@@ -5,9 +5,11 @@
   <Config />
   <SourceFiles>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bg_0000_bg3.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteSheet1.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
