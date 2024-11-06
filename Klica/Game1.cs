@@ -1,5 +1,5 @@
 ﻿
-using Klica.Classes.Managers;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,10 +10,10 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private AssetManager _assetManager;
-    private GameManager _gameManager;
     public static int ScreenWidth = 1920;
     public static int ScreenHeight= 1080;
+
+    Texture2D texture;
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -23,11 +23,6 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        // Initialize AssetManager singleton with Content
-        AssetManager.Instance.Initialize(Content);
-
-        // Initialize GameManager or other managers
-        _gameManager = new GameManager();
 
         base.Initialize();
     }
@@ -35,8 +30,9 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _assetManager.LoadAssets();
+        
         // TODO: use this.Content to load your game content here
+        texture = Content.Load<Texture2D>("bg_0000_bg3");
     }
 
     protected override void Update(GameTime gameTime)
@@ -45,7 +41,6 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
-        _gameManager.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -55,7 +50,9 @@ public class Game1 : Game
 
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
-        _gameManager.Draw(_spriteBatch);
+
+        _spriteBatch.Draw(texture,new Vector2(0,0), Color.White);
+
         _spriteBatch.End();
         base.Draw(gameTime);
     }
