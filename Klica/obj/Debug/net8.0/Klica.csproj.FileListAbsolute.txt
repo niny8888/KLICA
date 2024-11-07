@@ -53,3 +53,6 @@ d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Kl
 D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.genruntimeconfig.cache
 D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\ref\Klica.dll
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteInfo.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\bg_0000_bg3.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteInfo.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteSheet1.xnb

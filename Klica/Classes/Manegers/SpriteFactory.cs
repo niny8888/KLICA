@@ -40,20 +40,29 @@ namespace Klica
 
             // Parse data parts
             string name = parts[0];
-            int x = int.Parse(parts[1]);
-            int y = int.Parse(parts[2]);
-            int width = int.Parse(parts[3]);
-            int height = int.Parse(parts[4]);
-            float pivotX = float.Parse(parts[7]);
+            int rotacijaD = int.Parse(parts[1]); /// rotacija?
+
+
+            int x=int.Parse(parts[2]);
+            int y = int.Parse(parts[3]);
+            int width = int.Parse(parts[4]);
+            int height = int.Parse(parts[5]);
+            float pivotX = float.Parse(parts[7]); // 0.5 - odvzone, 0,5 visie
             float pivotY = float.Parse(parts[8]);
 
             // Position and other properties
             Vector2 position = new Vector2(400, 500); // Modify or make dynamic as needed
             Rectangle sourceRectangle = new Rectangle(x, y, width, height);
+            float rotateAngle;
             float scale = 1f;  // Default scale, modify as needed
-
+            if(rotacijaD==1){
+                rotateAngle= -1.6f;
+            }
+            else{
+                rotateAngle=0f;
+            }
             // Add the sprite to the manager
-            spriteManager.AddSprite(name, position, sourceRectangle, scale: scale);
+            spriteManager.AddSprite(name, position, sourceRectangle, scale: scale,rotateAngle);
         }
     }
 }

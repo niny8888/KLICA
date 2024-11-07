@@ -45,7 +45,7 @@ public class Game1 : Game
         _spriteManager = new SpriteManager(_spriteSheet);
         System.Console.WriteLine($"Current Directory: {System.IO.Directory.GetCurrentDirectory()}");
 
-        var spriteDataLines = System.IO.File.ReadAllLines("SpriteInfo");
+        var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
 
         _spriteManager = new SpriteManager(_spriteSheet);
         SpriteFactory.Initialize(_spriteSheet, _spriteManager, spriteDataLines);
@@ -67,6 +67,7 @@ public class Game1 : Game
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
         _spriteBatch.Draw(_background, Vector2.Zero, Color.White);
+        //_spriteManager.DrawSpriteNamed(_spriteBatch,"spike_sides");
         _spriteManager.DrawSprites(_spriteBatch);
 
         _spriteBatch.End();

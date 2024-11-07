@@ -1,16 +1,6 @@
-#
-# Sprite sheet data for MonoGame.
-#
-# To learn how to import these sprites into your MonoGame project visit:
-# https://www.codeandweb.com/texturepacker/monogame
-#
-# Sprite sheet: SpriteInfo.png (1008 x 1188)
-# $TexturePacker:SmartUpdate:6fc1b1adafca7a865893acc2415ba6e2:14d9878f1049f243e176bc72993acc97:886533f2c6a9fb5a3de7386237b4efdf$
-#
-
-organizem_0000_base4;0;291;438;258;435;258;435;0.5;0.5
-organizem_0000s_0000_spike_backone;0;958;561;49;149;49;149;0.5;0
-organizem_0000s_0001_spike_sides;1;614;1;60;542;542;60;0.5;0.5
+base_green;0;291;438;258;435;258;435;0.5;0.5
+spike_backone;0;958;561;49;149;49;149;0.5;0
+spike_sides;1;614;1;60;542;542;60;0.5;0.5
 organizem_0000s_0002_spike_back;1;676;1;108;354;354;108;0.5;0
 organizem_0000s_0003_spike_front;1;786;1;108;354;354;108;0.5;1
 organizem_0001_base3;0;1;438;288;437;288;437;0.5;0.5

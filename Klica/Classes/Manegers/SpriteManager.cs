@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -24,6 +26,15 @@ namespace Klica
         public Sprite GetSprite(string name)
         {
             return _sprites.ContainsKey(name) ? _sprites[name] : null;
+        }
+
+    
+        public void DrawSpriteNamed(SpriteBatch spriteBatch, string name)
+        {
+            if (_sprites.TryGetValue(name, out Sprite sprite))
+            {
+                sprite.Draw(spriteBatch);
+            }
         }
 
         public void DrawSprites(SpriteBatch spriteBatch)

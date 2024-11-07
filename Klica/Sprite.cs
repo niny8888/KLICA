@@ -20,7 +20,7 @@ namespace Klica
             _scale = scale;
             _rotation = rotation;
             _tint = tint ?? Color.White; // Default to white if tint is not provided
-        }
+        } // dodej layer depth
 
         // Draw method to render the sprite
         public void Draw(SpriteBatch spriteBatch)
