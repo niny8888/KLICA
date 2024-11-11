@@ -67,8 +67,9 @@ public class Game1 : Game
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
         _spriteBatch.Draw(_background, Vector2.Zero, Color.White);
-        //_spriteManager.DrawSpriteNamed(_spriteBatch,"spike_sides");
-        _spriteManager.DrawSprites(_spriteBatch);
+        _spriteManager.DrawSpriteNamed(_spriteBatch,"base_modra");
+        _spriteManager.DrawSpriteNamed(_spriteBatch,"ustaD");
+        //_spriteManager.DrawSprites(_spriteBatch);
 
         _spriteBatch.End();
         base.Draw(gameTime);

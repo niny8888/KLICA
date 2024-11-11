@@ -10,15 +10,17 @@ namespace Klica
         private Rectangle _sourceRectangle;
         private float _scale;
         private float _rotation;
+        private Vector2 _origin;
         private Color _tint;
 
-        public Sprite(Texture2D texture, Vector2 position, Rectangle sourceRectangle, float scale = 1f, float rotation = 0f, Color? tint = null)
+        public Sprite(Texture2D texture, Vector2 position, Rectangle sourceRectangle, float scale = 1f, float rotation = 0f, Vector2? origin = null, Color? tint = null)
         {
             _texture = texture;
             _position = position;
             _sourceRectangle = sourceRectangle;
             _scale = scale;
             _rotation = rotation;
+            _origin = origin ?? new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2); // Default to center
             _tint = tint ?? Color.White; // Default to white if tint is not provided
         } // dodej layer depth
 
@@ -31,7 +33,7 @@ namespace Klica
                 _sourceRectangle,
                 _tint,
                 _rotation,
-                new Vector2(_sourceRectangle.Width / 2, _sourceRectangle.Height / 2), // Adjust the origin as needed
+                _origin,  
                 _scale,
                 SpriteEffects.None,
                 0f
