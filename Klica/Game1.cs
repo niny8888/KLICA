@@ -64,10 +64,10 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        // TODO: Add your drawing code here
+        
         _spriteBatch.Begin();
         _spriteBatch.Draw(_background, Vector2.Zero, Color.White);
-        _spriteManager.DrawSpriteNamed(_spriteBatch,"base_modra");
+        _spriteManager.DrawSpriteNamed(_spriteBatch,"base_blue");
         _spriteManager.DrawSpriteNamed(_spriteBatch,"ustaD");
         //_spriteManager.DrawSprites(_spriteBatch);
 

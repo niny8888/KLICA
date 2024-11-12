@@ -45,5 +45,41 @@ namespace Klica
                 sprite.Draw(spriteBatch);
             }
         }
+
+
+        ///getters:
+
+        public Vector2? GetPosition(string name)
+        {
+            return _sprites.ContainsKey(name) ? _sprites[name].Position : (Vector2?)null;
+        }
+
+        public Rectangle? GetSourceRectangle(string name)
+        {
+            return _sprites.ContainsKey(name) ? _sprites[name].SourceRectangle : (Rectangle?)null;
+        }
+
+        public float? GetScale(string name)
+        {
+            return _sprites.ContainsKey(name) ? _sprites[name].Scale : (float?)null;
+        }
+
+        public float? GetRotation(string name)
+        {
+            return _sprites.ContainsKey(name) ? _sprites[name].Rotation : (float?)null;
+        }
+
+        public Vector2? GetOrigin(string name)
+        {
+            return _sprites.ContainsKey(name) ? _sprites[name].Origin : (Vector2?)null;
+        }
+
+        public Color? GetTint(string name)
+        {
+            return _sprites.ContainsKey(name) ? _sprites[name].Tint : (Color?)null;
+        }
+
+
+        
     }
 }

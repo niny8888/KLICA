@@ -39,5 +39,14 @@ namespace Klica
                 0f
             );
         }
+        
+        //getters:
+         public Texture2D Texture => _texture;
+        public Vector2 Position => _position;
+        public Rectangle SourceRectangle => _sourceRectangle;
+        public float Scale => _scale;
+        public float Rotation => _rotation;
+        public Vector2 Origin => _origin;
+        public Color Tint => _tint;
     }
 }
