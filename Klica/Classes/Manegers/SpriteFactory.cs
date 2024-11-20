@@ -48,8 +48,8 @@ namespace Klica
             int y = int.Parse(parts[3]);
             int width = int.Parse(parts[4]);
             int height = int.Parse(parts[5]);
-            float pivotX = float.Parse(parts[8])/100; // 0.5 - odvzone, 0,5 visie
-            float pivotY = float.Parse(parts[9])/100;
+            float pivotX = float.Parse(parts[8])/10; // 0.5 - odvzone, 0,5 visie
+            float pivotY = float.Parse(parts[9])/10;
 
             // Position and other properties
             Vector2 position = new Vector2(400, 500); // Modify or make dynamic as needed
@@ -63,6 +63,7 @@ namespace Klica
                 rotateAngle=0f;
             }
             Vector2 pivot;
+
             pivot = new Vector2(
                 (int)Math.Ceiling(pivotX * width),
                 (int)Math.Ceiling(pivotY * height)

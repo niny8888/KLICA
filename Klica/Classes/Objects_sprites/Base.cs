@@ -43,6 +43,10 @@ namespace Klica.Classes.Objects_sprites{
             _currentSprite._position = vector2;
         }
 
+        internal void SetRotation(float rotation_new){
+            _currentSprite._rotation = rotation_new;
+        }
+
 
     
 

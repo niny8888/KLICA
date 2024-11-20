@@ -9,7 +9,7 @@ namespace Klica
         public Vector2 _position;
         private Rectangle _sourceRectangle;
         private float _scale;
-        private float _rotation;
+        public float _rotation;
         private Vector2 _origin;
         private Color _tint;
 

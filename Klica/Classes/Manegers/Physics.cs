@@ -15,7 +15,7 @@ namespace Klica.Classes.Managers{
 
         public void Update(Vector2 _got_acc){
             _acceleration=_got_acc;
-            _velocity/=_friction;
+            _velocity/=_friction*200f;
             if(_velocity.Length()>_max_velocity){
                 _velocity*=_max_velocity/_velocity.Length();
             }

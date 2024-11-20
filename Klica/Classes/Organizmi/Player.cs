@@ -41,6 +41,7 @@ namespace Klica.Classes.Objects_sprites
             ///posision je to kar mi fizka vrne da je
             _phisycs.Update(go);
             _player_base.SetPosition(_phisycs.GetPosition());
+            _player_base.SetRotation((float)Math.Atan2(_phisycs._velocity.Y,_phisycs._velocity.X) +1.6f);
 
 
             
