@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection.Metadata.Ecma335;
+using Klica.Classes.Objects_sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,8 +10,8 @@ namespace Klica
 {
     public class SpriteManager
     {
-        private Texture2D _spriteSheet;
-        private Dictionary<string, Sprite> _sprites;
+        private static Texture2D _spriteSheet;
+        private static Dictionary<string, Sprite> _sprites;
 
         public SpriteManager(Texture2D spriteSheet)
         {
@@ -24,7 +25,7 @@ namespace Klica
             _sprites[name] = sprite;
         }
 
-        public Sprite GetSprite(string name)
+        public static Sprite GetSprite(string name)
         {
             return _sprites.ContainsKey(name) ? _sprites[name] : null;
         }
@@ -44,6 +45,15 @@ namespace Klica
             {
                 sprite.Draw(spriteBatch);
             }
+        }
+
+
+        // public void DrawComposable(Organizm o){
+
+        // }
+
+        public void DrawPart(){
+            
         }
 
 

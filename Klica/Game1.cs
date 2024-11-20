@@ -1,5 +1,5 @@
 ﻿
-
+using Klica.Classes.Objects_sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,7 +12,9 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     public static int ScreenWidth = 1920;
     public static int ScreenHeight= 1080;
-    private SpriteManager _spriteManager;
+    public SpriteManager _spriteManager;
+
+    public Player _player;
 
     Texture2D _background;
     Texture2D _spriteSheet;
@@ -38,17 +40,17 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         
-        // TODO: use this.Content to load your game content here
         _background = Content.Load<Texture2D>("bg_0000_bg3");
         _spriteSheet = Content.Load<Texture2D>("SpriteInfo");
+        //Player player = new Player(_spriteManager);
 
         _spriteManager = new SpriteManager(_spriteSheet);
         System.Console.WriteLine($"Current Directory: {System.IO.Directory.GetCurrentDirectory()}");
 
         var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
-
         _spriteManager = new SpriteManager(_spriteSheet);
         SpriteFactory.Initialize(_spriteSheet, _spriteManager, spriteDataLines);
+        _player = new();
     }
 
     protected override void Update(GameTime gameTime)
@@ -56,7 +58,8 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
+        // TODO
+        _player.UpdatePlayer();
         base.Update(gameTime);
     }
 
@@ -68,8 +71,9 @@ public class Game1 : Game
         _spriteBatch.Begin();
         _spriteBatch.Draw(_background, Vector2.Zero, Color.White);
         _spriteManager.DrawSpriteNamed(_spriteBatch,"base_blue");
-        _spriteManager.DrawSpriteNamed(_spriteBatch,"ustaD");
+        //_spriteManager.DrawSpriteNamed(_spriteBatch,"ustaD");
         //_spriteManager.DrawSprites(_spriteBatch);
+        //_spriteBatch.Draw(_player);
 
         _spriteBatch.End();
         base.Draw(gameTime);

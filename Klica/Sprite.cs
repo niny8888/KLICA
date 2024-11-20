@@ -6,7 +6,7 @@ namespace Klica
     public class Sprite
     {
         private Texture2D _texture;
-        private Vector2 _position;
+        public Vector2 _position;
         private Rectangle _sourceRectangle;
         private float _scale;
         private float _rotation;
@@ -24,7 +24,7 @@ namespace Klica
             _tint = tint ?? Color.White; // Default to white if tint is not provided
         } // dodej layer depth
 
-        // Draw method to render the sprite
+        
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
@@ -40,8 +40,9 @@ namespace Klica
             );
         }
         
+        
         //getters:
-         public Texture2D Texture => _texture;
+        public Texture2D Texture => _texture;
         public Vector2 Position => _position;
         public Rectangle SourceRectangle => _sourceRectangle;
         public float Scale => _scale;
