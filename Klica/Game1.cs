@@ -1,4 +1,5 @@
 ﻿
+using Klica.Classes;
 using Klica.Classes.Objects_sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,10 +15,17 @@ public class Game1 : Game
     public static int ScreenHeight= 1080;
     public SpriteManager _spriteManager;
 
-    public Player _player;
 
+    // Level, gameplay, and physics engine
+    private Level _level;
+    private GameplayRules _gameplayRules;
+    private PhysicsEngine _physicsEngine;
+
+    // Player and background
+    public Player _player;
     Texture2D _background;
     Texture2D _spriteSheet;
+
 
     public Game1()
     {
@@ -39,18 +47,27 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        
+        _gameplayRules = new GameplayRules(3600, 1);
         _background = Content.Load<Texture2D>("bg_0000_bg3");
         _spriteSheet = Content.Load<Texture2D>("SpriteInfo");
-        //Player player = new Player(_spriteManager);
-
+        
+        
         _spriteManager = new SpriteManager(_spriteSheet);
         System.Console.WriteLine($"Current Directory: {System.IO.Directory.GetCurrentDirectory()}");
-
         var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
-        _spriteManager = new SpriteManager(_spriteSheet);
         SpriteFactory.Initialize(_spriteSheet, _spriteManager, spriteDataLines);
-        _player = new();
+        
+        _player = new Player();
+        _level = new Level(new Rectangle(0, 0, 800, 800), _background,_gameplayRules);
+        _physicsEngine = new PhysicsEngine(_level);
+        _spriteManager = new SpriteManager(_spriteSheet);
+        
+
+
+        
+        var food = new Food(new Vector2(100, 100), new Vector2(1, 0.5f), 50f);
+        _physicsEngine.AddFood(food);
+
     }
 
     protected override void Update(GameTime gameTime)
@@ -60,6 +77,8 @@ public class Game1 : Game
 
         // TODO
         _player.UpdatePlayer();
+        int score = 0;
+        _physicsEngine.Update(gameTime, _player._position, ref score);
         base.Update(gameTime);
     }
 
