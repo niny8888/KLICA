@@ -8,7 +8,7 @@ namespace Klica.Classes.Managers{
         public Vector2 _acceleration= Vector2.Zero;
         public float _friction= 1.001f;
 
-        private static float _max_velocity = 100;
+        private float _max_velocity = 100;
 
         public Physics(){
         }

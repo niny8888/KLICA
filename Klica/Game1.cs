@@ -47,16 +47,20 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _gameplayRules = new GameplayRules(3600, 1);
+        
         _background = Content.Load<Texture2D>("bg_0000_bg3");
         _spriteSheet = Content.Load<Texture2D>("SpriteInfo");
         
         
+        
         _spriteManager = new SpriteManager(_spriteSheet);
+        _gameplayRules = new GameplayRules(3600, 1);
         System.Console.WriteLine($"Current Directory: {System.IO.Directory.GetCurrentDirectory()}");
         var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
         SpriteFactory.Initialize(_spriteSheet, _spriteManager, spriteDataLines);
         
+
+
         _player = new Player();
         _level = new Level(new Rectangle(0, 0, 1280, 720), _background,_gameplayRules);
         _physicsEngine = new PhysicsEngine(_level);

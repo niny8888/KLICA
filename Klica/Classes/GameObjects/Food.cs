@@ -9,7 +9,9 @@ namespace Klica.Classes
 {
     public class Food
     {
-        public static Sprite _sprite = SpriteManager.GetSprite("food");
+        private SpriteManager _spriteManager = SpriteManager.getInstance();
+
+        public static Sprite _sprite;
         public Vector2 Position { get; private set; }
         public float Speed { get; private set; }
         public Vector2 Direction { get; private set; }
@@ -21,10 +23,11 @@ namespace Klica.Classes
         
         public Food( Vector2 position, Vector2 direction, float speed)
         {
+            _sprite = _spriteManager.GetSprite("food");
             Position = position;
             Direction = direction;
             Speed = speed;
-            _sprite= SpriteManager.GetSprite("food");
+            _sprite= _spriteManager.GetSprite("food");
         }
 
         

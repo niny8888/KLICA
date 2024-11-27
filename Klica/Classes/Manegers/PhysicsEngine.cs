@@ -32,7 +32,7 @@ namespace Klica.Classes
 
                 
                 if (Vector2.Distance(food.Position, playerPosition) < food.CollisionRadius)
-                {
+                {///tole je za popravt da gleda boundse ne pa position!! pa mjbi da je bl general da bom sam kt splosen colison klicala
                     food.OnConsumed(ref score);
                 }
             }

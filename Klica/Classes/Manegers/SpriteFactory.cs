@@ -55,7 +55,7 @@ namespace Klica
             Vector2 position = new Vector2(400, 500); // Modify or make dynamic as needed
             Rectangle sourceRectangle = new Rectangle(x, y, width, height);
             float rotateAngle;
-            float scale = 1f;  // Default scale, modify as needed
+            float scale = 0.2f;  // Default scale, modify as needed
             if(rotacijaD==1){
                 rotateAngle= -1.6f;
             }

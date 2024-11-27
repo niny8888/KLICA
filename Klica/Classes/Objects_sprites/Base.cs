@@ -7,26 +7,34 @@ using Microsoft.Xna.Framework.Input;
 namespace Klica.Classes.Objects_sprites{
     public class Base
     {
-        private static Sprite _base_sprite_blue= SpriteManager.GetSprite("base_blue");
-        private static Sprite _base_sprite_orange= SpriteManager.GetSprite("base_orange");
-        private static Sprite _base_sprite_green= SpriteManager.GetSprite("base_green");
-        private static Sprite _base_sprite_pink= SpriteManager.GetSprite("base_pink");
+        private SpriteManager _spriteManager = SpriteManager.getInstance();
 
-        private static bool Rotatable = true;
-        private static bool Composable= true;
-        private static bool Movable = true;
-        private static bool Colidable= true;  //colision shape --> sphere !! TODO
+        private Sprite _base_sprite_blue;
+        private Sprite _base_sprite_orange;
+        private Sprite _base_sprite_green;
+        private Sprite _base_sprite_pink;
 
+        private  bool Rotatable = true;
+        private bool Composable= true;
+        private bool Movable = true;
+        private  bool Colidable= true;  //colision shape --> sphere !! TODO
 
-        public static Sprite _currentSprite = _base_sprite_blue;
+        public Vector2 _position_eyes =new Vector2(0,0);
+
+        public Sprite _currentSprite;
     
 
 
         public Base(int _spriteID){
+            _base_sprite_blue= _spriteManager.GetSprite("base_blue");
+            _base_sprite_orange= _spriteManager.GetSprite("base_orange");
+            _base_sprite_green= _spriteManager.GetSprite("base_green");
+            _base_sprite_pink= _spriteManager.GetSprite("base_pink");
+
             SetSprite(_spriteID);
         }
 
-        public static void SetSprite(int spriteIndex)
+        public void SetSprite(int spriteIndex)
         {
             _currentSprite = spriteIndex switch
             {

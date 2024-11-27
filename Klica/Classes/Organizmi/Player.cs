@@ -12,6 +12,7 @@ namespace Klica.Classes.Objects_sprites
     public class Player 
     {
         private Base _player_base = new Base(0);
+        private Eyes _player_eye= new Eyes(0);
         private Physics _phisycs;
         public Player(){
             _phisycs = new Physics();
@@ -45,13 +46,14 @@ namespace Klica.Classes.Objects_sprites
             _player_base.SetPosition(_phisycs.GetPosition());
             _position=_player_base.GetPosition();
             _player_base.SetRotation((float)Math.Atan2(_phisycs._velocity.Y,_phisycs._velocity.X) +1.6f);
-
+            _player_eye.SetPosition(_player_base._position_eyes);
 
             
         }
 
         public void DrawPlayer(SpriteBatch _spriteBatch){
              _player_base.Draw(_spriteBatch);
+             _player_eye.Draw(_spriteBatch);
          }
 
 

@@ -6,18 +6,25 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Klica.Classes.Objects_sprites{
     public class Eyes{
-        private static Sprite _eyes_white= SpriteManager.GetSprite("ucki_zun");
-        private static Sprite _eyes_version1= SpriteManager.GetSprite("ucki_not1");
-        private static Sprite _eyes_version2= SpriteManager.GetSprite("ucki_not2");
-        private static Sprite _eyes_version3= SpriteManager.GetSprite("ucki_not3");
+        private SpriteManager _spriteManager = SpriteManager.getInstance();
+        private Sprite _eyes_white;
+        private Sprite _eyes_version1;
+        private  Sprite _eyes_version2;
+        private  Sprite _eyes_version3;
 
-        public static Sprite _currentEye = _eyes_version1;
+        public Sprite _currentEye;
+
     
         public Eyes(int version){
+            _eyes_white= _spriteManager.GetSprite("ucki_zun");
+            _eyes_version1= _spriteManager.GetSprite("ucki_not1");
+            _eyes_version2= _spriteManager.GetSprite("ucki_not2");
+            _eyes_version3= _spriteManager.GetSprite("ucki_not3");
+
             SetSpriteEye(version);
         }
         
-        public static void SetSpriteEye(int spriteIndex)
+        public void SetSpriteEye(int spriteIndex)
         {
             _currentEye = spriteIndex switch
             {
@@ -34,6 +41,10 @@ namespace Klica.Classes.Objects_sprites{
 
         internal void SetRotation(float rotation_new){
             _currentEye._rotation = rotation_new;
+        }
+
+        public void Draw(SpriteBatch _spriteBatch){
+            _currentEye.Draw(_spriteBatch);
         }
 
     }   

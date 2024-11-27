@@ -11,14 +11,22 @@ namespace Klica
     public class SpriteManager
     {
         private static Texture2D _spriteSheet;
-        private static Dictionary<string, Sprite> _sprites;
+        private  Dictionary<string, Sprite> _sprites;
         private List<Sprite> _activeSprites;
+        private static volatile SpriteManager instance= null;
 
         public SpriteManager(Texture2D spriteSheet)
         {
             _spriteSheet = spriteSheet;
             _sprites = new Dictionary<string, Sprite>();
             _activeSprites = new List<Sprite>();
+            instance= this;
+        }
+        public static SpriteManager getInstance(){
+            if(instance==null){
+                instance=new SpriteManager(_spriteSheet);
+            }
+            return instance;
         }
 
         public void AddSprite(String name, Vector2 position, Rectangle sourceRectangle, float scale = 1f, float rotation = 0f, Vector2? origin = null, Color? tint = null)
@@ -27,7 +35,7 @@ namespace Klica
             _sprites[name] = sprite;
         }
 
-        public static Sprite GetSprite(string name)
+        public Sprite GetSprite(string name)
         {
             return _sprites.ContainsKey(name) ? _sprites[name] : null;
         }
