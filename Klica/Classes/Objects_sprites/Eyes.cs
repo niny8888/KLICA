@@ -48,5 +48,7 @@ namespace Klica.Classes.Objects_sprites{
             _currentEye.Draw(_spriteBatch);
         }
 
+        //base-position je za popravt size od sprita , da se * scale da ce se je scalu
+        /// k se rotira se mu rab spremenit origin rotacije na oregin od base sprita(parenta)
     }   
 }
