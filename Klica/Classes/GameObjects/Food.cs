@@ -1,17 +1,22 @@
+using System;
+using Klica;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
 
 namespace Klica.Classes
 {
     public class Food
     {
+        public static Sprite _sprite = SpriteManager.GetSprite("food");
         public Vector2 Position { get; private set; }
         public float Speed { get; private set; }
         public Vector2 Direction { get; private set; }
         public float CollisionRadius { get; private set; } = 20f;
         public bool IsConsumed { get; private set; } = false;
 
-        private Sprite _sprite = SpriteManager.GetSprite("food");
+        
 
         
         public Food( Vector2 position, Vector2 direction, float speed)
@@ -19,6 +24,7 @@ namespace Klica.Classes
             Position = position;
             Direction = direction;
             Speed = speed;
+            _sprite= SpriteManager.GetSprite("food");
         }
 
         

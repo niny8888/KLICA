@@ -58,15 +58,13 @@ public class Game1 : Game
         SpriteFactory.Initialize(_spriteSheet, _spriteManager, spriteDataLines);
         
         _player = new Player();
-        _level = new Level(new Rectangle(0, 0, 800, 800), _background,_gameplayRules);
+        _level = new Level(new Rectangle(0, 0, 1280, 720), _background,_gameplayRules);
         _physicsEngine = new PhysicsEngine(_level);
-        _spriteManager = new SpriteManager(_spriteSheet);
         
-
-
         
-        var food = new Food(new Vector2(100, 100), new Vector2(1, 0.5f), 50f);
+        var food = new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 50f);
         _physicsEngine.AddFood(food);
+        
 
     }
 
@@ -88,11 +86,14 @@ public class Game1 : Game
 
         
         _spriteBatch.Begin();
-        _spriteBatch.Draw(_background, Vector2.Zero, Color.White);
-        _spriteManager.DrawSpriteNamed(_spriteBatch,"base_blue");
+        _level.DrawBackground(_spriteBatch);
+        _physicsEngine.Draw(_spriteBatch);
+        //_spriteBatch.Draw(_background, Vector2.Zero, Color.White);
+        //_spriteManager.DrawSpriteNamed(_spriteBatch,"spike_front");
         //_spriteManager.DrawSpriteNamed(_spriteBatch,"ustaD");
         //_spriteManager.DrawSprites(_spriteBatch);
-        //_spriteBatch.Draw(_player);
+        _player.DrawPlayer(_spriteBatch);
+        //_physicsEngine.Draw(_spriteBatch);
 
         _spriteBatch.End();
         base.Draw(gameTime);

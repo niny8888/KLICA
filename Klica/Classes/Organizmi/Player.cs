@@ -50,9 +50,9 @@ namespace Klica.Classes.Objects_sprites
             
         }
 
-        // public void DrawPlayer(SpriteBatch _spriteBatch){
-        //     _player_base.Draw(_spriteBatch);
-        // }
+        public void DrawPlayer(SpriteBatch _spriteBatch){
+             _player_base.Draw(_spriteBatch);
+         }
 
 
     }

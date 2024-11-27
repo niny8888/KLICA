@@ -55,9 +55,9 @@ namespace Klica.Classes.Objects_sprites{
 
     
 
-        // public void Draw(SpriteBatch _spriteBatch){
-        //     _currentSprite.Draw(_spriteBatch);
-        // }
+        public void Draw(SpriteBatch _spriteBatch){
+            _currentSprite.Draw(_spriteBatch);
+        }
 
         //custop prorps: rotatable itd.
 
