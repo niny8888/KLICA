@@ -51,11 +51,27 @@ namespace Klica
             float pivotX = float.Parse(parts[8])/10; // 0.5 - odvzone, 0,5 visie
             float pivotY = float.Parse(parts[9])/10;
 
-            // Position and other properties
-            Vector2 position = new Vector2(400, 500); // Modify or make dynamic as needed
+            
+            Vector2 position = new Vector2(400, 500);
             Rectangle sourceRectangle = new Rectangle(x, y, width, height);
             float rotateAngle;
-            float scale = 0.2f;  // Default scale, modify as needed
+            float scale = 0.4f;  
+
+
+            if(scale!=1f){
+                // sourceRectangle = new Rectangle(
+                // x,
+                // y,
+                // (int)(width * scale),
+                // (int)(height * scale)
+                // );
+
+            
+                pivotX *= scale;
+                pivotY *= scale;
+
+            }
+
             if(rotacijaD==1){
                 rotateAngle= -1.6f;
             }

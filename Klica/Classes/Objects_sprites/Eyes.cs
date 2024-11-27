@@ -42,6 +42,7 @@ namespace Klica.Classes.Objects_sprites{
         internal void SetRotation(float rotation_new){
             _currentEye._rotation = rotation_new;
         }
+        
 
         public void Draw(SpriteBatch _spriteBatch){
             _currentEye.Draw(_spriteBatch);

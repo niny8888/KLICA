@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Klica")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fd2d4f4c8d5c1350569dba9065117c6f51a1d677")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a29e03bfe84a577b87fa17545358bb62814fa11d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Klica")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Klica")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

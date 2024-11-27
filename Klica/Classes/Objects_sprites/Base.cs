@@ -32,6 +32,7 @@ namespace Klica.Classes.Objects_sprites{
             _base_sprite_pink= _spriteManager.GetSprite("base_pink");
 
             SetSprite(_spriteID);
+            SetEyePosition();
         }
 
         public void SetSprite(int spriteIndex)
@@ -46,9 +47,29 @@ namespace Klica.Classes.Objects_sprites{
             };
         }
 
+        internal void SetEyePosition()
+        {
+            Vector2 offset = new Vector2(0, -_currentSprite.SourceRectangle.Height / 4);
+
+            
+            float cos = (float)Math.Cos(_currentSprite.Rotation);
+            float sin = (float)Math.Sin(_currentSprite.Rotation);
+
+            Vector2 rotatedOffset = new Vector2(
+                offset.X * cos - offset.Y * sin,
+                offset.X * sin + offset.Y * cos
+            );
+
+            
+            _position_eyes = _currentSprite.Position + rotatedOffset;
+        }
+
+
+
         internal void SetPosition(Vector2 vector2)
         {
             _currentSprite._position = vector2;
+            SetEyePosition();
         }
 
         internal Vector2 GetPosition()
