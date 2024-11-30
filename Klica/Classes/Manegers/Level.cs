@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,12 +9,16 @@ namespace Klica.Classes
         public Rectangle Bounds { get; private set; } //velikost k je playable
         public Texture2D BackgroundTexture { get; private set; }
         public GameplayRules Rules { get; private set; } //Pravila
+        public Random Random { get; } = new Random();
 
-        public Level(Rectangle bounds, Texture2D backgroundTexture, GameplayRules rules)
+        public int _FoodNum { get; set; }
+
+        public Level(Rectangle bounds, Texture2D backgroundTexture, GameplayRules rules, int FoodNumber)
         {
             Bounds = bounds;
             BackgroundTexture = backgroundTexture;
             Rules = rules;
+            _FoodNum=FoodNumber;
         }
 
 

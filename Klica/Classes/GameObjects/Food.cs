@@ -30,7 +30,6 @@ namespace Klica.Classes
             _sprite= _spriteManager.GetSprite("food");
         }
 
-        
         public void Update(GameTime gameTime, Rectangle levelBounds)
         {
             

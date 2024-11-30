@@ -60,13 +60,13 @@ public class Game1 : Game
         SpriteFactory.Initialize(_spriteSheet, _spriteManager, spriteDataLines);
         
 
-
+        var food = new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 50f);
         _player = new Player();
-        _level = new Level(new Rectangle(0, 0, 1280, 720), _background,_gameplayRules);
+        _level = new Level(new Rectangle(0, 0, 1280, 720), _background,_gameplayRules,10);
         _physicsEngine = new PhysicsEngine(_level);
         
         
-        var food = new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 50f);
+        
         _physicsEngine.AddFood(food);
         
 
