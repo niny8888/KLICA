@@ -49,11 +49,11 @@ namespace Klica.Classes.Objects_sprites{
 
         internal void SetEyePosition()
         {
-            Vector2 offset = new Vector2(0, -_currentSprite.SourceRectangle.Height / 4);
+            Vector2 offset = new Vector2(0,- _currentSprite._size.Height / 4);
 
-            
-            float cos = (float)Math.Cos(_currentSprite.Rotation);
-            float sin = (float)Math.Sin(_currentSprite.Rotation);
+            Vector2 basePosition = _currentSprite._position;
+            float cos = (float)Math.Cos(_currentSprite._rotation);
+            float sin = (float)Math.Sin(_currentSprite._rotation);
 
             Vector2 rotatedOffset = new Vector2(
                 offset.X * cos - offset.Y * sin,
@@ -61,7 +61,7 @@ namespace Klica.Classes.Objects_sprites{
             );
 
             
-            _position_eyes = _currentSprite.Position + rotatedOffset;
+            _position_eyes = basePosition+ rotatedOffset;
         }
 
 
@@ -79,6 +79,8 @@ namespace Klica.Classes.Objects_sprites{
 
         internal void SetRotation(float rotation_new){
             _currentSprite._rotation = rotation_new;
+            SetEyePosition();
+            
         }
 
 

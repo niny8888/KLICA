@@ -58,19 +58,19 @@ namespace Klica
             float scale = 0.4f;  
 
 
-            if(scale!=1f){
-                // sourceRectangle = new Rectangle(
-                // x,
-                // y,
-                // (int)(width * scale),
-                // (int)(height * scale)
-                // );
+            // if(scale!=1f){
+            //     // sourceRectangle = new Rectangle(
+            //     // x,
+            //     // y,
+            //     // (int)(width * scale),
+            //     // (int)(height * scale)
+            //     // );
 
             
-                pivotX *= scale;
-                pivotY *= scale;
+            //     pivotX *= scale;
+            //     pivotY *= scale;
 
-            }
+            // }
 
             if(rotacijaD==1){
                 rotateAngle= -1.6f;
