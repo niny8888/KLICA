@@ -65,6 +65,7 @@ namespace Klica.Classes.Objects_sprites{
             _eyes_white.Draw(_spriteBatch);
             _currentEye.Draw(_spriteBatch);
             _currentEyeAnimation.Update(_gameTime);
+            SetPosition(_eyes_white._position);
             _currentEyeAnimation?.Draw(_spriteBatch);
         }
 

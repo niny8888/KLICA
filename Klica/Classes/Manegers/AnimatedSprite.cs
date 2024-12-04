@@ -14,7 +14,7 @@ namespace Klica.Classes
 
         public AnimatedSprite(
             List<Sprite> frames,
-            float frameTime = 0.1f // Default to 10 frames per second
+            float frameTime = 0.1f // Default frames
         ) : base(
             frames[0].Texture,
             frames[0].Position,
@@ -40,7 +40,7 @@ namespace Klica.Classes
             if (!_isPlaying || _frames.Count <= 1)
                 return;
 
-            _timeSinceLastFrame += 0.5f;///(float)gameTime.ElapsedGameTime.TotalSeconds;
+            _timeSinceLastFrame += 0.01f;///(float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (_timeSinceLastFrame >= _frameTime)
             {
