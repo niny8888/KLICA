@@ -1,18 +1,18 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Klica
+namespace Klica.Classes
 {
     public class Sprite
     {
-        private Texture2D _texture;
+        public Texture2D _texture;
         public Vector2 _position;
-        private Rectangle _sourceRectangle;
+        public Rectangle _sourceRectangle;
         public Rectangle _size;
-        private float _scale;
+        public float _scale;
         public float _rotation;
         public Vector2 _origin;
-        private Color _tint;
+        public Color _tint;
 
         public Sprite(Texture2D texture, Vector2 position, Rectangle sourceRectangle, float scale = 1f, float rotation = 0f, Vector2? origin = null, Color? tint = null)
         {

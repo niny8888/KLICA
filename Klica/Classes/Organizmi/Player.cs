@@ -40,6 +40,10 @@ namespace Klica.Classes.Objects_sprites
             {
                 go.X += 1;
             }
+            if (go != Vector2.Zero)
+            {
+                go.Normalize();
+            }
 
             ///posision je to kar mi fizka vrne da je
             _phisycs.Update(go);

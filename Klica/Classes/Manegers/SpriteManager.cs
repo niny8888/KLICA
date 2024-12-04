@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection.Metadata.Ecma335;
+using Klica.Classes;
 using Klica.Classes.Objects_sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

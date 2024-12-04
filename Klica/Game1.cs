@@ -25,6 +25,7 @@ public class Game1 : Game
     public Player _player;
     Texture2D _background;
     Texture2D _spriteSheet;
+    
 
 
     public Game1()

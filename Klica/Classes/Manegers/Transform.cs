@@ -5,9 +5,9 @@ namespace Klica.Classes.Managers
 {
     public class Transform
     {
-        private static Random random = new Random();
+        private Random random = new Random();
 
-        public static void RandomizePosition<T>(T obj, Rectangle bounds)
+        public void RandomizePosition<T>(T obj, Rectangle bounds)
         {
             // Use reflection to find and update the Position property
             var positionProperty = typeof(T).GetProperty("Position");
@@ -25,5 +25,8 @@ namespace Klica.Classes.Managers
                 throw new ArgumentException("The object does not have a Vector2 Position property.");
             }
         }
+
+        // public void TempOregin(){
+        // }
     }
 }
