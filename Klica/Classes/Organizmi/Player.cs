@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Klica.Classes.Objects_sprites
-//namespace Klica;
 {
     public class Player 
     {
@@ -39,6 +38,15 @@ namespace Klica.Classes.Objects_sprites
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 go.X += 1;
+            }
+            if (go != Vector2.Zero)
+            {
+                go.Normalize();
+            }
+            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+            if (gamePadState.IsConnected)
+            {
+                go += new Vector2(gamePadState.ThumbSticks.Left.X, -gamePadState.ThumbSticks.Left.Y); // Y is inverted
             }
             if (go != Vector2.Zero)
             {

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ninyp\\Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\Klica.csproj": {}
+    "D:\\My Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\Klica.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ninyp\\Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\Klica.csproj": {
+    "D:\\My Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\Klica.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ninyp\\Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\Klica.csproj",
+        "projectUniqueName": "D:\\My Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\Klica.csproj",
         "projectName": "Klica",
-        "projectPath": "C:\\Users\\ninyp\\Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\Klica.csproj",
-        "packagesPath": "C:\\Users\\ninyp\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ninyp\\Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\obj\\",
+        "projectPath": "D:\\My Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\Klica.csproj",
+        "packagesPath": "C:\\Users\\Nina\\.nuget\\packages\\",
+        "outputPath": "D:\\My Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ninyp\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Nina\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
