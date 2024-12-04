@@ -37,14 +37,17 @@ namespace Klica.Classes.Objects_sprites{
         internal void SetPosition(Vector2 vector2)
         {
             _currentEye._position = vector2;
+            _eyes_white._position= vector2;
         }
 
         internal void SetRotation(float rotation_new){
             _currentEye._rotation = rotation_new;
+            _eyes_white._rotation = rotation_new;
         }
         
 
         public void Draw(SpriteBatch _spriteBatch){
+            _eyes_white.Draw(_spriteBatch);
             _currentEye.Draw(_spriteBatch);
         }
 

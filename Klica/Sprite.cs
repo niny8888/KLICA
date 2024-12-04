@@ -11,7 +11,7 @@ namespace Klica
         public Rectangle _size;
         private float _scale;
         public float _rotation;
-        private Vector2 _origin;
+        public Vector2 _origin;
         private Color _tint;
 
         public Sprite(Texture2D texture, Vector2 position, Rectangle sourceRectangle, float scale = 1f, float rotation = 0f, Vector2? origin = null, Color? tint = null)
@@ -23,9 +23,9 @@ namespace Klica
             _scale = scale;
             _rotation = rotation;
             _origin = origin ?? new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2); // Default to center
-            _tint = tint ?? Color.White; // Default to white if tint is not provided
-            
+            _tint = tint ?? Color.White; // Default to white if tint is not provided 
             _size= new Rectangle(0,0, (int)(_sourceRectangle.Width * scale), (int)(_sourceRectangle.Height*scale));//to je treba porihtat ker pol k dam shit gor ne gre_size= new Rectangle(0,0,_sourceRectangle.Width * scale, _sourceRectangle.Height*scale);
+
         } // dodej layer depth
 
         
@@ -43,6 +43,10 @@ namespace Klica
                 0f
             );
         }
+
+        // public void SetPosition(){
+        //     //spremen se oregin
+        // }
         
         
         //getters:
