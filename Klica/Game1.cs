@@ -46,7 +46,7 @@ public class Game1 : Game
     {
 
         base.Initialize();
-        SceneManager.Instance.AddScene(SceneManager.SceneType.MainMenu, new MenuScene());
+        SceneManager.Instance.AddScene(SceneManager.SceneType.MainMenu, new MenuScene(this));
         //SceneManager.Instance.AddScene(SceneManager.SceneType.Game, new GameScene());
         SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
         SceneManager.Instance.GetCurrentScene().LoadContent(Content);
