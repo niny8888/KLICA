@@ -17,6 +17,7 @@ namespace Klica.Classes
         public Vector2 Direction { get; private set; }
         public float CollisionRadius { get; private set; } = 20f;
         public bool IsConsumed { get; private set; } = false;
+        private float _vibrationDuration = 0f; 
 
         
 
@@ -53,6 +54,14 @@ namespace Klica.Classes
                     MathHelper.Clamp(Position.Y, levelBounds.Top, levelBounds.Bottom)
                 );
             }
+            if (_vibrationDuration > 0)
+            {
+                _vibrationDuration -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_vibrationDuration <= 0)
+                {
+                    GamePad.SetVibration(PlayerIndex.One, 0f, 0f); // Stop vibration
+                }
+            }
         }
 
         
@@ -60,6 +69,8 @@ namespace Klica.Classes
         {
             IsConsumed = true;
             score++;
+            _vibrationDuration = 0.5f;
+            GamePad.SetVibration(PlayerIndex.One, 1.0f, 1.0f);
         }
 
         

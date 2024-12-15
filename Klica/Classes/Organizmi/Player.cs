@@ -52,7 +52,7 @@ namespace Klica.Classes.Objects_sprites
             {
                 go.Normalize();
             }
-
+            
             ///posision je to kar mi fizka vrne da je
             _phisycs.Update(go);
             _player_base.SetPosition(_phisycs.GetPosition());

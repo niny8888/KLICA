@@ -24,11 +24,16 @@ c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\
 c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.pdb
 C:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.genruntimeconfig.cache
 C:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\ref\Klica.dll
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\bg_0000_bg3.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteInfo.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteSheet1.xnb
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\bg_0000_bg3.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\DefaultFront.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteInfo.xnb
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteSheet1.xnb
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Klica.exe
-D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Klica.deps.json
-D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Klica.runtimeconfig.json
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Klica.deps.json
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Klica.runtimeconfig.json
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Klica.dll
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Klica.pdb
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\MonoGame.Framework.dll
@@ -46,13 +51,18 @@ d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Kl
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.AssemblyInfo.cs
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.csproj.CoreCompileInputs.cache
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.sourcelink.json
-D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.csproj.Up2Date
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.csproj.Up2Date
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.dll
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\refint\Klica.dll
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.pdb
-D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.genruntimeconfig.cache
-D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\ref\Klica.dll
-d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteInfo.xnb
-c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\bg_0000_bg3.xnb
-c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteInfo.xnb
-c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpriteSheet1.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\Klica.genruntimeconfig.cache
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\obj\Debug\net8.0\ref\Klica.dll
+D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Autofac.dll
+D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\MonoGame.Extended.dll
+D:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\MonoGame.Extended.Content.Pipeline.dll
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\Arial.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\Arial_0.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\Arial_1.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\Arial_2.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\Arial_3.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\Arial_4.xnb

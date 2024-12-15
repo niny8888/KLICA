@@ -14,6 +14,9 @@ public class Game1 : Game
     public static int ScreenWidth = 1920;
     public static int ScreenHeight= 1080;
     public SpriteManager _spriteManager;
+    public GameTime gameTime;
+
+
 
 
     // Level, gameplay, and physics engine
@@ -43,6 +46,10 @@ public class Game1 : Game
     {
 
         base.Initialize();
+        SceneManager.Instance.AddScene(SceneManager.SceneType.MainMenu, new MenuScene());
+        //SceneManager.Instance.AddScene(SceneManager.SceneType.Game, new GameScene());
+        SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
+        SceneManager.Instance.GetCurrentScene().LoadContent(Content);
     }
 
     protected override void LoadContent()
@@ -87,11 +94,12 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+       GraphicsDevice.Clear(Color.CornflowerBlue);
 
         
         _spriteBatch.Begin();
         _level.DrawBackground(_spriteBatch);
+        SceneManager.Instance.Draw(_spriteBatch);
         _physicsEngine.Draw(_spriteBatch);
         //_spriteBatch.Draw(_background, Vector2.Zero, Color.White);
         //_spriteManager.DrawSpriteNamed(_spriteBatch,"spike_front");
@@ -99,6 +107,7 @@ public class Game1 : Game
         //_spriteManager.DrawSprites(_spriteBatch);
         _player.DrawPlayer(_spriteBatch);
         //_physicsEngine.Draw(_spriteBatch);
+        
 
         _spriteBatch.End();
         base.Draw(gameTime);
