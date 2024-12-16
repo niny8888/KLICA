@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
+using Klica.Classes;
+using Klica;
 
 public class MenuScene : IScene
 {
@@ -25,9 +27,10 @@ public class MenuScene : IScene
 
     private Texture2D _buttonTexture;
 
-    private Game _game;
+    private Game1 _game;
+    private bool _contentLoaded = false;
 
-    public MenuScene(Game game)
+    public MenuScene(Game1 game)
     {
         _game = game; 
     }
@@ -46,12 +49,28 @@ public class MenuScene : IScene
     public void LoadContent(ContentManager content)
     {
         
-        _background = content.Load<Texture2D>("bg_0000_bg3");
+        try
+        {
+            Console.WriteLine("Loading background...");
+            _background = content.Load<Texture2D>("bg_0000_bg3");
+            Console.WriteLine("Background loaded successfully!");
+
+            Console.WriteLine("Loading font...");
+            _font = content.Load<BitmapFont>("Arial");
+            Console.WriteLine("Font loaded successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading content: {ex.Message}");
+        }
+
+        _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
 
        
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _buttonTexture.SetData(new Color[] { Color.White });
+        _contentLoaded = true;
     }
 
     public void Update(GameTime gameTime)
@@ -86,6 +105,9 @@ public class MenuScene : IScene
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        if (!_contentLoaded)
+        return; 
+        
         switch (_currentState)
         {
             case MenuState.MainMenu:

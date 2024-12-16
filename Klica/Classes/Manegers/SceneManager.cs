@@ -1,42 +1,53 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 public class SceneManager
 {
-    private static SceneManager _instance;
-    public static SceneManager Instance => _instance ??= new SceneManager();
-
     public enum SceneType { MainMenu, Game }
-    private SceneType _currentScene;
-    private Dictionary<SceneType, IScene> _scenes;
 
-    private SceneManager()
-    {
-        _scenes = new Dictionary<SceneType, IScene>();
-    }
+    private readonly Dictionary<SceneType, IScene> _scenes = new();
+    private IScene _currentScene;
+
+    public static SceneManager Instance { get; } = new();
+
+    private SceneManager() { }
 
     public void AddScene(SceneType sceneType, IScene scene)
     {
-        _scenes[sceneType] = scene;
+        if (!_scenes.ContainsKey(sceneType))
+        {
+            _scenes.Add(sceneType, scene);
+            Console.WriteLine($"Scene added: {sceneType}");
+        }
     }
 
     public void SetScene(SceneType sceneType)
     {
-        _currentScene = sceneType;
-        _scenes[_currentScene].Initialize();
+        if (_scenes.TryGetValue(sceneType, out var scene))
+        {
+            _currentScene = scene;
+            _currentScene.Initialize();
+        }
+    }
+
+    public void LoadContent(ContentManager content)
+    {
+        foreach (var scene in _scenes.Values)
+        {
+            scene.LoadContent(content);
+        }
     }
 
     public void Update(GameTime gameTime)
     {
-        _scenes[_currentScene]?.Update(gameTime);
+        _currentScene?.Update(gameTime);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        _scenes[_currentScene]?.Draw(spriteBatch);
-    }
-    public IScene GetCurrentScene(){
-        return _scenes[_currentScene];
+        _currentScene?.Draw(spriteBatch);
     }
 }
