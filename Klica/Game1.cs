@@ -39,7 +39,7 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         
         SceneManager.Instance.AddScene(SceneManager.SceneType.MainMenu, new MenuScene(this));
-        SceneManager.Instance.AddScene(SceneManager.SceneType.Game, new GameScene());
+        SceneManager.Instance.AddScene(SceneManager.SceneType.Game, new GameScene(this));
 
         // Set the initial scene
         SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
