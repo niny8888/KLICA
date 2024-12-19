@@ -6,15 +6,16 @@ namespace Klica.Classes
 {
     public class AnimatedSprite : Sprite
     {
-        private List<Sprite> _frames; // List of sprites for each animation frame
-        private int _currentFrameIndex; // Index of the current frame
-        private float _frameTime; // Time per frame in seconds
-        private float _timeSinceLastFrame; // Accumulated time since last frame
-        private bool _isPlaying; // Whether the animation is playing
+        private List<Sprite> _frames; 
+        private int _currentFrameIndex;
+        private float _frameTime; 
+        private float _timeSinceLastFrame;
+        private bool _isPlaying; 
+        private bool _isReversing;
 
         public AnimatedSprite(
             List<Sprite> frames,
-            float frameTime = 0.1f // Default frames
+            float frameTime = 0.1f 
         ) : base(
             frames[0].Texture,
             frames[0].Position,
@@ -30,29 +31,49 @@ namespace Klica.Classes
             _frameTime = frameTime;
             _timeSinceLastFrame = 0f;
             _isPlaying = true;
+            _isReversing = false;
 
-            // Set initial values based on the first frame
+            
             UpdateFrameProperties();
         }
 
         public void Update(GameTime gameTime)
         {
-            if (!_isPlaying || _frames.Count <= 1)
-                return;
+            if (!_isPlaying || _frames == null || _frames.Count <= 1)
+                 return;
 
-            _timeSinceLastFrame += 0.01f;///(float)gameTime.ElapsedGameTime.TotalSeconds;
+            _timeSinceLastFrame += 0.01f;
 
             if (_timeSinceLastFrame >= _frameTime)
             {
-                _timeSinceLastFrame -= _frameTime; // Reset frame timer
-                _currentFrameIndex = (_currentFrameIndex + 1) % _frames.Count; // Loop through frames
+                _timeSinceLastFrame -= _frameTime;
+
+                
+                if (_isReversing)
+                {
+                    _currentFrameIndex--;
+                    if (_currentFrameIndex <= 0)
+                    {
+                        _currentFrameIndex = 0;
+                        _isReversing = false; 
+                    }
+                }
+                else
+                {
+                    _currentFrameIndex++;
+                    if (_currentFrameIndex >= _frames.Count - 1)
+                    {
+                        _currentFrameIndex = _frames.Count - 1;
+                        _isReversing = true;
+                    }
+                }
+
                 UpdateFrameProperties();
             }
         }
 
         private void UpdateFrameProperties()
         {
-            // Update the base sprite's properties to match the current frame
             var currentFrame = _frames[_currentFrameIndex];
             _texture = currentFrame.Texture;
             _position = currentFrame.Position;
