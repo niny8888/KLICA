@@ -12,7 +12,7 @@ namespace Klica.Classes
             ScoreToWin = scoreToWin;
         }
 
-        public bool CheckWinCondition(int currentScore)
+        public bool CheckWinCondition( int currentScore)
         {
             return currentScore >= ScoreToWin;
         }

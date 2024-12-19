@@ -15,6 +15,7 @@ public class Game1 : Game
     public static int ScreenHeight= 1080;
     public SpriteManager _spriteManager;
     public GameTime gameTime;
+    
 
 
     public Game1()

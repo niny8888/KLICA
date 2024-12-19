@@ -22,6 +22,9 @@ public class GameScene : IScene
     private BitmapFont _font;
     private MouseState _previousMouseState;
     Game1 _game;
+    public static int _gameScore;
+    public bool _gameStateWin;
+    public bool _gameStateLost;
 
     public GameScene(Game1 game)
     {
@@ -29,7 +32,7 @@ public class GameScene : IScene
     }
     public void Initialize()
     {
-        _player = new Player();
+        _player = new Player(_physicsEngine);
         _gameplayRules = new GameplayRules(3600, 1);
         _backButton = new Rectangle(20, 20, 200, 50);
     }
@@ -58,12 +61,23 @@ public class GameScene : IScene
     }
 
     public void Update(GameTime gameTime)
+{
+    _player.UpdatePlayer(gameTime);
+    
+    // Check collisions with food
+    foreach (var food in _physicsEngine._foodItems) // Assuming a collection of food objects in PhysicsEngine
     {
-        _player.UpdatePlayer();
-        int score = 0;
-        _physicsEngine.Update(gameTime, _player._position, ref score);
-        HandleInput();// za gumb
+        if (!food.IsConsumed && Vector2.Distance(_player._position, food.Position) <= food.CollisionRadius)
+        {
+            food.OnConsumed(ref _gameScore);
+        }
     }
+
+    HandleInput(); // Handle input for the back button
+    _physicsEngine.Update(gameTime, _player._position, ref _gameScore);
+    _gameStateWin = _gameplayRules.CheckWinCondition(_gameScore);
+    _gameStateLost = _gameplayRules.CheckLoseCondition(_gameScore);
+}
 
     public void Draw(SpriteBatch spriteBatch)
     {
@@ -71,6 +85,7 @@ public class GameScene : IScene
         _physicsEngine.Draw(spriteBatch);
         _player.DrawPlayer(spriteBatch);
         DrawButton(spriteBatch, "Back to Menu", _backButton);
+    
     }
 
     private void HandleInput()

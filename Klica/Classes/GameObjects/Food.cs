@@ -31,12 +31,12 @@ namespace Klica.Classes
             _sprite= _spriteManager.GetSprite("food");
         }
 
-        public void Update(GameTime gameTime, Rectangle levelBounds)
+        public void Update(GameTime gameTime, Rectangle levelBounds, Vector2 playerMouthPosition, ref int score)
         {
-            
+            // Move food
             Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            
+            // Handle bouncing off boundaries
             if (Position.X < levelBounds.Left || Position.X > levelBounds.Right)
             {
                 Direction = new Vector2(-Direction.X, Direction.Y);
@@ -54,6 +54,14 @@ namespace Klica.Classes
                     MathHelper.Clamp(Position.Y, levelBounds.Top, levelBounds.Bottom)
                 );
             }
+
+            // Check for proximity to player's mouth
+            if (!IsConsumed && Vector2.Distance(Position, playerMouthPosition) <= CollisionRadius)
+            {
+                OnConsumed(ref score);
+            }
+
+            // Handle vibration
             if (_vibrationDuration > 0)
             {
                 _vibrationDuration -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -76,8 +84,11 @@ namespace Klica.Classes
         
         public void Draw(SpriteBatch spriteBatch)
         {
-            _sprite._position = Position;
-            _sprite.Draw(spriteBatch);
+            if (!IsConsumed)
+            {
+                _sprite._position = Position;
+                _sprite.Draw(spriteBatch);
+            }
         }
     }
 }

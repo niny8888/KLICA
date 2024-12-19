@@ -12,60 +12,66 @@ namespace Klica.Classes.Objects_sprites
     {
         private Base _player_base = new Base(0);
         private Eyes _player_eye= new Eyes(0);
-        private Physics _phisycs;
-        public Player(){
-            _phisycs = new Physics();
+        private Physics _physics;
+
+        private PhysicsEngine _physicsEngine;
+        private Mouth _playerMouth;
+
+        
+        public Player(PhysicsEngine physicsEngine){
+            _physics = new Physics();
+            _physicsEngine=physicsEngine;
+            Sprite leftMouth = SpriteManager.getInstance().GetSprite("ustaL");
+            Sprite rightMouth = SpriteManager.getInstance().GetSprite("ustaD");
+            _playerMouth = new Mouth(leftMouth, rightMouth, Vector2.Zero);
         }
 
         public Vector2 _position { get; internal set; }
 
-        public void UpdatePlayer(){
-            Vector2 go= Vector2.Zero; //akselerejšn
+         public void UpdatePlayer(GameTime gameTime)
+        {
+            Vector2 movementDirection = Vector2.Zero;
 
+            // Keyboard input
+            if (Keyboard.GetState().IsKeyDown(Keys.W)) movementDirection.Y -= 1;
+            if (Keyboard.GetState().IsKeyDown(Keys.A)) movementDirection.X -= 1;
+            if (Keyboard.GetState().IsKeyDown(Keys.S)) movementDirection.Y += 1;
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) movementDirection.X += 1;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
-            {   
-                go.Y -= 1;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-            {
-                go.X -= 1;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
-            {
-                go.Y += 1;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                go.X += 1;
-            }
-            if (go != Vector2.Zero)
-            {
-                go.Normalize();
-            }
+            // Normalize movement direction
+            if (movementDirection != Vector2.Zero) movementDirection.Normalize();
+
+            // Gamepad input
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             if (gamePadState.IsConnected)
             {
-                go += new Vector2(gamePadState.ThumbSticks.Left.X, -gamePadState.ThumbSticks.Left.Y); // Y is inverted
+                movementDirection += new Vector2(gamePadState.ThumbSticks.Left.X, -gamePadState.ThumbSticks.Left.Y); // Y is inverted
             }
-            if (go != Vector2.Zero)
-            {
-                go.Normalize();
-            }
-            
-            ///posision je to kar mi fizka vrne da je
-            _phisycs.Update(go);
-            _player_base.SetPosition(_phisycs.GetPosition());
-            _position=_player_base.GetPosition();
-            _player_base.SetRotation((float)Math.Atan2(_phisycs._velocity.Y,_phisycs._velocity.X) +1.6f);
+
+            // Normalize again if gamepad input was added
+            if (movementDirection != Vector2.Zero) movementDirection.Normalize();
+
+            // Update physics
+            _physics.Update(movementDirection);
+            _player_base.SetPosition(_physics.GetPosition());
+            _position = _player_base.GetPosition();
+            _player_base.SetRotation((float)Math.Atan2(_physics._velocity.Y, _physics._velocity.X) + 1.6f);
+
+            // Update eye position
             _player_eye.SetPosition(_player_base._position_eyes);
 
-            
+            // Determine if the mouth should open based on proximity to food
+            bool isMouthOpening = _physicsEngine._foodItems.Exists(food =>
+                !food.IsConsumed && Vector2.Distance(_player_base.GetMouthPosition(), food.Position) <= 20f); // 20f is the threshold
+
+            // Update mouth (animate open/close)
+            _playerMouth.Update(_player_base.GetMouthPosition(), isMouthOpening);
         }
 
         public void DrawPlayer(SpriteBatch _spriteBatch){
              _player_base.Draw(_spriteBatch);
              _player_eye.Draw(_spriteBatch);
+             _playerMouth.Draw(_spriteBatch);
          }
 
 

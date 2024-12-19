@@ -20,6 +20,8 @@ namespace Klica.Classes.Objects_sprites{
         private  bool Colidable= true;  //colision shape --> sphere !! TODO
 
         public Vector2 _position_eyes =new Vector2(0,0);
+        public Vector2 _position_mouth = Vector2.Zero;
+        private float _rotation_mouth = 0f;
 
         public Sprite _currentSprite;
     
@@ -32,7 +34,12 @@ namespace Klica.Classes.Objects_sprites{
             _base_sprite_pink= _spriteManager.GetSprite("base_pink");
 
             SetSprite(_spriteID);
+            UpdateComponentPositions();
+        }
+         private void UpdateComponentPositions()
+        {
             SetEyePosition();
+            SetMouthPosition();
         }
 
         public void SetSprite(int spriteIndex)
@@ -50,25 +57,33 @@ namespace Klica.Classes.Objects_sprites{
         internal void SetEyePosition()
         {
             Vector2 offset = new Vector2(0,- _currentSprite._size.Height / 4);
-            Vector2 basePosition = _currentSprite._position;
-            float cos = (float)Math.Cos(_currentSprite._rotation);
-            float sin = (float)Math.Sin(_currentSprite._rotation);
+            _position_eyes= CalculateRotatedPosition(_currentSprite._position, offset, _currentSprite._rotation);
+           
+        }
+        internal void SetMouthPosition()
+        {
+            Vector2 offset = new Vector2(0, -_currentSprite._size.Height); // Offset for the mouth
+            _position_mouth = CalculateRotatedPosition(_currentSprite._position, offset, _currentSprite._rotation);
+            _rotation_mouth = _currentSprite._rotation; // Align mouth rotation with the base
+            
+        }
+        private Vector2 CalculateRotatedPosition(Vector2 basePosition, Vector2 offset, float rotation)
+        {
+            float cos = (float)Math.Cos(rotation);
+            float sin = (float)Math.Sin(rotation);
 
             Vector2 rotatedOffset = new Vector2(
                 offset.X * cos - offset.Y * sin,
                 offset.X * sin + offset.Y * cos
             );
 
-            
-            _position_eyes = basePosition+ rotatedOffset;
+            return basePosition + rotatedOffset;
         }
-
-
 
         internal void SetPosition(Vector2 vector2)
         {
             _currentSprite._position = vector2;
-            SetEyePosition();
+            UpdateComponentPositions();
         }
 
         internal Vector2 GetPosition()
@@ -76,14 +91,21 @@ namespace Klica.Classes.Objects_sprites{
             return _currentSprite._position;
         }
 
-        internal void SetRotation(float rotation_new){
+        internal void SetRotation(float rotation_new)
+        {
             _currentSprite._rotation = rotation_new;
-            SetEyePosition();
-            
+            UpdateComponentPositions();
         }
 
+        internal Vector2 GetMouthPosition()
+        {
+            return _position_mouth;
+        }
 
-    
+        internal float GetMouthRotation()
+        {
+            return _rotation_mouth;
+        }
 
         public void Draw(SpriteBatch _spriteBatch){
             _currentSprite.Draw(_spriteBatch);
