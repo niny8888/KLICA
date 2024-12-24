@@ -21,8 +21,9 @@ namespace Klica.Classes
             frames[0].Texture,
             frames[0].Position,
             frames[0].SourceRectangle,
+            frames[0].RotatedSheet,
             frames[0].Scale,
-            frames[0].Rotation,
+            frames[0]._rotation,
             frames[0].Origin,
             frames[0].Tint
         )
@@ -71,19 +72,20 @@ namespace Klica.Classes
                         _isReversing = true;
                     }
                 }
+                System.Console.WriteLine("frame: "+ _currentFrameIndex);
 
                 UpdateFrameProperties();
             }
         }
 
         private void UpdateFrameProperties()
-        {
+        { 
             var currentFrame = _frames[_currentFrameIndex];
             _texture = currentFrame.Texture;
             _position = currentFrame.Position;
             _sourceRectangle = currentFrame.SourceRectangle;
             _scale = currentFrame.Scale;
-            _rotation = currentFrame.Rotation;
+            _rotation = currentFrame._rotation;
             _origin = currentFrame.Origin;
             _tint = currentFrame.Tint;
         }

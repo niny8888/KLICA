@@ -80,8 +80,8 @@ namespace Klica.Classes.Objects_sprites
             }else{
                 Vector2 leftBaseOffset = CalculateOffset(-separation,_rotationAngle,directionX,directionY);  // Left offset along the X-axis
                 Vector2 rightBaseOffset = CalculateOffset(separation,_rotationAngle,directionX,directionY);  // Right offset along the X-axis
-                System.Console.WriteLine("Left offset: "+ leftBaseOffset);
-                System.Console.WriteLine("Right offset: "+ rightBaseOffset);
+                //System.Console.WriteLine("Left offset: "+ leftBaseOffset);
+                //System.Console.WriteLine("Right offset: "+ rightBaseOffset);
 
                 Vector2 leftOffset = RotateVector(leftBaseOffset, _rotationAngle);
                 Vector2 rightOffset = RotateVector(rightBaseOffset, _rotationAngle);
@@ -96,7 +96,7 @@ namespace Klica.Classes.Objects_sprites
         private Vector2 CalculateOffset(float separation, float rotation, float directionX, float directionY)
         {
             float direction = MathHelper.ToDegrees(MathF.Atan2(directionY, directionX));  //iz X, Y v smeri
-            System.Console.WriteLine("Direction: "+ direction);
+            //System.Console.WriteLine("Direction: "+ direction);
             
             float xOffset = 0f;
             float yOffset = 0f;
@@ -173,7 +173,7 @@ namespace Klica.Classes.Objects_sprites
         public void SetRotation(float rotation)
         {
             _leftMouth._rotation = rotation;
-            _rightMouth._rotation = rotation-1.6f;
+            _rightMouth._rotation = rotation;
             
         }
 

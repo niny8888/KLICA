@@ -14,10 +14,11 @@ namespace Klica.Classes
         public Vector2 _origin;
         public Color _tint;
 
-        public Sprite(Texture2D texture, Vector2 position, Rectangle sourceRectangle, float scale = 1f, float rotation = 0f, Vector2? origin = null, Color? tint = null)
+        public int _rotatedSheet;
+
+        public Sprite(Texture2D texture, Vector2 position, Rectangle sourceRectangle, int rotatedSheet, float scale = 0.4f, float rotation = 0f, Vector2? origin = null, Color? tint = null)
         {
             _texture = texture;
-            
             _position = position;
             _sourceRectangle = sourceRectangle;
             _scale = scale;
@@ -25,24 +26,26 @@ namespace Klica.Classes
             _origin = origin ?? new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2); // Default to center
             _tint = tint ?? Color.White; // Default to white if tint is not provided 
             _size= new Rectangle(0,0, (int)(_sourceRectangle.Width * scale), (int)(_sourceRectangle.Height*scale));//to je treba porihtat ker pol k dam shit gor ne gre_size= new Rectangle(0,0,_sourceRectangle.Width * scale, _sourceRectangle.Height*scale);
-
+            _rotatedSheet= rotatedSheet;
         } // dodej layer depth
 
-        
+        public float AdjustedRotation => _rotatedSheet == 1 ? _rotation - 1.6f : _rotation;
+
         public void Draw(SpriteBatch spriteBatch)
-        {
+        {   
             spriteBatch.Draw(
                 _texture,
                 _position,
                 _sourceRectangle,
                 _tint,
-                _rotation,
+                AdjustedRotation,
                 _origin,  
                 _scale,
                 SpriteEffects.None,
                 0f
             );
         }
+
 
         // public void SetPosition(){
         //     //spremen se oregin
@@ -54,8 +57,11 @@ namespace Klica.Classes
         public Vector2 Position => _position;
         public Rectangle SourceRectangle => _sourceRectangle;
         public float Scale => _scale;
-        public float Rotation => _rotation;
+        public float Rotation => AdjustedRotation;
         public Vector2 Origin => _origin;
         public Color Tint => _tint;
+        public Rectangle Size => _size;
+        public int RotatedSheet => _rotatedSheet;
+        
     }
 }

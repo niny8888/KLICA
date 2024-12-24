@@ -43,7 +43,7 @@ namespace Klica
             // Parse data parts
             string name = parts[0];
             int rotacijaD = int.Parse(parts[1]); /// rotacija?
-
+            System.Console.WriteLine("Rotacija: "+rotacijaD);
 
             int x=int.Parse(parts[2]);
             int y = int.Parse(parts[3]);
@@ -56,7 +56,6 @@ namespace Klica
             Vector2 position = new Vector2(400, 500);
             Rectangle sourceRectangle = new Rectangle(x, y, width, height);
             float rotateAngle;
-            float scale = 0.4f;  
 
 
             // if(scale!=1f){
@@ -73,21 +72,21 @@ namespace Klica
 
             // }
 
-            if(rotacijaD==1){
-                rotateAngle= -1.6f;
-            }
-            else{
-                rotateAngle=0f;
-            }
+            // if(rotacijaD==1){
+            //     rotateAngle= -1.6f;
+            // }
+            // else{
+            //     rotateAngle=0f;
+            // }
             Vector2 pivot;
 
             pivot = new Vector2(
                 (int)Math.Round(pivotX * width),
                 (int)Math.Round(pivotY * height)
             );
-            System.Console.WriteLine("Name: " + name + " |  Size:"+ sourceRectangle+" |  Pivot: "+pivot);
+            //System.Console.WriteLine("Name: " + name + " |  Size:"+ sourceRectangle+" |  Pivot: "+pivot);
 
-            spriteManager.AddSprite(name, position, sourceRectangle, scale: scale ,rotateAngle, pivot);
+            spriteManager.AddSprite(name, position, sourceRectangle,rotacijaD,0.4f, 0 , pivot,null);
         }
     }
 }

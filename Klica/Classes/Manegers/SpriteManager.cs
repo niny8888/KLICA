@@ -15,6 +15,8 @@ namespace Klica
         private  Dictionary<string, Sprite> _sprites;
         private List<Sprite> _activeSprites;
         private static volatile SpriteManager instance= null;
+        public float AdjustedRotation ;
+
 
         public SpriteManager(Texture2D spriteSheet)
         {
@@ -30,12 +32,13 @@ namespace Klica
             return instance;
         }
 
-        public void AddSprite(String name, Vector2 position, Rectangle sourceRectangle, float scale = 1f, float rotation = 0f, Vector2? origin = null, Color? tint = null)
+        public void AddSprite(String name, Vector2 position, Rectangle sourceRectangle,int _rotatedSheet, float scale = 1f,  float rotation = 0f, Vector2? origin = null, Color? tint = null)
         {
-            var sprite = new Sprite(_spriteSheet, position, sourceRectangle, scale, rotation, origin,  tint);
+            AdjustedRotation = _rotatedSheet == 1 ? rotation - 1.6f : rotation;
+            var sprite = new Sprite(_spriteSheet, position, sourceRectangle, _rotatedSheet ,scale,AdjustedRotation , origin,  tint);
             _sprites[name] = sprite;
         }
-
+        
         public Sprite GetSprite(string name)
         {
             return _sprites.ContainsKey(name) ? _sprites[name] : null;
@@ -67,10 +70,12 @@ namespace Klica
                     originalSprite.Texture,
                     position,
                     originalSprite.SourceRectangle,
+                    originalSprite._rotatedSheet,
                     originalSprite.Scale,
-                    originalSprite.Rotation,
+                    originalSprite.AdjustedRotation,
                     originalSprite.Origin,
                     originalSprite.Tint
+                    
                 );
                 _activeSprites.Add(activeSprite);
             }
@@ -121,7 +126,7 @@ namespace Klica
 
         public float? GetRotation(string name)
         {
-            return _sprites.ContainsKey(name) ? _sprites[name].Rotation : (float?)null;
+            return _sprites.ContainsKey(name) ? _sprites[name].AdjustedRotation : (float?)null;
         }
 
         public Vector2? GetOrigin(string name)
@@ -132,6 +137,11 @@ namespace Klica
         public Color? GetTint(string name)
         {
             return _sprites.ContainsKey(name) ? _sprites[name].Tint : (Color?)null;
+        }
+
+        public int? GetRotatedSheet(string name)
+        {
+            return _sprites.ContainsKey(name) ? _sprites[name]._rotatedSheet : (int?)null;
         }
 
 

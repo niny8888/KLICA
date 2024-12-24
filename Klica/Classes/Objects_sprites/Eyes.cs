@@ -76,7 +76,7 @@ namespace Klica.Classes.Objects_sprites{
             _currentEye.Draw(_spriteBatch);
             
             _currentEyeAnimation.Update(_gameTime);
-            _currentEyeAnimation?.Draw(_spriteBatch);
+            _currentEyeAnimation.Draw(_spriteBatch);
         }
 
         //base-position je za popravt size od sprita , da se * scale da ce se je scalu
