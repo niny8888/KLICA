@@ -18,14 +18,14 @@ namespace Klica.Classes
             List<Sprite> frames,
             float frameTime = 0.1f 
         ) : base(
-            frames[0].Texture,
-            frames[0].Position,
-            frames[0].SourceRectangle,
-            frames[0].RotatedSheet,
-            frames[0].Scale,
-            frames[0]._rotation,
-            frames[0].Origin,
-            frames[0].Tint
+            frames[1].Texture,
+            frames[1].Position,
+            frames[1].SourceRectangle,
+            frames[1].RotatedSheet,
+            frames[1].Scale,
+            frames[1]._rotation,
+            frames[1].Origin,
+            frames[1].Tint
         )
         {
             _frames = frames;
