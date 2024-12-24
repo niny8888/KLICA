@@ -20,8 +20,10 @@ namespace Klica.Classes.Objects_sprites{
         private  bool Colidable= true;  //colision shape --> sphere !! TODO
 
         public Vector2 _position_eyes =new Vector2(0,0);
-        public Vector2 _position_mouth = Vector2.Zero;
+        public Vector2 _position_mouth = new Vector2(0,0);
         private float _rotation_mouth = 0f;
+        Vector2 organismCenter = new Vector2(0, 0);
+
 
         public Sprite _currentSprite;
     
@@ -35,6 +37,7 @@ namespace Klica.Classes.Objects_sprites{
 
             SetSprite(_spriteID);
             UpdateComponentPositions();
+            organismCenter = new Vector2(_currentSprite._size.Width / 2, _currentSprite._size.Height / 2);
         }
          private void UpdateComponentPositions()
         {
@@ -62,11 +65,10 @@ namespace Klica.Classes.Objects_sprites{
         }
         internal void SetMouthPosition()
         {
-            Vector2 offset = new Vector2(0, -_currentSprite._size.Height); // Offset for the mouth
+            Vector2 offset = new Vector2(12,- _currentSprite._size.Height/2); // Adjust offset for visual alignment
             _position_mouth = CalculateRotatedPosition(_currentSprite._position, offset, _currentSprite._rotation);
-            _rotation_mouth = _currentSprite._rotation; // Align mouth rotation with the base
-            
         }
+
         private Vector2 CalculateRotatedPosition(Vector2 basePosition, Vector2 offset, float rotation)
         {
             float cos = (float)Math.Cos(rotation);
@@ -95,6 +97,10 @@ namespace Klica.Classes.Objects_sprites{
         {
             _currentSprite._rotation = rotation_new;
             UpdateComponentPositions();
+        }
+        
+        public float GetRotation(){
+            return _currentSprite._rotation;
         }
 
         internal Vector2 GetMouthPosition()

@@ -83,7 +83,8 @@ public class GameScene : IScene
     {
         _level.DrawBackground(spriteBatch);
         _physicsEngine.Draw(spriteBatch);
-        _player.DrawPlayer(spriteBatch);
+        System.Console.WriteLine("GameTime: " + _game.GetGameTime());
+        _player.DrawPlayer(spriteBatch, _game.GetGameTime());
         DrawButton(spriteBatch, "Back to Menu", _backButton);
     
     }

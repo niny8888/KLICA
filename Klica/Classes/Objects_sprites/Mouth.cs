@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -5,50 +7,190 @@ namespace Klica.Classes.Objects_sprites
 {
     public class Mouth
     {
+        private SpriteManager _spriteManager = SpriteManager.getInstance();
         private Sprite _leftMouth;
         private Sprite _rightMouth;
+        private Sprite _oneMouth;
 
-        private Vector2 _position; // Center position of the mouth
+        private Vector2 _position=new Vector2(0,0); // Center position of the mouth
         private float _rotationAngle; // Current rotation angle for animation
         private float _rotationSpeed = 0.05f; // Speed of rotation during opening/closing
         private bool _isOpening = false; // Whether the mouth is opening
         private float _openThreshold = 50f; // Distance to trigger opening
+        Boolean isSingular=false;
 
-        public Mouth(Sprite leftMouth, Sprite rightMouth, Vector2 position)
+        public Mouth(int type)
         {
-            _leftMouth = leftMouth;
-            _rightMouth = rightMouth;
-            _position = position;
+            SetMouth(type);
+            if(type==2)
+                isSingular=true;
+            
+        }
+        public void SetMouth(int mouthType)
+        {
+            switch (mouthType)
+            {
+                case 0:
+                    _leftMouth = _spriteManager.GetSprite("ustaL");
+                    _rightMouth = _spriteManager.GetSprite("ustaD");
+                    break;
+                case 1:
+                    _leftMouth = _spriteManager.GetSprite("ustaL2");
+                    _rightMouth = _spriteManager.GetSprite("ustaD2");
+                    break;
+                case 2:
+                    _oneMouth = _spriteManager.GetSprite("usta3");
+                    break;
+                default:
+                    // Handle invalid mouthType if necessary
+                    Console.WriteLine("Invalid mouth type");
+                    break;
+            }
         }
 
-       public void Update(Vector2 playerPosition, bool isOpening)
+
+       public void CheckFoodCollisions(Vector2 position, float rotation, bool isOpening)
         {
-            _position = playerPosition;
+            _position = position;
+            SetRotation(rotation);
             _isOpening = isOpening;
 
-            // Animate mouth opening/closing
-            if (_isOpening && _rotationAngle < 0.5f) // Open up to a certain angle
+            //Animate mouth opening/closing
+            if (_isOpening && _rotationAngle < 0.5f)
             {
                 _rotationAngle += _rotationSpeed;
             }
-            else if (!_isOpening && _rotationAngle > 0f) // Close if not opening
+            else if (!_isOpening && _rotationAngle > 0f)
             {
                 _rotationAngle -= _rotationSpeed;
             }
         }
 
 
+
+        
+        public void SetPosition(Vector2 position, float directionX, float directionY)
+        {   
+            float separation = 10f;
+            _position = position;
+
+            if(isSingular){
+                _oneMouth._position = position;
+                return;
+            }else{
+                Vector2 leftBaseOffset = CalculateOffset(-separation,_rotationAngle,directionX,directionY);  // Left offset along the X-axis
+                Vector2 rightBaseOffset = CalculateOffset(separation,_rotationAngle,directionX,directionY);  // Right offset along the X-axis
+                System.Console.WriteLine("Left offset: "+ leftBaseOffset);
+                System.Console.WriteLine("Right offset: "+ rightBaseOffset);
+
+                Vector2 leftOffset = RotateVector(leftBaseOffset, _rotationAngle);
+                Vector2 rightOffset = RotateVector(rightBaseOffset, _rotationAngle);
+               
+                _leftMouth._position = position + leftOffset;
+                _rightMouth._position = position + rightOffset;
+            }
+            
+            
+        }
+
+        private Vector2 CalculateOffset(float separation, float rotation, float directionX, float directionY)
+        {
+            float direction = MathHelper.ToDegrees(MathF.Atan2(directionY, directionX));  //iz X, Y v smeri
+            System.Console.WriteLine("Direction: "+ direction);
+            
+            float xOffset = 0f;
+            float yOffset = 0f;
+
+
+
+            //Right -->
+            if (direction == 0 || direction == 360)
+            {
+                yOffset = separation;
+            }
+            //DOWNNN
+            else if (direction==90)
+            {
+                xOffset = -separation;
+            }
+            //LEFT
+            else if (direction==180)
+            {
+                yOffset = -separation;
+            }
+            //UP
+            else if (direction==-90)
+            {
+                xOffset = separation;
+            }
+
+            ///Problem z rotit+ranjem vrce
+            else if (direction > 0 && direction < 90)
+            {
+                // Facing right (0 degrees) -> left and right are along the Y-axis
+                yOffset = separation;  // Up or down
+                xOffset = separation;
+            }
+            else if (direction > 90 && direction < 180)
+            {
+                // Facing down (90 degrees) -> left and right are along the X-axis (inverted)
+                xOffset = separation;  // Left or right
+            }
+            else if (direction > 180 && direction < 270)
+            {
+                // Facing left (180 degrees) -> left and right are along the Y-axis (inverted)
+                yOffset = -separation;  // Up or down
+            }
+            else if (direction > 270 && direction < 360)
+            {
+                // Facing up (270 degrees) -> left and right are along the X-axis
+                xOffset = -separation;  // Left or right
+            }
+
+
+
+
+            // Apply the offsets to the vector
+            return new Vector2(xOffset, yOffset);
+        }
+
+         private Vector2 RotateVector(Vector2 vector, float angle)
+        {
+            float cos = MathF.Cos(angle);
+            float sin = MathF.Sin(angle);
+
+            return new Vector2(
+                vector.X * cos - vector.Y * sin,
+                vector.X * sin + vector.Y * cos
+            );
+        }
+
+
+
+
+
+
+        public void SetRotation(float rotation)
+        {
+            _leftMouth._rotation = rotation;
+            _rightMouth._rotation = rotation-1.6f;
+            
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
-            // Draw left and right parts of the mouth
-            _leftMouth._position = _position; // Adjusted for left position
-            _rightMouth._position = _position; // Adjusted for right position
-
-            _leftMouth._rotation = -_rotationAngle; // Rotate left mouth counter-clockwise
-            _rightMouth._rotation = _rotationAngle; // Rotate right mouth clockwise
-
+            // System.Console.WriteLine("Mouth created");
+            // System.Console.WriteLine("Left Mouth pos:"+ _leftMouth._position);
+            // System.Console.WriteLine("Right Mouth pos:"+ _rightMouth._position);
+            // System.Console.WriteLine("Mouth D rotation: "+ _rightMouth._rotation);
+            // System.Console.WriteLine("Mouth L rotation: "+ _leftMouth._rotation);
+            // System.Console.WriteLine("Mouth pos:"+ _position);
+            // System.Console.WriteLine("Mouth rotation:"+ _rotationAngle);
+            // System.Console.WriteLine("Mouth Left oregin:"+ _leftMouth._origin);
+            // System.Console.WriteLine("Mouth Right oregin:"+ _rightMouth._origin);
             _leftMouth.Draw(spriteBatch);
             _rightMouth.Draw(spriteBatch);
         }
+
     }
 }

@@ -49,6 +49,10 @@ namespace Klica.Classes.Objects_sprites{
         {
             _currentEye._position = vector2;
             _eyes_white._position= vector2;
+            foreach (var frame in _eyeFrames)
+            {
+                frame._position = vector2;
+            }
             if (_currentEyeAnimation != null)
                 _currentEyeAnimation._position = vector2;
         }
@@ -56,16 +60,22 @@ namespace Klica.Classes.Objects_sprites{
         internal void SetRotation(float rotation_new){
             _currentEye._rotation = rotation_new;
             _eyes_white._rotation = rotation_new;
+            foreach (var frame in _eyeFrames)
+            {
+                frame._rotation = rotation_new;
+            }
             if (_currentEyeAnimation != null)
                 _currentEyeAnimation._rotation = rotation_new;
+            
         }
         
 
-        public void Draw(SpriteBatch _spriteBatch){
+        public void Draw(SpriteBatch _spriteBatch, GameTime _gameTime){
+            
             _eyes_white.Draw(_spriteBatch);
             _currentEye.Draw(_spriteBatch);
+            
             _currentEyeAnimation.Update(_gameTime);
-            SetPosition(_eyes_white._position);
             _currentEyeAnimation?.Draw(_spriteBatch);
         }
 

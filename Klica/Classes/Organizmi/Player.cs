@@ -12,18 +12,16 @@ namespace Klica.Classes.Objects_sprites
     {
         private Base _player_base = new Base(0);
         private Eyes _player_eye= new Eyes(0);
+        private Mouth _player_mouth = new Mouth(0);
         private Physics _physics;
 
         private PhysicsEngine _physicsEngine;
-        private Mouth _playerMouth;
+        private Vector2 _lastMovementDirection = Vector2.Zero;
 
         
         public Player(PhysicsEngine physicsEngine){
             _physics = new Physics();
             _physicsEngine=physicsEngine;
-            Sprite leftMouth = SpriteManager.getInstance().GetSprite("ustaL");
-            Sprite rightMouth = SpriteManager.getInstance().GetSprite("ustaD");
-            _playerMouth = new Mouth(leftMouth, rightMouth, Vector2.Zero);
         }
 
         public Vector2 _position { get; internal set; }
@@ -39,7 +37,11 @@ namespace Klica.Classes.Objects_sprites
             if (Keyboard.GetState().IsKeyDown(Keys.D)) movementDirection.X += 1;
 
             // Normalize movement direction
-            if (movementDirection != Vector2.Zero) movementDirection.Normalize();
+            if (movementDirection == Vector2.Zero && _lastMovementDirection != Vector2.Zero)
+            {
+                movementDirection = _lastMovementDirection;
+            }
+
 
             // Gamepad input
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
@@ -59,19 +61,35 @@ namespace Klica.Classes.Objects_sprites
 
             // Update eye position
             _player_eye.SetPosition(_player_base._position_eyes);
-
+            _player_eye.SetRotation(_player_base.GetRotation());
+            
+            // Update mouth position
+            _player_mouth.SetPosition(_player_base._position_mouth,movementDirection.X,movementDirection.Y);
+            _player_mouth.SetRotation(_player_base.GetRotation());
+           
+           
             // Determine if the mouth should open based on proximity to food
-            bool isMouthOpening = _physicsEngine._foodItems.Exists(food =>
-                !food.IsConsumed && Vector2.Distance(_player_base.GetMouthPosition(), food.Position) <= 20f); // 20f is the threshold
+            bool isMouthOpening = false;
+            if (gameTime.TotalGameTime.Milliseconds % 100 == 0) // Check every 100 milliseconds
+            {
+                isMouthOpening = _physicsEngine._foodItems.Exists(food =>
+                    !food.IsConsumed && Vector2.Distance(_player_base._position_mouth, food.Position) <= 20f); // 20f is the threshold
+            }
 
             // Update mouth (animate open/close)
-            _playerMouth.Update(_player_base.GetMouthPosition(), isMouthOpening);
+            _player_mouth.CheckFoodCollisions(_player_base._position_mouth,_player_base.GetRotation(), isMouthOpening);
+            
+            if (movementDirection != Vector2.Zero)
+            {
+                _lastMovementDirection = movementDirection;
+            }
+            
         }
 
-        public void DrawPlayer(SpriteBatch _spriteBatch){
+        public void DrawPlayer(SpriteBatch _spriteBatch, GameTime _gameTime){
              _player_base.Draw(_spriteBatch);
-             _player_eye.Draw(_spriteBatch);
-             _playerMouth.Draw(_spriteBatch);
+             _player_eye.Draw(_spriteBatch,_gameTime);
+             _player_mouth.Draw(_spriteBatch);
          }
 
 

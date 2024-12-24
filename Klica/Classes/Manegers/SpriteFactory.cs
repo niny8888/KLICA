@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -48,8 +49,8 @@ namespace Klica
             int y = int.Parse(parts[3]);
             int width = int.Parse(parts[4]);
             int height = int.Parse(parts[5]);
-            float pivotX = float.Parse(parts[8])/10; // 0.5 - odvzone, 0,5 visie
-            float pivotY = float.Parse(parts[9])/10;
+            float pivotX = float.Parse(parts[8], CultureInfo.InvariantCulture); // 0.5 - odvzone, 0,5 visie
+            float pivotY = float.Parse(parts[9], CultureInfo.InvariantCulture);
 
             
             Vector2 position = new Vector2(400, 500);
@@ -81,10 +82,11 @@ namespace Klica
             Vector2 pivot;
 
             pivot = new Vector2(
-                (int)Math.Ceiling(pivotX * width),
-                (int)Math.Ceiling(pivotY * height)
+                (int)Math.Round(pivotX * width),
+                (int)Math.Round(pivotY * height)
             );
-            
+            System.Console.WriteLine("Name: " + name + " |  Size:"+ sourceRectangle+" |  Pivot: "+pivot);
+
             spriteManager.AddSprite(name, position, sourceRectangle, scale: scale ,rotateAngle, pivot);
         }
     }

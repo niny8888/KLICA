@@ -47,8 +47,14 @@ public class Game1 : Game
         SceneManager.Instance.LoadContent(Content);
     }
 
+    public GameTime GetGameTime()
+    {
+        return gameTime;
+    }
+
     protected override void Update(GameTime gameTime)
     {
+        this.gameTime = gameTime;
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 

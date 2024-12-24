@@ -58,7 +58,7 @@ namespace Klica.Classes
             direction.Normalize();
 
             // Randomize speed within a reasonable range (e.g., 50 to 150)
-            float speed = (float)(_level.Random.Next(50, 150));
+            float speed = _level.Random.Next(50, 150);
 
             return new Food(position, direction, speed);
         }

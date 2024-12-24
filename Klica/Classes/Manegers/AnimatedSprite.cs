@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Klica.Classes
 {
@@ -37,12 +38,15 @@ namespace Klica.Classes
             UpdateFrameProperties();
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTimeGiven)
         {
             if (!_isPlaying || _frames == null || _frames.Count <= 1)
                  return;
-
-            _timeSinceLastFrame += 0.01f;
+        
+            if(gameTimeGiven == null)
+                return;
+            
+            _timeSinceLastFrame += (float)gameTimeGiven.ElapsedGameTime.TotalSeconds;
 
             if (_timeSinceLastFrame >= _frameTime)
             {
