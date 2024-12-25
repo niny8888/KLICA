@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Klica.Classes.Objects_sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,184 +16,203 @@ namespace Klica.Classes.Organizmi
 
     public class Enemy : OrganismBuilder
     {
-        private EnemyState currentState;
-        private int aggressionLevel;
-        private int fleeTimer;
-        public Vector2 _position { get; internal set; }
-        private Random random;
-        private PhysicsEngine _physicsEngine;
-        private Vector2 _currentIdleDirection;  // Current direction when in Idle state
-        private float _idleDirectionChangeTimer;
-        private float _idleDirectionChangeInterval = 10.0f; // Change direction every 1 second
-        private float _idleWaitTime; // Time to wait before changing idle direction again
-        private float _idleWaitThreshold = 2.0f; // Wait for 2 seconds before changing direction again
-        
-        public Enemy(Base baseSprite, Eyes eye, Mouth mouth, int aggressionLevel, PhysicsEngine physicsEngine)
-            : base(baseSprite, eye, mouth,physicsEngine)
+        private EnemyState _currentState;
+        private int _aggressionLevel;
+        private int _fleeTimer;
+        private Vector2 _velocity;
+        private Vector2 _targetPosition;
+        private float _speed;
+        private Random _random;
+
+        private Collider _baseCollider;
+        private Collider _mouthCollider;
+
+        public Enemy(Base baseSprite, Eyes eye, Mouth mouth, int aggressionLevel)
+    : base(baseSprite, eye, mouth, null) 
         {
-            this.aggressionLevel = aggressionLevel;
-            this.currentState = EnemyState.Idle;
-            this.random = new Random();
-            _position = new Vector2(random.Next(100, 800), random.Next(100, 600));
-            _currentIdleDirection = Vector2.Zero;
-            _idleWaitTime = 0f;
-        
+            _aggressionLevel = aggressionLevel;
+            _currentState = EnemyState.Idle;
+            _random = new Random();
+            _position = new Vector2(_random.Next(100, 800), _random.Next(100, 600));
+            _speed = 2f;
+            _targetPosition = _position;
+
+            // Initialize components in base class
+            _organism_base.SetPosition(_position);
+            _organism_mouth.SetPosition(_organism_base._position_mouth, 0, 0);
+            _organism_eye.SetPosition(_organism_base._position_eyes);
+
+            // Initialize colliders
+            _baseCollider = new Collider(_position, baseSprite.Width / 2f, this);
+            _mouthCollider = new Collider(baseSprite._position_mouth, 25f, this);
         }
 
 
-        public void Update(GameTime gameTime, Player player, Food[] foods)
+        public void Update(GameTime gameTime, Player player, PhysicsEngine physicsEngine,ref int score)
         {
             Vector2 movementDirection = Vector2.Zero;
-
-            // Update state-specific behavior
-            switch (currentState)
+            switch (_currentState)
             {
                 case EnemyState.Idle:
-                    _idleDirectionChangeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    _idleWaitTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                    // Change direction only after a certain interval or if idle wait time exceeds threshold
-                    if (_idleDirectionChangeTimer >= _idleDirectionChangeInterval || _idleWaitTime >= _idleWaitThreshold)
-                    {
-                        _currentIdleDirection = GetRandomMovementDirection();
-                        _idleDirectionChangeTimer = 0f; // Reset the timer
-                        _idleWaitTime = 0f; // Reset idle wait time
-                    }
-
-                    movementDirection = _currentIdleDirection;
-                    CheckForFood(foods);
-                    CheckForPlayer(player);
+                    movementDirection= UpdateIdleState(player, physicsEngine._foodItems.ToArray());
                     break;
-
                 case EnemyState.ChasingFood:
-                    movementDirection = GetFoodChaseDirection(foods);
+                    movementDirection=UpdateChasingFoodState(physicsEngine._foodItems.ToArray(), ref score);
                     break;
-
                 case EnemyState.ChasingPlayer:
-                    movementDirection = GetPlayerChaseDirection(player);
+                    movementDirection=UpdateChasingPlayerState(player);
                     break;
-
                 case EnemyState.Fleeing:
-                    movementDirection = GetFleeDirection(player);
+                    movementDirection=UpdateFleeingState(player);
                     break;
             }
-            System.Console.WriteLine("Enemy state: " + currentState);
-            System.Console.WriteLine("Enemy direction: " + movementDirection);
-            // Call the base method to update organism properties
-            UpdateOrganism(movementDirection, gameTime);
-        }
-
-        private Vector2 GetRandomMovementDirection()
-        {
-            Vector2 randomDirection = new Vector2((float)(random.NextDouble() - 0.5), (float)(random.NextDouble() - 0.5));
-            randomDirection.Normalize();
-            return randomDirection * 2f; // Adjust speed as needed
-        }
-
-
-        private void CheckForFood(Food[] foods)
-        {
-            foreach (var food in foods)
+            if(movementDirection != Vector2.Zero)
             {
-                if (IsInRange(food.Position, 100f)) // Example range
-                {
-                    currentState = EnemyState.ChasingFood;
-                    break;
-                }
+                System.Console.WriteLine("movement dir: " + movementDirection);
+                UpdateOrganism(movementDirection, gameTime);
             }
+            Console.WriteLine($"Enemy {_position} moving towards {_targetPosition} in state {_currentState}");
+            // Update colliders
+            
+            _baseCollider.Position = _position;
+            _mouthCollider.Position = _organism_base._position_mouth;
         }
 
-       private Vector2 GetFoodChaseDirection(Food[] foods)
+        private Vector2 UpdateIdleState(Player player, Food[] foods)
         {
-            foreach (var food in foods)
+            if (_random.NextDouble() < 0.01)
             {
-                if (IsInRange(food.Position, 10f)) // Close enough to eat
-                {
-                    Eat(food);
-                    currentState = EnemyState.Idle;
-                    return Vector2.Zero;
-                }
-                else if (IsInRange(food.Position, 100f))
-                {
-                    return Vector2.Normalize(food.Position - _position) * 2f;
-                }
+                _targetPosition = GetRandomTargetPosition();
             }
-            currentState = EnemyState.Idle; // If no food is close, return to Idle
-            return Vector2.Zero;
+
+            if (IsPlayerInRange(player, 150f))
+            {
+                _currentState = _random.Next(100) < _aggressionLevel ? EnemyState.ChasingPlayer : EnemyState.Fleeing;
+            }
+            else if (IsFoodInRange(foods, 100f))
+            {
+                _currentState = EnemyState.ChasingFood;
+            }
+
+            return _targetPosition - _position;
         }
 
-        private void CheckForPlayer(Player player)
+        private Vector2 UpdateChasingFoodState(Food[] foods, ref int score)
         {
-            if (IsInRange(player._position, 150f)) // Example detection range
+            Food closestFood = GetClosestFood(foods);
+            if (closestFood != null)
             {
-                if (random.Next(100) < aggressionLevel)
-                {
-                    currentState = EnemyState.ChasingPlayer;
-                }
-                else
-                {
-                    currentState = EnemyState.Fleeing;
-                }
-            }
-        }
+                _targetPosition = closestFood.Position;
 
-        private Vector2 GetPlayerChaseDirection(Player player)
-        {
-            if (IsInRange(player._position, 20f)) // Close enough to attack
-            {
-                DealDamage(player);
-                return Vector2.Zero;
-            }
-            else if (IsInRange(player._position, 200f)) // Still within chase range
-            {
-                return Vector2.Normalize(player._position - _position) * 2f;
+                if (Vector2.Distance(_position, closestFood.Position) < 10f)
+                {
+                    closestFood.OnConsumed(ref score);
+                    _currentState = EnemyState.Idle;
+                }
             }
             else
             {
-                currentState = EnemyState.Idle;
-                return Vector2.Zero;
+                _currentState = EnemyState.Idle;
             }
+
+            return _targetPosition - _position;
         }
 
-        private Vector2 GetFleeDirection(Player player)
+        private Vector2 UpdateChasingPlayerState(Player player)
         {
-            Vector2 fleeDirection = (_position - player._position);
-            fleeDirection.Normalize();
+            _targetPosition = player._position;
 
-            fleeTimer++;
-            if (fleeTimer > 100) // Flee for a limited time
+            if (Vector2.Distance(_position, player._position) < 20f)
             {
-                currentState = EnemyState.Idle;
-                fleeTimer = 0;
+                player.TakeDamage(10);
+                _currentState = EnemyState.Idle;
             }
 
-            return fleeDirection * 2f;
+            return _targetPosition - _position;
         }
 
-        private bool IsInRange(Vector2 targetPosition, float range)
+        private Vector2 UpdateFleeingState(Player player)
         {
-            return Vector2.Distance(_position, targetPosition) <= range;
+            Vector2 directionAwayFromPlayer = _position - player._position;
+            directionAwayFromPlayer.Normalize();
+            _targetPosition = _position + directionAwayFromPlayer * 100f;
+
+            _fleeTimer++;
+            if (_fleeTimer > 100)
+            {
+                _currentState = EnemyState.Idle;
+                _fleeTimer = 0;
+            }
+
+            return _targetPosition - _position;
         }
 
-        private void MoveTo(Vector2 targetPosition)
+        private void MoveTowardsTarget(GameTime gameTime)
         {
-            Vector2 direction = targetPosition - _position;
-            direction.Normalize();
-            _position += direction * 2f; // Example speed
+            Vector2 direction = _targetPosition - _position;
+            if (direction.Length() > 1f)
+            {
+                direction.Normalize();
+                _velocity = direction * _speed;
+            }
+            else
+            {
+                _velocity = Vector2.Zero; // Stop when close enough
+            }
+
+            _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        private void Eat(Food food)
+        private Vector2 GetRandomTargetPosition()
         {
-            //food.IsConsumed = true;
+            return new Vector2(
+                _random.Next(100, 800),
+                _random.Next(100, 600)
+            );
         }
 
-        private void DealDamage(Player player)
+        private bool IsPlayerInRange(Player player, float range)
         {
-            player.TakeDamage(10);
+            return Vector2.Distance(_position, player._position) <= range;
         }
-        public void Draw(SpriteBatch _spriteBatch, GameTime _gameTime)
+
+        private bool IsFoodInRange(IEnumerable<Food> foods, float range)
         {
-            DrawOrganism(_spriteBatch, _gameTime);
+            foreach (var food in foods)
+            {
+                if (Vector2.Distance(_position, food.Position) <= range)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Food GetClosestFood(IEnumerable<Food> foods)
+        {
+            Food closestFood = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var food in foods)
+            {
+                float distance = Vector2.Distance(_position, food.Position);
+                if (distance < closestDistance)
+                {
+                    closestFood = food;
+                    closestDistance = distance;
+                }
+            }
+
+            return closestFood;
+        }
+
+        public Collider GetBaseCollider() => _baseCollider;
+
+        public Collider GetMouthCollider() => _mouthCollider;
+
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            DrawOrganism(spriteBatch, gameTime);
         }
     }
 }

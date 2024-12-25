@@ -51,13 +51,13 @@ public class MenuScene : IScene
         
         try
         {
-            Console.WriteLine("Loading background...");
+            //Console.WriteLine("Loading background...");
             _background = content.Load<Texture2D>("bg_0000_bg3");
-            Console.WriteLine("Background loaded successfully!");
+            //Console.WriteLine("Background loaded successfully!");
 
-            Console.WriteLine("Loading font...");
+            //Console.WriteLine("Loading font...");
             _font = content.Load<BitmapFont>("Arial");
-            Console.WriteLine("Font loaded successfully!");
+            //Console.WriteLine("Font loaded successfully!");
         }
         catch (Exception ex)
         {

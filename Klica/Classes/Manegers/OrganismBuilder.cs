@@ -7,9 +7,9 @@ using Klica.Classes.Managers;
 
 namespace Klica{
     public class OrganismBuilder{
-        private Base _organism_base;
-        private Eyes _organism_eye;
-        private Mouth _organism_mouth;
+        public Base _organism_base;
+        public Eyes _organism_eye;
+        public Mouth _organism_mouth;
         private Physics _physics;
         private PhysicsEngine _physicsEngine;
         private Vector2 _lastMovementDirection = Vector2.Zero;
@@ -42,10 +42,11 @@ namespace Klica{
             
             bool isMouthOpening = false;
             bool FoodConsumed = false;
-            if (gameTime.TotalGameTime.Milliseconds % 100 == 0) // Check every 100 milliseconds
+            if (_physicsEngine != null && gameTime.TotalGameTime.Milliseconds % 100 == 0) // Check every 100 milliseconds
             {
                 FoodConsumed = _physicsEngine._foodItems.Exists(food => food.IsConsumed);
             }
+
             _organism_mouth.CheckFoodCollisions(_organism_base._position_mouth, _organism_base.GetRotation(), ref FoodConsumed);
         }
 

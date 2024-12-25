@@ -24,7 +24,7 @@ namespace Klica.Classes
         
         public Food( Vector2 position, Vector2 direction, float speed)
         {
-            _sprite = _spriteManager.GetSprite("food");
+            _sprite = _spriteManager.GetSprite("food").Clone();
             Position = position;
             Direction = direction;
             Speed = speed;

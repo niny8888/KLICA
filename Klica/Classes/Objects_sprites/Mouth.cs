@@ -31,15 +31,15 @@ namespace Klica.Classes.Objects_sprites
             switch (mouthType)
             {
                 case 0:
-                    _leftMouth = _spriteManager.GetSprite("ustaL");
-                    _rightMouth = _spriteManager.GetSprite("ustaD");
+                    _leftMouth = _spriteManager.GetSprite("ustaL").Clone();
+                    _rightMouth = _spriteManager.GetSprite("ustaD").Clone();
                     break;
                 case 1:
-                    _leftMouth = _spriteManager.GetSprite("ustaL2");
-                    _rightMouth = _spriteManager.GetSprite("ustaD2");
+                    _leftMouth = _spriteManager.GetSprite("ustaL2").Clone();
+                    _rightMouth = _spriteManager.GetSprite("ustaD2").Clone();
                     break;
                 case 2:
-                    _oneMouth = _spriteManager.GetSprite("usta3");
+                    _oneMouth = _spriteManager.GetSprite("usta3").Clone();
                     break;
                 default:
                     // Handle invalid mouthType if necessary

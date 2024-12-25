@@ -45,6 +45,20 @@ namespace Klica.Classes
                 0f
             );
         }
+        public Sprite Clone()
+        {
+            return new Sprite(
+                this._texture,
+                this._position,
+                this._sourceRectangle,
+                this._rotatedSheet,
+                this._scale,
+                this._rotation,
+                this._origin,
+                this._tint
+            );
+        }
+
 
 
         // public void SetPosition(){

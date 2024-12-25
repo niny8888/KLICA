@@ -26,14 +26,16 @@ namespace Klica.Classes.Objects_sprites{
 
 
         public Sprite _currentSprite;
+        public int Width => _currentSprite._size.Width;
+        public int Height => _currentSprite._size.Height;
     
 
 
         public Base(int _spriteID){
-            _base_sprite_blue= _spriteManager.GetSprite("base_blue");
-            _base_sprite_orange= _spriteManager.GetSprite("base_orange");
-            _base_sprite_green= _spriteManager.GetSprite("base_green");
-            _base_sprite_pink= _spriteManager.GetSprite("base_pink");
+            _base_sprite_blue= _spriteManager.GetSprite("base_blue").Clone();
+            _base_sprite_orange= _spriteManager.GetSprite("base_orange").Clone();
+            _base_sprite_green= _spriteManager.GetSprite("base_green").Clone();
+            _base_sprite_pink= _spriteManager.GetSprite("base_pink").Clone();
 
             SetSprite(_spriteID);
             UpdateComponentPositions();

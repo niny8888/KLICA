@@ -31,7 +31,6 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-
        base.Initialize();
     }
 
@@ -64,7 +63,7 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-      GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(Color.CornflowerBlue);
 
         _spriteBatch.Begin();
         SceneManager.Instance.Draw(_spriteBatch);

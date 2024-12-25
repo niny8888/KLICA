@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Klica.Classes.Objects_sprites{
     public class Eyes{
         private SpriteManager _spriteManager = SpriteManager.getInstance();
-        private static Sprite _eyes_white;
+        private Sprite _eyes_white;
         private Sprite _eyes_version1;
         private  Sprite _eyes_version2;
         private  Sprite _eyes_version3;
@@ -21,15 +21,15 @@ namespace Klica.Classes.Objects_sprites{
     
         public Eyes(int version){
             _eyeFrames= new List<Sprite>();
-            _eyes_white= _spriteManager.GetSprite("ucki_zun");
-            _eyes_version1= _spriteManager.GetSprite("ucki_not1");
-            _eyes_version2= _spriteManager.GetSprite("ucki_not2");
-            _eyes_version3= _spriteManager.GetSprite("ucki_not3");
+            _eyes_white= _spriteManager.GetSprite("ucki_zun").Clone();
+            _eyes_version1= _spriteManager.GetSprite("ucki_not1").Clone();
+            _eyes_version2= _spriteManager.GetSprite("ucki_not2").Clone();
+            _eyes_version3= _spriteManager.GetSprite("ucki_not3").Clone();
 
             for (int i = 1; i <= 9; i++)
             {
                 string spriteName = $"mezikanje_e{i}";
-                _eyeFrames.Add(_spriteManager.GetSprite(spriteName)); // Add frames for animation
+                _eyeFrames.Add(_spriteManager.GetSprite(spriteName).Clone()); // Add frames for animation
             }
             _currentEyeAnimation= new AnimatedSprite(_eyeFrames);
             SetSpriteEye(version);

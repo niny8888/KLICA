@@ -8,23 +8,34 @@ namespace Klica.Classes.Objects_sprites
 {
     public class Player
     {
+        // Player properties
         private Base _player_base = new Base(0);
         private Eyes _player_eye= new Eyes(0);
         public Mouth _player_mouth = new Mouth(0);
-        private Physics _physics;
 
+        // Physics properties
+        private Physics _physics;
         private PhysicsEngine _physicsEngine;
         private Vector2 _lastMovementDirection = Vector2.Zero;
 
-         public Vector2 _position { get; internal set; }
+        public Vector2 _position { get; internal set; }
         public int _health { get; internal set; }
         private bool _hasStarted = false;
+
+
+        // Collision properties
+        private Collider _baseCollider;
+        private Collider _mouthCollider;
+
+
         public Player(PhysicsEngine physicsEngine)
         {   
             _position = new Vector2(1920 / 2, 1080 / 2);
             _physics = new Physics(_position);
             _physicsEngine = physicsEngine;
             _player_base.SetPosition(_position);
+            _baseCollider = new Collider(_position, _player_base.Width / 2f, this);
+            _mouthCollider = new Collider(_player_base._position_mouth, 25f, this);
         }
 
         public void TakeDamage(int damage)
@@ -82,12 +93,9 @@ namespace Klica.Classes.Objects_sprites
                 _position = _player_base.GetPosition();
             }
 
-            // System.Console.WriteLine("Player position: " + _position);
-            // System.Console.WriteLine("Physisc position: " + _physics.GetPosition());
             _player_base.SetPosition(_player_base.GetPosition());
             _position = _player_base.GetPosition();
             _player_base.SetRotation((float)Math.Atan2(_physics._velocity.Y, _physics._velocity.X) + 1.6f);
-
             // Update eye position
             _player_eye.SetPosition(_player_base._position_eyes);
             _player_eye.SetRotation(_player_base.GetRotation());
@@ -95,6 +103,9 @@ namespace Klica.Classes.Objects_sprites
             // Update mouth position
             _player_mouth.SetPosition(_player_base._position_mouth,movementDirection.X,movementDirection.Y);
             _player_mouth.SetRotation(_player_base.GetRotation());
+
+            _baseCollider.Position = _position;
+            _mouthCollider.Position = _player_base._position_mouth;
            
            ///###################################za popravt!!!!!
            ///  V V V V V
@@ -118,6 +129,8 @@ namespace Klica.Classes.Objects_sprites
             }
             
         }
+        public Collider GetBaseCollider() => _baseCollider;
+        public Collider GetMouthCollider() => _mouthCollider;
 
         public void DrawPlayer(SpriteBatch _spriteBatch, GameTime _gameTime){
              _player_base.Draw(_spriteBatch);
