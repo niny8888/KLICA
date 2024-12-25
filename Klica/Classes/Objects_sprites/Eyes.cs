@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Klica.Classes.Objects_sprites{
     public class Eyes{
         private SpriteManager _spriteManager = SpriteManager.getInstance();
-        private Sprite _eyes_white;
+        private static Sprite _eyes_white;
         private Sprite _eyes_version1;
         private  Sprite _eyes_version2;
         private  Sprite _eyes_version3;

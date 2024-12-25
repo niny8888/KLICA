@@ -37,6 +37,12 @@ namespace Klica
             AdjustedRotation = _rotatedSheet == 1 ? rotation - 1.6f : rotation;
             var sprite = new Sprite(_spriteSheet, position, sourceRectangle, _rotatedSheet ,scale,AdjustedRotation , origin,  tint);
             _sprites[name] = sprite;
+            ActivateSprite(name, position);
+        }
+        public void AddSprite(Sprite sprite, String name)
+        {
+            _sprites[name] = sprite;
+            ActivateSprite(name, sprite.Position);
         }
         
         public Sprite GetSprite(string name)
@@ -64,19 +70,18 @@ namespace Klica
         {
             if (_sprites.ContainsKey(name))
             {
-                // Clone the sprite with the specified position
                 var originalSprite = _sprites[name];
                 var activeSprite = new Sprite(
                     originalSprite.Texture,
                     position,
                     originalSprite.SourceRectangle,
-                    originalSprite._rotatedSheet,
+                    originalSprite.RotatedSheet,
                     originalSprite.Scale,
-                    originalSprite.AdjustedRotation,
+                    originalSprite.Rotation,
                     originalSprite.Origin,
                     originalSprite.Tint
-                    
                 );
+                System.Console.WriteLine("Active sprite: " + activeSprite);
                 _activeSprites.Add(activeSprite);
             }
         }

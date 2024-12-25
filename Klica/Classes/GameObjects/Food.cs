@@ -28,7 +28,6 @@ namespace Klica.Classes
             Position = position;
             Direction = direction;
             Speed = speed;
-            _sprite= _spriteManager.GetSprite("food");
         }
 
         public void Update(GameTime gameTime, Rectangle levelBounds, Vector2 playerMouthPosition, ref int score)

@@ -16,15 +16,19 @@ namespace Klica{
         public int _health { get; internal set; }
         public Vector2 _position { get; internal set; }
 
-        public OrganismBuilder(Base baseSprite, Eyes eye, Mouth mouth){
+        public OrganismBuilder(Base baseSprite, Eyes eye, Mouth mouth, PhysicsEngine physicsEngine){
             _organism_base = baseSprite;
             _organism_eye = eye;
             _organism_mouth = mouth;
+            _physics = new Physics(_organism_base.GetPosition());
+            _physicsEngine = physicsEngine;
         }
-        public void UpdateOrganism(Vector2 movementDirection, GameTime gameTime){
-            movementDirection = Vector2.Zero;
-              
-            if (movementDirection != Vector2.Zero) movementDirection.Normalize();
+        public void UpdateOrganism(Vector2 movementDirection, GameTime gameTime)
+        {
+            if (movementDirection != Vector2.Zero)
+            {
+                movementDirection.Normalize();
+            }
 
             _physics.Update(movementDirection);
             _organism_base.SetPosition(_physics.GetPosition());
@@ -33,24 +37,18 @@ namespace Klica{
 
             _organism_eye.SetPosition(_organism_base._position_eyes);
             _organism_eye.SetRotation(_organism_base.GetRotation());
-        
-            _organism_mouth.SetPosition(_organism_base._position_mouth, movementDirection.X,movementDirection.Y);
+            _organism_mouth.SetPosition(_organism_base._position_mouth, movementDirection.X, movementDirection.Y);
             _organism_mouth.SetRotation(_organism_base.GetRotation());
             
             bool isMouthOpening = false;
-            bool FoodConsumed= false;
+            bool FoodConsumed = false;
             if (gameTime.TotalGameTime.Milliseconds % 100 == 0) // Check every 100 milliseconds
             {
-                FoodConsumed = _physicsEngine._foodItems.Exists(food =>
-                    food.IsConsumed); 
+                FoodConsumed = _physicsEngine._foodItems.Exists(food => food.IsConsumed);
             }
             _organism_mouth.CheckFoodCollisions(_organism_base._position_mouth, _organism_base.GetRotation(), ref FoodConsumed);
-            
-            if (movementDirection == Vector2.Zero && _lastMovementDirection != Vector2.Zero)
-            {
-                movementDirection = _lastMovementDirection;
-            } 
         }
+
 
         public void TakeDamage(int damage)
         {
@@ -60,6 +58,7 @@ namespace Klica{
                 System.Console.WriteLine("Game over! U died!");
             }
         }
+
         public void DrawOrganism(SpriteBatch _spriteBatch, GameTime _gameTime){
             _organism_base.Draw(_spriteBatch);
             _organism_eye.Draw(_spriteBatch, _gameTime);

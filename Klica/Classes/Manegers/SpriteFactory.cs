@@ -43,7 +43,7 @@ namespace Klica
             // Parse data parts
             string name = parts[0];
             int rotacijaD = int.Parse(parts[1]); /// rotacija?
-            System.Console.WriteLine("Rotacija: "+rotacijaD);
+            //System.Console.WriteLine("Rotacija: "+rotacijaD);
 
             int x=int.Parse(parts[2]);
             int y = int.Parse(parts[3]);

@@ -59,10 +59,10 @@ public class GameScene : IScene
         _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, _gameplayRules, 10);
         _physicsEngine = new PhysicsEngine(_level);
 
-        var food = new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 50f);
+        var food = new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f);
         _physicsEngine.AddFood(food);
 
-        SpawnEnemies(3);
+        SpawnEnemies(1);
 
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
@@ -107,7 +107,7 @@ public class GameScene : IScene
         {
             enemy.Draw(spriteBatch, _game.GetGameTime());
         }
-        System.Console.WriteLine("GameTime: " + _game.GetGameTime());
+        //System.Console.WriteLine("GameTime: " + _game.GetGameTime());
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
         DrawButton(spriteBatch, "Back to Menu", _backButton);
     
@@ -145,7 +145,7 @@ public class GameScene : IScene
             var eyes = new Eyes(1);
             var mouth = new Mouth(1);
 
-            var enemy = new Enemy(baseSprite, eyes, mouth, _random.Next(30, 70));
+            var enemy = new Enemy(baseSprite, eyes, mouth, _random.Next(30, 70),physicsEngine: _physicsEngine);
             enemy._position = spawnPosition; // Set the spawn position
             _enemies.Add(enemy);
         }

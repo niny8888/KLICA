@@ -20,44 +20,73 @@ namespace Klica.Classes.Organizmi
         private int fleeTimer;
         public Vector2 _position { get; internal set; }
         private Random random;
-
-        public Enemy(Base baseSprite, Eyes eye, Mouth mouth, int aggressionLevel)
-            : base(baseSprite, eye, mouth)
+        private PhysicsEngine _physicsEngine;
+        private Vector2 _currentIdleDirection;  // Current direction when in Idle state
+        private float _idleDirectionChangeTimer;
+        private float _idleDirectionChangeInterval = 10.0f; // Change direction every 1 second
+        private float _idleWaitTime; // Time to wait before changing idle direction again
+        private float _idleWaitThreshold = 2.0f; // Wait for 2 seconds before changing direction again
+        
+        public Enemy(Base baseSprite, Eyes eye, Mouth mouth, int aggressionLevel, PhysicsEngine physicsEngine)
+            : base(baseSprite, eye, mouth,physicsEngine)
         {
             this.aggressionLevel = aggressionLevel;
             this.currentState = EnemyState.Idle;
             this.random = new Random();
+            _position = new Vector2(random.Next(100, 800), random.Next(100, 600));
+            _currentIdleDirection = Vector2.Zero;
+            _idleWaitTime = 0f;
+        
         }
 
 
         public void Update(GameTime gameTime, Player player, Food[] foods)
         {
+            Vector2 movementDirection = Vector2.Zero;
+
+            // Update state-specific behavior
             switch (currentState)
             {
                 case EnemyState.Idle:
-                    MoveRandomly(gameTime);
+                    _idleDirectionChangeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    _idleWaitTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    // Change direction only after a certain interval or if idle wait time exceeds threshold
+                    if (_idleDirectionChangeTimer >= _idleDirectionChangeInterval || _idleWaitTime >= _idleWaitThreshold)
+                    {
+                        _currentIdleDirection = GetRandomMovementDirection();
+                        _idleDirectionChangeTimer = 0f; // Reset the timer
+                        _idleWaitTime = 0f; // Reset idle wait time
+                    }
+
+                    movementDirection = _currentIdleDirection;
                     CheckForFood(foods);
                     CheckForPlayer(player);
                     break;
+
                 case EnemyState.ChasingFood:
-                    ChaseFood(foods);
+                    movementDirection = GetFoodChaseDirection(foods);
                     break;
+
                 case EnemyState.ChasingPlayer:
-                    ChasePlayer(player);
+                    movementDirection = GetPlayerChaseDirection(player);
                     break;
+
                 case EnemyState.Fleeing:
-                    FleeFromPlayer(player);
+                    movementDirection = GetFleeDirection(player);
                     break;
             }
+            System.Console.WriteLine("Enemy state: " + currentState);
+            System.Console.WriteLine("Enemy direction: " + movementDirection);
+            // Call the base method to update organism properties
+            UpdateOrganism(movementDirection, gameTime);
         }
 
-        private void MoveRandomly(GameTime gameTime)
+        private Vector2 GetRandomMovementDirection()
         {
-            // Random small movement in any direction
             Vector2 randomDirection = new Vector2((float)(random.NextDouble() - 0.5), (float)(random.NextDouble() - 0.5));
             randomDirection.Normalize();
-            _position += randomDirection * 2f; // Adjust speed as needed
-
+            return randomDirection * 2f; // Adjust speed as needed
         }
 
 
@@ -73,7 +102,7 @@ namespace Klica.Classes.Organizmi
             }
         }
 
-        private void ChaseFood(Food[] foods)
+       private Vector2 GetFoodChaseDirection(Food[] foods)
         {
             foreach (var food in foods)
             {
@@ -81,13 +110,15 @@ namespace Klica.Classes.Organizmi
                 {
                     Eat(food);
                     currentState = EnemyState.Idle;
-                    return;
+                    return Vector2.Zero;
                 }
-                else
+                else if (IsInRange(food.Position, 100f))
                 {
-                    MoveTo(food.Position);
+                    return Vector2.Normalize(food.Position - _position) * 2f;
                 }
             }
+            currentState = EnemyState.Idle; // If no food is close, return to Idle
+            return Vector2.Zero;
         }
 
         private void CheckForPlayer(Player player)
@@ -105,27 +136,28 @@ namespace Klica.Classes.Organizmi
             }
         }
 
-        private void ChasePlayer(Player player)
+        private Vector2 GetPlayerChaseDirection(Player player)
         {
             if (IsInRange(player._position, 20f)) // Close enough to attack
             {
                 DealDamage(player);
+                return Vector2.Zero;
             }
             else if (IsInRange(player._position, 200f)) // Still within chase range
             {
-                MoveTo(player._position);
+                return Vector2.Normalize(player._position - _position) * 2f;
             }
             else
             {
                 currentState = EnemyState.Idle;
+                return Vector2.Zero;
             }
         }
 
-        private void FleeFromPlayer(Player player)
+        private Vector2 GetFleeDirection(Player player)
         {
             Vector2 fleeDirection = (_position - player._position);
             fleeDirection.Normalize();
-            _position += fleeDirection * 2f; // Move away
 
             fleeTimer++;
             if (fleeTimer > 100) // Flee for a limited time
@@ -133,6 +165,8 @@ namespace Klica.Classes.Organizmi
                 currentState = EnemyState.Idle;
                 fleeTimer = 0;
             }
+
+            return fleeDirection * 2f;
         }
 
         private bool IsInRange(Vector2 targetPosition, float range)
