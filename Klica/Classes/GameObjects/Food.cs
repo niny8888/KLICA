@@ -15,7 +15,7 @@ namespace Klica.Classes
         public Vector2 Position { get; private set; }
         public float Speed { get; private set; }
         public Vector2 Direction { get; private set; }
-        public float CollisionRadius { get; private set; } = 20f;
+        public float CollisionRadius { get; private set; } = 50f;
         public bool IsConsumed { get; private set; } = false;
         private float _vibrationDuration = 0f; 
 
@@ -58,6 +58,8 @@ namespace Klica.Classes
             // Check for proximity to player's mouth
             if (!IsConsumed && Vector2.Distance(Position, playerMouthPosition) <= CollisionRadius)
             {
+                System.Console.WriteLine("Food consumed");
+                System.Console.WriteLine("Score: " + score);
                 OnConsumed(ref score);
             }
 
@@ -77,8 +79,14 @@ namespace Klica.Classes
         {
             IsConsumed = true;
             score++;
+
             _vibrationDuration = 0.5f;
             GamePad.SetVibration(PlayerIndex.One, 1.0f, 1.0f);
+        }
+
+        public bool WasConsumed()
+        {
+            return IsConsumed;
         }
 
         

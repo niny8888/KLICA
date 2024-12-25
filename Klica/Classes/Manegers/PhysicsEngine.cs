@@ -32,6 +32,12 @@ namespace Klica.Classes
                 food.Update(gameTime, _level.Bounds, playerMouthPosition, ref score);
             }
             _foodItems.RemoveAll(food => food.IsConsumed);
+
+            if(_foodItems.Count < _level._FoodNum)
+            {
+                _foodItems.Add(CreateRandomFood());
+            }
+        
         }
         
         public void Draw(SpriteBatch spriteBatch)

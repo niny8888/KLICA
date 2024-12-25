@@ -1,6 +1,4 @@
 using System;
-using System.Security.Cryptography.X509Certificates;
-using Klica;
 using Klica.Classes.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,23 +6,35 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Klica.Classes.Objects_sprites
 {
-    public class Player 
+    public class Player
     {
         private Base _player_base = new Base(0);
         private Eyes _player_eye= new Eyes(0);
-        private Mouth _player_mouth = new Mouth(0);
+        public Mouth _player_mouth = new Mouth(0);
         private Physics _physics;
 
         private PhysicsEngine _physicsEngine;
         private Vector2 _lastMovementDirection = Vector2.Zero;
 
+         public Vector2 _position { get; internal set; }
+         public int _health { get; internal set; }
         
-        public Player(PhysicsEngine physicsEngine){
+        public Player(PhysicsEngine physicsEngine)
+        {
             _physics = new Physics();
-            _physicsEngine=physicsEngine;
+            _physicsEngine = physicsEngine;
         }
 
-        public Vector2 _position { get; internal set; }
+        public void TakeDamage(int damage)
+        {
+            _health -= damage;
+            if (_health <= 0)
+            {
+                System.Console.WriteLine("Game over! U died!");
+            }
+        }
+
+       
 
          public void UpdatePlayer(GameTime gameTime)
         {
@@ -67,17 +77,21 @@ namespace Klica.Classes.Objects_sprites
             _player_mouth.SetPosition(_player_base._position_mouth,movementDirection.X,movementDirection.Y);
             _player_mouth.SetRotation(_player_base.GetRotation());
            
-           
+           ///###################################za popravt!!!!!
+           ///  V V V V V
+
+
             // Determine if the mouth should open based on proximity to food
             bool isMouthOpening = false;
+            bool FoodConsumed= false;
             if (gameTime.TotalGameTime.Milliseconds % 100 == 0) // Check every 100 milliseconds
             {
-                isMouthOpening = _physicsEngine._foodItems.Exists(food =>
-                    !food.IsConsumed && Vector2.Distance(_player_base._position_mouth, food.Position) <= 20f); // 20f is the threshold
+                FoodConsumed = _physicsEngine._foodItems.Exists(food =>
+                    food.IsConsumed); 
             }
-
+            //System.Console.WriteLine("Food consumed: " + FoodConsumed);
             // Update mouth (animate open/close)
-            _player_mouth.CheckFoodCollisions(_player_base._position_mouth,_player_base.GetRotation(), isMouthOpening);
+            _player_mouth.CheckFoodCollisions(_player_base._position_mouth,_player_base.GetRotation(),ref FoodConsumed);
             
             if (movementDirection != Vector2.Zero)
             {

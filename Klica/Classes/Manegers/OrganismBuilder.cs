@@ -2,48 +2,68 @@ using Klica.Classes;
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Klica.Classes.Objects_sprites;
+using Klica.Classes.Managers;
 
 namespace Klica{
     public class OrganismBuilder{
-        private Base _base;
-        private Eyes _eye;
-        private Sprite _mouthL;
-        private Sprite _mouthD;
+        private Base _organism_base;
+        private Eyes _organism_eye;
+        private Mouth _organism_mouth;
+        private Physics _physics;
+        private PhysicsEngine _physicsEngine;
+        private Vector2 _lastMovementDirection = Vector2.Zero;
+        public int _health { get; internal set; }
+        public Vector2 _position { get; internal set; }
 
-        private Vector2 _origin; 
-        private Vector2 _offsetEye;
-        private Vector2 _offsetMouthL;
-        private Vector2 _offsetMouthD;
+        public OrganismBuilder(Base baseSprite, Eyes eye, Mouth mouth){
+            _organism_base = baseSprite;
+            _organism_eye = eye;
+            _organism_mouth = mouth;
+        }
+        public void UpdateOrganism(Vector2 movementDirection, GameTime gameTime){
+            movementDirection = Vector2.Zero;
+              
+            if (movementDirection != Vector2.Zero) movementDirection.Normalize();
+
+            _physics.Update(movementDirection);
+            _organism_base.SetPosition(_physics.GetPosition());
+            _position = _organism_base.GetPosition();
+            _organism_base.SetRotation((float)Math.Atan2(_physics._velocity.Y, _physics._velocity.X) + 1.6f);
+
+            _organism_eye.SetPosition(_organism_base._position_eyes);
+            _organism_eye.SetRotation(_organism_base.GetRotation());
         
-        private float _rotation;
-        private float _scale;
-        private Vector2 _position;
-
-       public OrganismBuilder(Base baseSprite, Eyes eye, Sprite mouthL, Sprite mouthD)
-        {
-            _base = baseSprite;
-            _eye = eye;
-            _mouthL = mouthL;
-            _mouthD = mouthD;
-
-        }
-        public void SetPosition(Vector2 position)
-        {
-            _position = position;
-        }
-
-        public void SetRotation(float rotation)
-        {
-            _rotation = rotation;
+            _organism_mouth.SetPosition(_organism_base._position_mouth, movementDirection.X,movementDirection.Y);
+            _organism_mouth.SetRotation(_organism_base.GetRotation());
+            
+            bool isMouthOpening = false;
+            bool FoodConsumed= false;
+            if (gameTime.TotalGameTime.Milliseconds % 100 == 0) // Check every 100 milliseconds
+            {
+                FoodConsumed = _physicsEngine._foodItems.Exists(food =>
+                    food.IsConsumed); 
+            }
+            _organism_mouth.CheckFoodCollisions(_organism_base._position_mouth, _organism_base.GetRotation(), ref FoodConsumed);
+            
+            if (movementDirection == Vector2.Zero && _lastMovementDirection != Vector2.Zero)
+            {
+                movementDirection = _lastMovementDirection;
+            } 
         }
 
-        public void SetScale(float scale)
+        public void TakeDamage(int damage)
         {
-            _scale = scale;
+            _health -= damage;
+            if (_health <= 0)
+            {
+                System.Console.WriteLine("Game over! U died!");
+            }
         }
-        
-
+        public void DrawOrganism(SpriteBatch _spriteBatch, GameTime _gameTime){
+            _organism_base.Draw(_spriteBatch);
+            _organism_eye.Draw(_spriteBatch, _gameTime);
+            _organism_mouth.Draw(_spriteBatch);
+        }
     }
 }

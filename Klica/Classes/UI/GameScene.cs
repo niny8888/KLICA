@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using Klica;
 using Klica.Classes;
 using Klica.Classes.Objects_sprites;
+using Klica.Classes.Organizmi;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,14 +16,19 @@ public class GameScene : IScene
     private GameplayRules _gameplayRules;
     private PhysicsEngine _physicsEngine;
     private Player _player;
+    private List<Enemy> _enemies;
     private Texture2D _background;
     private SpriteManager _spriteManager;
+    private Random _random;
 
     // za gumb
     private Rectangle _backButton;
     private Texture2D _buttonTexture;
     private BitmapFont _font;
     private MouseState _previousMouseState;
+
+
+    //game state
     Game1 _game;
     public static int _gameScore;
     public bool _gameStateWin;
@@ -29,11 +37,13 @@ public class GameScene : IScene
     public GameScene(Game1 game)
     {
         _game = game; 
+        _random = new Random();
+        _enemies = new List<Enemy>();
     }
     public void Initialize()
     {
         _player = new Player(_physicsEngine);
-        _gameplayRules = new GameplayRules(3600, 1);
+        _gameplayRules = new GameplayRules(3600, 3);
         _backButton = new Rectangle(20, 20, 200, 50);
     }
 
@@ -48,11 +58,13 @@ public class GameScene : IScene
 
         _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, _gameplayRules, 10);
         _physicsEngine = new PhysicsEngine(_level);
+
         var food = new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 50f);
         _physicsEngine.AddFood(food);
 
+        SpawnEnemies(3);
 
-       _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
+        _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
 
        
@@ -61,28 +73,40 @@ public class GameScene : IScene
     }
 
     public void Update(GameTime gameTime)
-{
-    _player.UpdatePlayer(gameTime);
-    
-    // Check collisions with food
-    foreach (var food in _physicsEngine._foodItems) // Assuming a collection of food objects in PhysicsEngine
     {
-        if (!food.IsConsumed && Vector2.Distance(_player._position, food.Position) <= food.CollisionRadius)
+        _player.UpdatePlayer(gameTime);
+        
+        // Check collisions with food
+        foreach (var food in _physicsEngine._foodItems)
         {
-            food.OnConsumed(ref _gameScore);
+            food.Update(gameTime, _level.Bounds, _player._position, ref _gameScore);
+        }
+        foreach (var enemy in _enemies)
+        {
+            enemy.Update(gameTime, _player, _physicsEngine._foodItems.ToArray());
+            ConstrainToBounds(enemy);
+        }
+
+        HandleInput(); // Handle input for the back button
+        _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore);
+        _gameStateWin = _gameplayRules.CheckWinCondition(_gameScore);
+        _gameStateLost = _gameplayRules.CheckLoseCondition(_gameScore);
+        if (_gameStateWin){
+            System.Console.WriteLine("You won!");
+        }
+        if(_gameStateLost){
+            System.Console.WriteLine("You lost!");
         }
     }
-
-    HandleInput(); // Handle input for the back button
-    _physicsEngine.Update(gameTime, _player._position, ref _gameScore);
-    _gameStateWin = _gameplayRules.CheckWinCondition(_gameScore);
-    _gameStateLost = _gameplayRules.CheckLoseCondition(_gameScore);
-}
 
     public void Draw(SpriteBatch spriteBatch)
     {
         _level.DrawBackground(spriteBatch);
         _physicsEngine.Draw(spriteBatch);
+        foreach (var enemy in _enemies)
+        {
+            enemy.Draw(spriteBatch, _game.GetGameTime());
+        }
         System.Console.WriteLine("GameTime: " + _game.GetGameTime());
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
         DrawButton(spriteBatch, "Back to Menu", _backButton);
@@ -107,6 +131,38 @@ public class GameScene : IScene
         }
 
         _previousMouseState = mouseState;
+    }
+    private void SpawnEnemies(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Vector2 spawnPosition = new Vector2(
+                _random.Next(_level.Bounds.Left, _level.Bounds.Right),
+                _random.Next(_level.Bounds.Top, _level.Bounds.Bottom)
+            );
+
+            var baseSprite = new Base(1);
+            var eyes = new Eyes(1);
+            var mouth = new Mouth(1);
+
+            var enemy = new Enemy(baseSprite, eyes, mouth, _random.Next(30, 70));
+            enemy._position = spawnPosition; // Set the spawn position
+            _enemies.Add(enemy);
+        }
+    }
+    private void ConstrainToBounds(Enemy enemy)
+    {
+        var bounds = _level.Bounds;
+
+        if (enemy._position.X < bounds.Left)
+            enemy._position = new Vector2(bounds.Left, enemy._position.Y);
+        else if (enemy._position.X > bounds.Right)
+            enemy._position = new Vector2(bounds.Right, enemy._position.Y);
+
+        if (enemy._position.Y < bounds.Top)
+            enemy._position = new Vector2(enemy._position.X, bounds.Top);
+        else if (enemy._position.Y > bounds.Bottom)
+            enemy._position = new Vector2(enemy._position.X, bounds.Bottom);
     }
 
     private void DrawButton(SpriteBatch spriteBatch, string text, Rectangle buttonRect)

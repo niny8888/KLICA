@@ -72,7 +72,7 @@ namespace Klica.Classes
                         _isReversing = true;
                     }
                 }
-                System.Console.WriteLine("frame: "+ _currentFrameIndex);
+                //System.Console.WriteLine("frame: "+ _currentFrameIndex);
 
                 UpdateFrameProperties();
             }

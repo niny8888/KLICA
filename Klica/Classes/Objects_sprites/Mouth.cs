@@ -12,11 +12,11 @@ namespace Klica.Classes.Objects_sprites
         private Sprite _rightMouth;
         private Sprite _oneMouth;
 
-        private Vector2 _position=new Vector2(0,0); // Center position of the mouth
+        public Vector2 _position=new Vector2(0,0); // Center position of the mouth
         private float _rotationAngle; // Current rotation angle for animation
         private float _rotationSpeed = 0.05f; // Speed of rotation during opening/closing
         private bool _isOpening = false; // Whether the mouth is opening
-        private float _openThreshold = 50f; // Distance to trigger opening
+        private float _openThreshold = 70f; // Distance to trigger opening
         Boolean isSingular=false;
 
         public Mouth(int type)
@@ -49,13 +49,25 @@ namespace Klica.Classes.Objects_sprites
         }
 
 
-       public void CheckFoodCollisions(Vector2 position, float rotation, bool isOpening)
+       public void CheckFoodCollisions(Vector2 foodPosition, float collisionRadius, ref bool foodConsumed)
         {
-            _position = position;
-            SetRotation(rotation);
-            _isOpening = isOpening;
+            float distanceToFood = Vector2.Distance(_position, foodPosition);
 
-            //Animate mouth opening/closing
+            if (!foodConsumed && distanceToFood <= _openThreshold)
+            {
+                _isOpening = true;
+                if (distanceToFood <= collisionRadius)
+                {
+                    foodConsumed = true; // Mark food as consumed
+                    _isOpening = false; // Close mouth after consuming
+                }
+            }
+            else
+            {
+                _isOpening = false; // Close mouth when food is far
+            }
+
+            // Animate mouth opening/closing
             if (_isOpening && _rotationAngle < 0.5f)
             {
                 _rotationAngle += _rotationSpeed;
@@ -188,8 +200,15 @@ namespace Klica.Classes.Objects_sprites
             // System.Console.WriteLine("Mouth rotation:"+ _rotationAngle);
             // System.Console.WriteLine("Mouth Left oregin:"+ _leftMouth._origin);
             // System.Console.WriteLine("Mouth Right oregin:"+ _rightMouth._origin);
-            _leftMouth.Draw(spriteBatch);
-            _rightMouth.Draw(spriteBatch);
+            if (isSingular)
+            {
+                _oneMouth.Draw(spriteBatch);
+            }
+            else
+            {
+                _leftMouth.Draw(spriteBatch);
+                _rightMouth.Draw(spriteBatch);
+            }
         }
 
     }
