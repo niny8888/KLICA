@@ -35,7 +35,8 @@ namespace Klica.Classes.Objects_sprites
             _physicsEngine = physicsEngine;
             _player_base.SetPosition(_position);
             _baseCollider = new Collider(_position, _player_base.Width / 2f, this);
-            _mouthCollider = new Collider(_player_base._position_mouth, 25f, this);
+            _mouthCollider = new Collider(_player_base._position_mouth, 0.5f, this);
+            _health = 100;
         }
 
         public void TakeDamage(int damage)
@@ -44,6 +45,7 @@ namespace Klica.Classes.Objects_sprites
             if (_health <= 0)
             {
                 System.Console.WriteLine("Game over! U died!");
+                _health=0;
             }
         }
 

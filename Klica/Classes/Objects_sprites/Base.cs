@@ -67,7 +67,7 @@ namespace Klica.Classes.Objects_sprites{
         }
         internal void SetMouthPosition()
         {
-            Vector2 offset = new Vector2(12,- _currentSprite._size.Height/2); // Adjust offset for visual alignment
+            Vector2 offset = new Vector2(0,- _currentSprite._size.Height/2); // Adjust offset for visual alignment
             _position_mouth = CalculateRotatedPosition(_currentSprite._position, offset, _currentSprite._rotation);
         }
 

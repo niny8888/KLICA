@@ -86,7 +86,7 @@ namespace Klica
             );
             //System.Console.WriteLine("Name: " + name + " |  Size:"+ sourceRectangle+" |  Pivot: "+pivot);
 
-            spriteManager.AddSprite(name, position, sourceRectangle,rotacijaD,0.4f, 0 , pivot,null);
+            spriteManager.AddSprite(name, position, sourceRectangle,rotacijaD,0.1f, 0 , pivot,null);
         }
     }
 }

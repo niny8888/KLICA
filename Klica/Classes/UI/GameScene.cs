@@ -38,6 +38,12 @@ public class GameScene : IScene
     public bool _gameStateWin;
     public bool _gameStateLost;
 
+    //Shader
+    private Effect _waterFlowEffect;
+    private Effect _perlinNoiseEffect;
+    private HUD _hud;
+    
+
     public GameScene(Game1 game)
     {
         _game = game; 
@@ -60,9 +66,22 @@ public class GameScene : IScene
         _background = content.Load<Texture2D>("bg_0000_bg3");
         var spriteSheet = content.Load<Texture2D>("SpriteInfo");
         _spriteManager = new SpriteManager(spriteSheet);
+    
 
         var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
         SpriteFactory.Initialize(spriteSheet, _spriteManager, spriteDataLines);
+
+        
+
+        _waterFlowEffect = content.Load<Effect>("WaterFlow");
+        _waterFlowEffect.Parameters["DistortionStrength"].SetValue(0.005f);
+        _waterFlowEffect.Parameters["Frequency"].SetValue(0.005f);
+
+        _perlinNoiseEffect = content.Load<Effect>("PerlinNoise");
+        _perlinNoiseEffect.Parameters["seed"].SetValue(714.434f);
+        _perlinNoiseEffect.Parameters["lineValueLimit"].SetValue(0.005f); // Adjust for less intense lines
+        _perlinNoiseEffect.Parameters["lineColor"].SetValue(new Vector3(1.0f, 1.0f, 1.0f)); // White lines
+        _perlinNoiseEffect.Parameters["lineAlpha"].SetValue(0.5f); // Adjust for less intense lines
 
         _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, _gameplayRules, 20);
         _physicsEngine = new PhysicsEngine(_level);
@@ -81,11 +100,13 @@ public class GameScene : IScene
 
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
-
+        _hud = new HUD(_font);
        
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _buttonTexture.SetData(new Color[] { Color.White });
     }
+private Vector2 _shaderTime = Vector2.Zero;
+private Vector2 _shaderPerlinTime = Vector2.Zero;
 
     public void Update(GameTime gameTime)
     {
@@ -113,22 +134,47 @@ public class GameScene : IScene
         if(_gameStateLost){
             System.Console.WriteLine("You lost!");
         }
+        _shaderTime.X += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _shaderTime.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 0.5f;
+
+        _shaderPerlinTime.X += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _perlinNoiseEffect.Parameters["iTime"].SetValue(_shaderPerlinTime.X);
+
+        _waterFlowEffect.Parameters["Time"].SetValue(_shaderTime);
         HandleInput();
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+   public void Draw(SpriteBatch spriteBatch)
     {
-        System.Console.WriteLine("Drawing game scene");
+        spriteBatch.End();
+        // Draw the background with the water flow effect
+        spriteBatch.Begin(effect: _waterFlowEffect,  samplerState: SamplerState.LinearWrap);
         _level.DrawBackground(spriteBatch);
+        spriteBatch.End();
+
+        // Draw other game elements
+        spriteBatch.Begin();
         _physicsEngine.Draw(spriteBatch);
+        
         foreach (var enemy in _enemies)
         {
             enemy.Draw(spriteBatch, _game.GetGameTime());
         }
-        //System.Console.WriteLine("GameTime: " + _game.GetGameTime());
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
+        spriteBatch.End();
+
+        spriteBatch.Begin(effect: _perlinNoiseEffect, blendState: BlendState.AlphaBlend);
+        spriteBatch.Draw(
+            _background, // Use a dummy texture for full-screen effect
+            new Rectangle(0, 0, 1920, 1080),
+            Color.White
+        );
+        
+        spriteBatch.End();
+
+        spriteBatch.Begin();
         DrawButton(spriteBatch, "Back to Menu", _backButton);
-    
+        _hud.Draw(spriteBatch, _player, _enemies);
     }
 
     private void HandleInput()
@@ -221,12 +267,11 @@ public class GameScene : IScene
 
     private void DrawButton(SpriteBatch spriteBatch, string text, Rectangle buttonRect)
     {
-        spriteBatch.Draw(_buttonTexture, buttonRect, Color.Gray);
-
-        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y, buttonRect.Width, 2), Color.Black); // Top border
-        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y, 2, buttonRect.Height), Color.Black); // Left border
-        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X + buttonRect.Width - 2, buttonRect.Y, 2, buttonRect.Height), Color.Black); // Right border
-        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y + buttonRect.Height - 2, buttonRect.Width, 2), Color.Black); // Bottom border
+        spriteBatch.Draw(_buttonTexture, buttonRect, Color.White);
+        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y, buttonRect.Width, 2), Color.Black);
+        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y, 2, buttonRect.Height), Color.Black);
+        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X + buttonRect.Width - 2, buttonRect.Y, 2, buttonRect.Height), Color.Black);
+        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y + buttonRect.Height - 2, buttonRect.Width, 2), Color.Black);
 
         Vector2 textSize = _font.MeasureString(text);
         Vector2 textPosition = new Vector2(buttonRect.X + (buttonRect.Width - textSize.X) / 2, buttonRect.Y + (buttonRect.Height - textSize.Y) / 2);

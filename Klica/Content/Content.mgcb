@@ -91,6 +91,12 @@
 /processorParam:TextureFormat=Color
 /build:bg_0000_bg3.png
 
+#begin PerlinNoise.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:PerlinNoise.fx
+
 #begin SpriteInfo.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -114,4 +120,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpriteSheet1.png
+
+#begin WaterFlow.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:WaterFlow.fx
 

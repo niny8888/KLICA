@@ -1,54 +1,30 @@
+using System.Collections.Generic;
+using Klica.Classes.Objects_sprites;
+using Klica.Classes.Organizmi;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
 
 public class HUD
 {
-    private Texture2D healthBarTexture;
-    private Texture2D hungerBarTexture;
-    private Rectangle healthBarRectangle;
-    private Rectangle hungerBarRectangle;
-    private float decreaseRate = 0.1f;
-    private float health = 100f;
-    private float hunger = 100f;
+    private BitmapFont _font;
 
-    public HUD(Texture2D healthTexture, Texture2D hungerTexture, Rectangle healthRect, Rectangle hungerRect)
+    public HUD(BitmapFont font)
     {
-        healthBarTexture = healthTexture;
-        hungerBarTexture = hungerTexture;
-        healthBarRectangle = healthRect;
-        hungerBarRectangle = hungerRect;
+        _font = font;
     }
 
-    public void Update(GameTime gameTime)
+    public void Draw(SpriteBatch spriteBatch, Player player, List<Enemy> enemies)
     {
-        DecreaseBarsOverTime(gameTime);
-    }
+        // Draw player health above the player
+        Vector2 playerHealthPosition = player._position - new Vector2(0, 30); // Slightly above the player
+        spriteBatch.DrawString(_font, $"{player._health}/100", playerHealthPosition, Color.White);
 
-    private void DecreaseBarsOverTime(GameTime gameTime)
-    {
-        health -= decreaseRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        hunger -= decreaseRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-        health = MathHelper.Clamp(health, 0, 100);
-        hunger = MathHelper.Clamp(hunger, 0, 100);
-    }
-
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        spriteBatch.Draw(healthBarTexture, new Rectangle(healthBarRectangle.X, healthBarRectangle.Y, (int)(healthBarRectangle.Width * (health / 100f)), healthBarRectangle.Height), Color.Red);
-        spriteBatch.Draw(hungerBarTexture, new Rectangle(hungerBarRectangle.X, hungerBarRectangle.Y, (int)(hungerBarRectangle.Width * (hunger / 100f)), hungerBarRectangle.Height), Color.Green);
-    }
-
-    public void EatFood(float amount)
-    {
-        hunger += amount;
-        hunger = MathHelper.Clamp(hunger, 0, 100);
-    }
-
-    public void Heal(float amount)
-    {
-        health += amount;
-        health = MathHelper.Clamp(health, 0, 100);
+        // Draw enemy health above each enemy
+        foreach (var enemy in enemies)
+        {
+            Vector2 enemyHealthPosition = enemy._position - new Vector2(0, 30); // Slightly above each enemy
+            spriteBatch.DrawString(_font, $"{enemy._health}/100", enemyHealthPosition, Color.Red);
+        }
     }
 }

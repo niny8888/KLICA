@@ -16,7 +16,7 @@ namespace Klica.Classes.Objects_sprites
         private float _rotationAngle; // Current rotation angle for animation
         private float _rotationSpeed = 0.05f; // Speed of rotation during opening/closing
         private bool _isOpening = false; // Whether the mouth is opening
-        private float _openThreshold = 70f; // Distance to trigger opening
+        private float _openThreshold = 10f; // Distance to trigger opening
         Boolean isSingular=false;
 
         public Mouth(int type)
@@ -83,7 +83,7 @@ namespace Klica.Classes.Objects_sprites
         
         public void SetPosition(Vector2 position, float directionX, float directionY)
         {   
-            float separation = 10f;
+            float separation = 1f;
             _position = position;
 
             if(isSingular){

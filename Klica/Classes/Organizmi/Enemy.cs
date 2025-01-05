@@ -36,6 +36,7 @@ namespace Klica.Classes.Organizmi
             _position = new Vector2(_random.Next(100, 800), _random.Next(100, 600));
             _speed = 2f;
             _targetPosition = _position;
+            _health = 100;
 
             // Initialize components in base class
             _organism_base.SetPosition(_position);
@@ -68,10 +69,10 @@ namespace Klica.Classes.Organizmi
             }
             if(movementDirection != Vector2.Zero)
             {
-                System.Console.WriteLine("movement dir: " + movementDirection);
+                //System.Console.WriteLine("movement dir: " + movementDirection);
                 UpdateOrganism(movementDirection, gameTime);
             }
-            Console.WriteLine($"Enemy {_position} moving towards {_targetPosition} in state {_currentState}");
+            Console.WriteLine($"Enemy in state {_currentState}");
             // Update colliders
             
             _baseCollider.Position = _position;
