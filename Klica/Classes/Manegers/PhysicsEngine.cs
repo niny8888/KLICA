@@ -2,6 +2,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using Klica.Classes.Objects_sprites;
+using Klica.Classes.Organizmi;
 
 namespace Klica.Classes
 {
@@ -26,30 +28,31 @@ namespace Klica.Classes
             _foodItems.Add(food);
         }
 
-        public void Update(GameTime gameTime, Vector2 playerMouthPosition, ref int score)
+        public void Update(GameTime gameTime, Vector2 playerMouthPosition, ref int score, Player player, List<Enemy> enemies)
         {
-            // Update all food items
+            // Update food items
             foreach (var food in _foodItems)
             {
                 food.Update(gameTime, _level.Bounds, playerMouthPosition, ref score);
             }
 
-            // Check for collisions between food items
-            for (int i = 0; i < _foodItems.Count; i++)
+            // Handle player-food collisions
+            foreach (var food in _foodItems)
             {
-                for (int j = i + 1; j < _foodItems.Count; j++)
+                if (IsCollision(player.GetBaseCollider(), food))
                 {
-                    var foodA = _foodItems[i];
-                    var foodB = _foodItems[j];
+                    HandleCollision(player, food);
+                }
+            }
 
-                    // Check if the food items are colliding
-                    float distance = Vector2.Distance(foodA.Position, foodB.Position);
-                    float collisionDistance = foodA.CollisionRadius + foodB.CollisionRadius;
-
-                    if (distance < collisionDistance)
+            // Handle enemy-food collisions
+            foreach (var enemy in enemies)
+            {
+                foreach (var food in _foodItems)
+                {
+                    if (IsCollision(enemy.GetBaseCollider(), food))
                     {
-                        // Resolve collision using the Food's HandleCollision method
-                        foodA.HandleCollision(foodB);
+                        HandleCollision(enemy, food);
                     }
                 }
             }
@@ -63,6 +66,54 @@ namespace Klica.Classes
                 _foodItems.Add(CreateRandomFood());
             }
         }
+
+        private bool IsCollision(Collider entityCollider, Food food)
+        {
+            // Check if the distance between the two colliders is less than the sum of their radii
+            float distance = Vector2.Distance(entityCollider.Position, food.Position);
+            float combinedRadius = entityCollider.Radius + food.CollisionRadius;
+
+            return distance < combinedRadius;
+        }
+        
+        private void HandleCollision(dynamic entity, Food food)
+        {
+            // Calculate collision normal
+            Vector2 normal = Vector2.Normalize(food.Position - entity.GetBaseCollider().Position);
+
+            // Relative velocity
+            Vector2 relativeVelocity = food.Velocity - entity.Velocity;
+
+            // Velocity along the normal
+            float velocityAlongNormal = Vector2.Dot(relativeVelocity, normal);
+
+            // If objects are separating, skip collision
+            if (velocityAlongNormal > 0) return;
+
+            // Combined restitution coefficient
+            float combinedRestitution = entity.Restitution * food.Restitution;
+
+            // Inverse masses
+            float invMassEntity = entity.Mass > 0 ? 1 / entity.Mass : 0;
+            float invMassFood = food.Mass > 0 ? 1 / food.Mass : 0;
+
+            // Impulse scalar
+            float impulse = -(1 + combinedRestitution) * velocityAlongNormal;
+            impulse /= invMassEntity + invMassFood;
+
+            // Apply impulse
+            Vector2 impulseVector = impulse * normal;
+            food.Velocity += impulseVector * invMassFood;
+
+            // Optional: If entity is dynamic (e.g., can move), apply impulse to entity
+            if (invMassEntity > 0)
+            {
+                entity.Velocity -= impulseVector * invMassEntity;
+            }
+        }
+
+
+
 
         public void Draw(SpriteBatch spriteBatch)
         {

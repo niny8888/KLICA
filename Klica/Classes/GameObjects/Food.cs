@@ -12,7 +12,7 @@ namespace Klica.Classes
 
         public static Sprite _sprite;
         public Vector2 Position { get; private set; }
-        public Vector2 Velocity { get; private set; }
+        public Vector2 Velocity { get; set; }
         public Vector2 InitialVelocity { get; private set; } 
         public float Speed { get; private set; }
         public Vector2 Direction { get; private set; }

@@ -223,7 +223,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
 
          // Handle input for the back button
         _collisionManager.Update();
-        _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore);
+        _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore, _player,_enemies);
         _gameStateWin = _gameplayRules.CheckWinCondition(_gameScore);
         _gameStateLost = _gameplayRules.CheckLoseCondition(_gameScore);
         if (_gameStateWin){

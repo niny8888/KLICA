@@ -26,6 +26,9 @@ namespace Klica.Classes.Organizmi
 
         private Collider _baseCollider;
         private Collider _mouthCollider;
+        public float Mass { get; private set; } = 3f;
+        public float Restitution { get; private set; } = 0.6f;
+        public Vector2 Velocity { get; set; } = Vector2.Zero;
 
         public Enemy(Base baseSprite, Eyes eye, Mouth mouth, int aggressionLevel)
     : base(baseSprite, eye, mouth, null) 
@@ -37,6 +40,7 @@ namespace Klica.Classes.Organizmi
             _speed = 2f;
             _targetPosition = _position;
             _health = 100;
+            Mass = 3f;
 
             // Initialize components in base class
             _organism_base.SetPosition(_position);
@@ -44,7 +48,7 @@ namespace Klica.Classes.Organizmi
             _organism_eye.SetPosition(_organism_base._position_eyes);
 
             // Initialize colliders
-            _baseCollider = new Collider(_position, baseSprite.Width / 2f, this);
+            _baseCollider = new Collider(_position, baseSprite.Width, this);
             _mouthCollider = new Collider(baseSprite._position_mouth, 25f, this);
         }
 

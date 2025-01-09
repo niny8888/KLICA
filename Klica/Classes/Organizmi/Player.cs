@@ -21,7 +21,9 @@ namespace Klica.Classes.Objects_sprites
         public Vector2 _position { get; internal set; }
         public int _health { get; internal set; }
         private bool _hasStarted = false;
-        public Vector2 Velocity { get; private set; }
+        public Vector2 Velocity { get; set; }
+        public float Mass { get; private set; } = 5f;
+        public float Restitution { get; private set; } = 0.5f;
 
 
         // Collision properties
@@ -35,10 +37,12 @@ namespace Klica.Classes.Objects_sprites
             _physics = new Physics(_position);
             _physicsEngine = physicsEngine;
             _player_base.SetPosition(_position);
-            _baseCollider = new Collider(_position, _player_base.Width / 2f, this);
+            _baseCollider = new Collider(_player_base.GetPosition(), _player_base.Width, this);
             _mouthCollider = new Collider(_player_base._position_mouth, 0.5f, this);
             _health = 100;
+            Mass = 5f;
         }
+        
 
         public void TakeDamage(int damage)
         {
