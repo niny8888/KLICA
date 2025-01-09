@@ -17,10 +17,8 @@ public static class TextureGenerator
                 int dx = x - radius;
                 int dy = y - radius;
 
-                // Calculate distance from the center
                 float distance = MathF.Sqrt(dx * dx + dy * dy);
 
-                // Check if the point is along the radius (within lineThickness range)
                 if (distance >= radius - lineThickness && distance <= radius && dy >= 0) // Half-circle condition (top half only)
                 {
                     colorData[y * diameter + x] = Color.White;

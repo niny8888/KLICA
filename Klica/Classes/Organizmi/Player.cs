@@ -139,6 +139,10 @@ namespace Klica.Classes.Objects_sprites
              _player_eye.Draw(_spriteBatch,_gameTime);
              _player_mouth.Draw(_spriteBatch);
          }
+         public float GetRotation()
+        {
+            return _player_base.GetRotation();
+        }
 
 
     }

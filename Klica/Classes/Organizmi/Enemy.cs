@@ -215,5 +215,10 @@ namespace Klica.Classes.Organizmi
         {
             DrawOrganism(spriteBatch, gameTime);
         }
+        public float GetRotation()
+        {
+            return _organism_base.GetRotation();
+        }
+
     }
 }

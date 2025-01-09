@@ -9,10 +9,11 @@ public class HalfCircleTrail
     public float GrowthRate { get; set; }
     public float Opacity { get; set; }
     public float Lifespan { get; set; }
-
     private float _elapsedTime;
 
-    public HalfCircleTrail(Vector2 position, float initialRadius, float maxRadius, float lifespan)
+    public float Rotation { get; set; } // New property for rotation
+
+    public HalfCircleTrail(Vector2 position, float initialRadius, float maxRadius, float lifespan, float rotation)
     {
         Position = position;
         InitialRadius = initialRadius;
@@ -21,6 +22,7 @@ public class HalfCircleTrail
         Opacity = 1f;
         Lifespan = lifespan;
         _elapsedTime = 0f;
+        Rotation = rotation;
     }
 
     public bool IsExpired => _elapsedTime >= Lifespan;
@@ -48,8 +50,8 @@ public class HalfCircleTrail
                 Position,
                 null,
                 Color.White * Opacity,
-                0f,
-                new Vector2(circleTexture.Width / 2, circleTexture.Height / 2),
+                Rotation, // Apply rotation here
+                new Vector2(circleTexture.Width / 2, circleTexture.Height), // Set origin at bottom center
                 new Vector2(scale, scale / 2), // Scale Y is half for half-circle
                 SpriteEffects.None,
                 0f

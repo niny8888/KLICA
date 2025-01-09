@@ -21,7 +21,7 @@ public class GameScene : IScene
     private SpriteManager _spriteManager;
     private Random _random;
     private int _enemyCount = 0;
-    private int _enemySpawnRate = 1;
+    private int _enemySpawnRate = 5;
 
     private CollisionManager _collisionManager;
 
@@ -45,6 +45,8 @@ public class GameScene : IScene
 
     //trail
     private List<HalfCircleTrail> _trails = new List<HalfCircleTrail>();
+    private Dictionary<Enemy, List<HalfCircleTrail>> _enemyTrails = new();
+
     private Texture2D _halfCircleTexture;
     private float _trailTimer = 0f;
     
@@ -98,10 +100,11 @@ public class GameScene : IScene
         _collisionManager.AddCollider(_player.GetBaseCollider(), HandlePlayerBaseCollision);
         _collisionManager.AddCollider(_player.GetMouthCollider(), HandlePlayerMouthCollision);
 
-        if (_enemyCount < _enemySpawnRate){
-            _enemyCount++;
-            SpawnEnemies(1);
-        }
+        // if (_enemyCount < _enemySpawnRate){
+        //     _enemyCount++;
+        //     SpawnEnemies(1);
+        // }
+        SpawnEnemies(_enemySpawnRate);
 
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
@@ -117,12 +120,20 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
     {
         System.Console.WriteLine("Updating game scene");
         _player.UpdatePlayer(gameTime);
+        // Add trail behind the player every 3 seconds
         _trailTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (_trailTimer >= 1f)
+        if (_trailTimer >= 0.5f)
         {
             _trailTimer = 0f;
-            _trails.Add(new HalfCircleTrail(_player._position, 10f, 50f, 2f)); // Adjust sizes and lifespan
+            _trails.Add(new HalfCircleTrail(
+                _player._position, // Position of the player
+                10f,               // Initial radius
+                50f,               // Maximum radius
+                2f,                // Lifespan in seconds
+                _player.GetRotation() // Player's current rotation
+            ));
         }
+
         foreach (var trail in _trails)
         {
             trail.Update(gameTime);
@@ -136,9 +147,39 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         }
         foreach (var enemy in _enemies)
         {
+            // Add a trail for each enemy every 0.5 seconds
+            if (!_enemyTrails.ContainsKey(enemy))
+            {
+                _enemyTrails[enemy] = new List<HalfCircleTrail>();
+            }
+
+            // Add a trail to the current enemy
+            _trailTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_trailTimer >= 0.5f)
+            {
+                _trailTimer = 0f;
+                _enemyTrails[enemy].Add(new HalfCircleTrail(
+                    enemy._position,
+                    10f,                    // Initial radius
+                    50f,                    // Maximum radius
+                    2f,                     // Lifespan in seconds
+                    enemy.GetRotation()     // Enemy's rotation
+                ));
+            }
+
+            // Update trails for the enemy
+            foreach (var trail in _enemyTrails[enemy])
+            {
+                trail.Update(gameTime);
+            }
+
+            // Remove expired trails
+            _enemyTrails[enemy].RemoveAll(trail => trail.IsExpired);
+
             enemy.Update(gameTime, _player, _physicsEngine, ref _gameScore);
             ConstrainToBounds(enemy);
         }
+
          // Handle input for the back button
         _collisionManager.Update();
         _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore);
@@ -161,6 +202,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         _waterFlowEffect.Parameters["Time"].SetValue(_shaderTime);
         HandleInput();
     }
+    
 
    public void Draw(SpriteBatch spriteBatch)
     {
@@ -174,10 +216,17 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         spriteBatch.Begin();
         _physicsEngine.Draw(spriteBatch);
         
-        foreach (var enemy in _enemies)
+        _enemies.ForEach(enemy => enemy.Update(_game.GetGameTime(), _player, _physicsEngine, ref _gameScore));
+        _enemies.ForEach(enemy => enemy.Draw(spriteBatch, _game.GetGameTime()));
+        foreach (var enemyTrailPair in _enemyTrails)
         {
-            enemy.Draw(spriteBatch, _game.GetGameTime());
+            foreach (var trail in enemyTrailPair.Value)
+            {
+                trail.Draw(spriteBatch, _halfCircleTexture);
+            }
         }
+
+       
         
 
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
@@ -186,6 +235,14 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         {
             trail.Draw(spriteBatch, _halfCircleTexture);
         }
+        foreach (var enemyTrailPair in _enemyTrails)
+        {
+            foreach (var trail in enemyTrailPair.Value)
+            {
+                trail.Draw(spriteBatch, _halfCircleTexture);
+            }
+        }
+
         spriteBatch.End();
 
         spriteBatch.Begin(effect: _perlinNoiseEffect, blendState: BlendState.AlphaBlend);
