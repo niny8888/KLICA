@@ -49,32 +49,39 @@ namespace Klica.Classes.Organizmi
         }
 
 
-        public void Update(GameTime gameTime, Player player, PhysicsEngine physicsEngine,ref int score)
+        public void Update(GameTime gameTime, Player player, PhysicsEngine physicsEngine, ref int score)
         {
+            // Apply velocity (bouncing effect)
+            _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Apply friction to slow down bounce velocity
+            _velocity *= 0.95f;
+
             Vector2 movementDirection = Vector2.Zero;
+
+            // Existing behavior logic
             switch (_currentState)
             {
                 case EnemyState.Idle:
-                    movementDirection= UpdateIdleState(player, physicsEngine._foodItems.ToArray());
+                    movementDirection = UpdateIdleState(player, physicsEngine._foodItems.ToArray());
                     break;
                 case EnemyState.ChasingFood:
-                    movementDirection=UpdateChasingFoodState(physicsEngine._foodItems.ToArray(), ref score);
+                    movementDirection = UpdateChasingFoodState(physicsEngine._foodItems.ToArray(), ref score);
                     break;
                 case EnemyState.ChasingPlayer:
-                    movementDirection=UpdateChasingPlayerState(player);
+                    movementDirection = UpdateChasingPlayerState(player);
                     break;
                 case EnemyState.Fleeing:
-                    movementDirection=UpdateFleeingState(player);
+                    movementDirection = UpdateFleeingState(player);
                     break;
             }
-            if(movementDirection != Vector2.Zero)
+
+            if (movementDirection != Vector2.Zero)
             {
-                //System.Console.WriteLine("movement dir: " + movementDirection);
                 UpdateOrganism(movementDirection, gameTime);
             }
-            Console.WriteLine($"Enemy in state {_currentState}");
+
             // Update colliders
-            
             _baseCollider.Position = _position;
             _mouthCollider.Position = _organism_base._position_mouth;
         }
@@ -218,6 +225,11 @@ namespace Klica.Classes.Organizmi
         public float GetRotation()
         {
             return _organism_base.GetRotation();
+        }
+
+        public void ApplyBounce(Vector2 direction, float strength)
+        {
+            _velocity += direction * strength;
         }
 
     }

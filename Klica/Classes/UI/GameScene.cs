@@ -102,11 +102,11 @@ public class GameScene : IScene
         _collisionManager.AddCollider(_player.GetBaseCollider(), HandlePlayerBaseCollision);
         _collisionManager.AddCollider(_player.GetMouthCollider(), HandlePlayerMouthCollision);
 
-        // if (_enemyCount < _enemySpawnRate){
-        //     _enemyCount++;
-        //     SpawnEnemies(1);
-        // }
-        SpawnEnemies(_enemySpawnRate);
+        if (_enemyCount < _enemySpawnRate){
+            _enemyCount++;
+            SpawnEnemies(1);
+        }
+        // SpawnEnemies(_enemySpawnRate);
 
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
@@ -142,18 +142,17 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         _trails.RemoveAll(trail => trail.IsExpired);
 
         // Update enemy trails
+        // Update enemy trails and behaviors
         foreach (var enemy in _enemies)
         {
-            // Initialize timer if not already present
+            // Initialize trail timers for the enemy
             if (!_enemyTrailTimers.ContainsKey(enemy))
             {
                 _enemyTrailTimers[enemy] = 0f;
             }
 
-            // Update the timer for this enemy
             _enemyTrailTimers[enemy] += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Add a new trail if the timer exceeds the threshold
             if (_enemyTrailTimers[enemy] >= 0.5f)
             {
                 _enemyTrailTimers[enemy] = 0f;
@@ -171,7 +170,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
                 ));
             }
 
-            // Update trails for this enemy
+            // Update trails
             if (_enemyTrails.ContainsKey(enemy))
             {
                 foreach (var trail in _enemyTrails[enemy])
@@ -179,14 +178,47 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
                     trail.Update(gameTime);
                 }
 
-                // Remove expired trails
                 _enemyTrails[enemy].RemoveAll(trail => trail.IsExpired);
             }
 
-            // Update the enemy's behavior
+            // Collision handling between player and enemy (base collision)
+            if (Vector2.Distance(_player._position, enemy._position) <
+                _player.GetBaseCollider().Radius + enemy.GetBaseCollider().Radius)
+            {
+                Vector2 direction = Vector2.Normalize(_player._position - enemy._position);
+                float bounceStrength = 300f;
+
+                _player.ApplyBounce(direction, bounceStrength);
+                enemy.ApplyBounce(-direction, bounceStrength);
+            }
+
+            // Collision handling for player mouth with enemy
+            if (Vector2.Distance(_player.GetMouthCollider().Position, enemy._position) <
+                _player.GetMouthCollider().Radius + enemy.GetBaseCollider().Radius)
+            {
+                Vector2 direction = Vector2.Normalize(_player.GetMouthCollider().Position - enemy._position);
+                float bounceStrength = 200f;
+
+                _player.ApplyBounce(direction, bounceStrength);
+                enemy.ApplyBounce(-direction, bounceStrength);
+            }
+
+            // Collision handling for enemy mouth with player
+            if (Vector2.Distance(enemy.GetMouthCollider().Position, _player._position) <
+                enemy.GetMouthCollider().Radius + _player.GetBaseCollider().Radius)
+            {
+                Vector2 direction = Vector2.Normalize(enemy.GetMouthCollider().Position - _player._position);
+                float bounceStrength = 200f;
+
+                _player.ApplyBounce(-direction, bounceStrength);
+                enemy.ApplyBounce(direction, bounceStrength);
+            }
+
+            // Update enemy behavior
             enemy.Update(gameTime, _player, _physicsEngine, ref _gameScore);
             ConstrainToBounds(enemy);
         }
+
 
 
          // Handle input for the back button
@@ -304,7 +336,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
             {
                 if (collider == _player.GetMouthCollider())
                 {
-                    Console.WriteLine("Enemy hit by player mouth.");
+                    enemy.TakeDamage(10);
                 }
             });
 
@@ -312,7 +344,6 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
             {
                 if (collider == _player.GetBaseCollider())
                 {
-                    // Enemy's mouth collides with player base
                     _player.TakeDamage(10);
                 }
             });

@@ -21,6 +21,7 @@ namespace Klica.Classes.Objects_sprites
         public Vector2 _position { get; internal set; }
         public int _health { get; internal set; }
         private bool _hasStarted = false;
+        public Vector2 Velocity { get; private set; }
 
 
         // Collision properties
@@ -51,7 +52,7 @@ namespace Klica.Classes.Objects_sprites
 
        
 
-         public void UpdatePlayer(GameTime gameTime)
+        public void UpdatePlayer(GameTime gameTime)
         {
             Vector2 movementDirection = Vector2.Zero;
 
@@ -67,7 +68,6 @@ namespace Klica.Classes.Objects_sprites
                 movementDirection = _lastMovementDirection;
             }
 
-
             // Gamepad input
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             if (gamePadState.IsConnected)
@@ -75,61 +75,46 @@ namespace Klica.Classes.Objects_sprites
                 movementDirection += new Vector2(gamePadState.ThumbSticks.Left.X, -gamePadState.ThumbSticks.Left.Y); // Y is inverted
             }
 
-            // Check if movement input was received
-            if (movementDirection != Vector2.Zero)
+            // Apply movement if started
+            if (_hasStarted || movementDirection != Vector2.Zero)
             {
-                _hasStarted = true; // Set flag to true when the player moves for the first time
-            }
+                _hasStarted = true;
 
-            // Only update position and physics after the player starts moving
-            if (_hasStarted)
-            {
-                // Normalize movement direction
                 if (movementDirection != Vector2.Zero) movementDirection.Normalize();
 
                 // Update physics based on movement direction
                 _physics.Update(movementDirection);
+
+                // Apply velocity (bouncing effect)
+                _position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                // Apply friction to slow down bounce velocity
+                Velocity *= 0.95f;
 
                 // Set position based on physics after user input
                 _player_base.SetPosition(_physics.GetPosition());
                 _position = _player_base.GetPosition();
             }
 
-            _player_base.SetPosition(_player_base.GetPosition());
-            _position = _player_base.GetPosition();
             _player_base.SetRotation((float)Math.Atan2(_physics._velocity.Y, _physics._velocity.X) + 1.6f);
+
             // Update eye position
             _player_eye.SetPosition(_player_base._position_eyes);
             _player_eye.SetRotation(_player_base.GetRotation());
-            
+
             // Update mouth position
-            _player_mouth.SetPosition(_player_base._position_mouth,movementDirection.X,movementDirection.Y);
+            _player_mouth.SetPosition(_player_base._position_mouth, movementDirection.X, movementDirection.Y);
             _player_mouth.SetRotation(_player_base.GetRotation());
 
+            // Update colliders
             _baseCollider.Position = _position;
             _mouthCollider.Position = _player_base._position_mouth;
-           
-           ///###################################za popravt!!!!!
-           ///  V V V V V
 
-
-            // Determine if the mouth should open based on proximity to food
-            bool isMouthOpening = false;
-            bool FoodConsumed= false;
-            if (gameTime.TotalGameTime.Milliseconds % 100 == 0) // Check every 100 milliseconds
-            {
-                FoodConsumed = _physicsEngine._foodItems.Exists(food =>
-                    food.IsConsumed); 
-            }
-            //System.Console.WriteLine("Food consumed: " + FoodConsumed);
-            // Update mouth (animate open/close)
-            _player_mouth.CheckFoodCollisions(_player_base._position_mouth,_player_base.GetRotation(),ref FoodConsumed);
-            
+            // Update last movement direction
             if (movementDirection != Vector2.Zero)
             {
                 _lastMovementDirection = movementDirection;
             }
-            
         }
         public Collider GetBaseCollider() => _baseCollider;
         public Collider GetMouthCollider() => _mouthCollider;
@@ -142,6 +127,10 @@ namespace Klica.Classes.Objects_sprites
          public float GetRotation()
         {
             return _player_base.GetRotation();
+        }
+        public void ApplyBounce(Vector2 direction, float strength)
+        {
+            Velocity += direction * strength;
         }
 
 
