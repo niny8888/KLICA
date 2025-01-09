@@ -21,7 +21,7 @@ public class GameScene : IScene
     private SpriteManager _spriteManager;
     private Random _random;
     private int _enemyCount = 0;
-    private int _enemySpawnRate = 5;
+    private int _enemySpawnRate = 1;
 
     private CollisionManager _collisionManager;
 
@@ -46,6 +46,8 @@ public class GameScene : IScene
     //trail
     private List<HalfCircleTrail> _trails = new List<HalfCircleTrail>();
     private Dictionary<Enemy, List<HalfCircleTrail>> _enemyTrails = new();
+    private Dictionary<Enemy, float> _enemyTrailTimers = new();
+
 
     private Texture2D _halfCircleTexture;
     private float _trailTimer = 0f;
@@ -121,64 +123,71 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         System.Console.WriteLine("Updating game scene");
         _player.UpdatePlayer(gameTime);
         // Add trail behind the player every 3 seconds
-        _trailTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (_trailTimer >= 0.5f)
-        {
-            _trailTimer = 0f;
-            _trails.Add(new HalfCircleTrail(
-                _player._position, // Position of the player
-                10f,               // Initial radius
-                50f,               // Maximum radius
-                2f,                // Lifespan in seconds
-                _player.GetRotation() // Player's current rotation
-            ));
+         _trailTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+    if (_trailTimer >= 0.5f)
+    {
+        _trailTimer = 0f;
+        _trails.Add(new HalfCircleTrail(
+            _player._position,
+            10f,
+            50f,
+            2f,
+            _player.GetRotation()
+        ));
         }
-
         foreach (var trail in _trails)
         {
             trail.Update(gameTime);
         }
         _trails.RemoveAll(trail => trail.IsExpired);
 
-        // Check collisions with food
-        foreach (var food in _physicsEngine._foodItems)
-        {
-            food.Update(gameTime, _level.Bounds, _player._position, ref _gameScore);
-        }
+        // Update enemy trails
         foreach (var enemy in _enemies)
         {
-            // Add a trail for each enemy every 0.5 seconds
-            if (!_enemyTrails.ContainsKey(enemy))
+            // Initialize timer if not already present
+            if (!_enemyTrailTimers.ContainsKey(enemy))
             {
-                _enemyTrails[enemy] = new List<HalfCircleTrail>();
+                _enemyTrailTimers[enemy] = 0f;
             }
 
-            // Add a trail to the current enemy
-            _trailTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (_trailTimer >= 0.5f)
+            // Update the timer for this enemy
+            _enemyTrailTimers[enemy] += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Add a new trail if the timer exceeds the threshold
+            if (_enemyTrailTimers[enemy] >= 0.5f)
             {
-                _trailTimer = 0f;
+                _enemyTrailTimers[enemy] = 0f;
+                if (!_enemyTrails.ContainsKey(enemy))
+                {
+                    _enemyTrails[enemy] = new List<HalfCircleTrail>();
+                }
+
                 _enemyTrails[enemy].Add(new HalfCircleTrail(
                     enemy._position,
-                    10f,                    // Initial radius
-                    50f,                    // Maximum radius
-                    2f,                     // Lifespan in seconds
-                    enemy.GetRotation()     // Enemy's rotation
+                    10f,
+                    50f,
+                    2f,
+                    enemy.GetRotation()
                 ));
             }
 
-            // Update trails for the enemy
-            foreach (var trail in _enemyTrails[enemy])
+            // Update trails for this enemy
+            if (_enemyTrails.ContainsKey(enemy))
             {
-                trail.Update(gameTime);
+                foreach (var trail in _enemyTrails[enemy])
+                {
+                    trail.Update(gameTime);
+                }
+
+                // Remove expired trails
+                _enemyTrails[enemy].RemoveAll(trail => trail.IsExpired);
             }
 
-            // Remove expired trails
-            _enemyTrails[enemy].RemoveAll(trail => trail.IsExpired);
-
+            // Update the enemy's behavior
             enemy.Update(gameTime, _player, _physicsEngine, ref _gameScore);
             ConstrainToBounds(enemy);
         }
+
 
          // Handle input for the back button
         _collisionManager.Update();
@@ -217,24 +226,12 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         _physicsEngine.Draw(spriteBatch);
         
         _enemies.ForEach(enemy => enemy.Update(_game.GetGameTime(), _player, _physicsEngine, ref _gameScore));
-        _enemies.ForEach(enemy => enemy.Draw(spriteBatch, _game.GetGameTime()));
-        foreach (var enemyTrailPair in _enemyTrails)
-        {
-            foreach (var trail in enemyTrailPair.Value)
-            {
-                trail.Draw(spriteBatch, _halfCircleTexture);
-            }
-        }
-
-       
-        
-
-        _player.DrawPlayer(spriteBatch, _game.GetGameTime());
-
-        foreach (var trail in _trails)
+         foreach (var trail in _trails)
         {
             trail.Draw(spriteBatch, _halfCircleTexture);
         }
+
+        // Draw enemy trails
         foreach (var enemyTrailPair in _enemyTrails)
         {
             foreach (var trail in enemyTrailPair.Value)
@@ -242,6 +239,15 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
                 trail.Draw(spriteBatch, _halfCircleTexture);
             }
         }
+
+        // Draw other game elements
+        _physicsEngine.Draw(spriteBatch);
+        foreach (var enemy in _enemies)
+        {
+            enemy.Draw(spriteBatch, _game.GetGameTime());
+        }
+        _player.DrawPlayer(spriteBatch, _game.GetGameTime());
+
 
         spriteBatch.End();
 
