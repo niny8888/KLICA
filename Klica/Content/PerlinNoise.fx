@@ -3,8 +3,10 @@ sampler TextureSampler : register(s0);
 float seed = 714.434;
 float iTime;
 float lineValueLimit = 0.005;
+float line2ValueLimit = 0.05;
 
 float3 lineColor = float3(1.0, 1.0, 1.0); // White lines
+float3 line2Color = float3(0.0, 1.0, 1.0); //
 float lineAlpha = 0.2; // 20% opacity
 
 float2 distortUv(float2 uv) {
@@ -69,7 +71,7 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD0) : COLOR {
 
     // Default: Fully transparent
     float3 color = float3(0.0, 0.0, 0.0);
-    float alpha = 0.0;
+    float alpha = 0.2;
 
     // White lines with 20% opacity
     if (noise < lineValueLimit) {

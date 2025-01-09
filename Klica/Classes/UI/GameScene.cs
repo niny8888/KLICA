@@ -42,6 +42,11 @@ public class GameScene : IScene
     private Effect _waterFlowEffect;
     private Effect _perlinNoiseEffect;
     private HUD _hud;
+
+    //trail
+    private List<HalfCircleTrail> _trails = new List<HalfCircleTrail>();
+    private Texture2D _halfCircleTexture;
+    private float _trailTimer = 0f;
     
 
     public GameScene(Game1 game)
@@ -66,7 +71,7 @@ public class GameScene : IScene
         _background = content.Load<Texture2D>("bg_0000_bg3");
         var spriteSheet = content.Load<Texture2D>("SpriteInfo");
         _spriteManager = new SpriteManager(spriteSheet);
-    
+        _halfCircleTexture = TextureGenerator.CreateCircleRadiusLineTexture(_game.GraphicsDevice, 50); // Radius 50
 
         var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
         SpriteFactory.Initialize(spriteSheet, _spriteManager, spriteDataLines);
@@ -112,7 +117,18 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
     {
         System.Console.WriteLine("Updating game scene");
         _player.UpdatePlayer(gameTime);
-        
+        _trailTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (_trailTimer >= 1f)
+        {
+            _trailTimer = 0f;
+            _trails.Add(new HalfCircleTrail(_player._position, 10f, 50f, 2f)); // Adjust sizes and lifespan
+        }
+        foreach (var trail in _trails)
+        {
+            trail.Update(gameTime);
+        }
+        _trails.RemoveAll(trail => trail.IsExpired);
+
         // Check collisions with food
         foreach (var food in _physicsEngine._foodItems)
         {
@@ -134,6 +150,8 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         if(_gameStateLost){
             System.Console.WriteLine("You lost!");
         }
+        
+        
         _shaderTime.X += (float)gameTime.ElapsedGameTime.TotalSeconds;
         _shaderTime.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 0.5f;
 
@@ -160,7 +178,14 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         {
             enemy.Draw(spriteBatch, _game.GetGameTime());
         }
+        
+
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
+
+        foreach (var trail in _trails)
+        {
+            trail.Draw(spriteBatch, _halfCircleTexture);
+        }
         spriteBatch.End();
 
         spriteBatch.Begin(effect: _perlinNoiseEffect, blendState: BlendState.AlphaBlend);
