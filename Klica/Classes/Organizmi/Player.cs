@@ -37,8 +37,8 @@ namespace Klica.Classes.Objects_sprites
             _physics = new Physics(_position);
             _physicsEngine = physicsEngine;
             _player_base.SetPosition(_position);
-            _baseCollider = new Collider(_player_base.GetPosition(), _player_base.Width, this);
-            _mouthCollider = new Collider(_player_base._position_mouth, 0.5f, this);
+            _baseCollider = new Collider(_player_base.GetPosition(), _player_base.Width/2f, this);
+            _mouthCollider = new Collider(_player_base._position_mouth, 10f, this);
             _health = 100;
             Mass = 5f;
         }

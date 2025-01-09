@@ -48,8 +48,8 @@ namespace Klica.Classes.Organizmi
             _organism_eye.SetPosition(_organism_base._position_eyes);
 
             // Initialize colliders
-            _baseCollider = new Collider(_position, baseSprite.Width, this);
-            _mouthCollider = new Collider(baseSprite._position_mouth, 25f, this);
+            _baseCollider = new Collider(_position, baseSprite.Width/2f, this);
+            _mouthCollider = new Collider(baseSprite._position_mouth, 10f, this);
         }
 
 

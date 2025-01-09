@@ -1,13 +1,14 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 public class Collider
 {
     public enum ColliderType { Sphere, Rectangle }
     public ColliderType Type { get; }
     public Vector2 Position { get; set; } // Position for spheres or the center of rectangles
-    public float Radius { get; } // For sphere colliders
+    public float Radius { get; set;} // For sphere colliders
     public Rectangle Bounds { get; } // For rectangle colliders
-    public object Owner { get; } // Reference to the object this collider belongs to
+    public object Owner { get; set;} // Reference to the object this collider belongs to
 
     // Constructor for sphere collider
     public Collider(Vector2 position, float radius, object owner)
@@ -58,4 +59,52 @@ public class Collider
 
         return (deltaX * deltaX + deltaY * deltaY) <= (circleRadius * circleRadius);
     }
+    public static void DrawCollider(SpriteBatch spriteBatch, Texture2D circleTexture, Collider collider, Color color)
+    {
+        if (collider.Type == Collider.ColliderType.Sphere)
+        {
+            // Draw a circle using the texture
+            var circleBounds = new Rectangle(
+                (int)(collider.Position.X - collider.Radius),
+                (int)(collider.Position.Y - collider.Radius),
+                (int)(collider.Radius * 2),
+                (int)(collider.Radius * 2)
+            );
+            spriteBatch.Draw(circleTexture, circleBounds, color * 0.5f); // Semi-transparent for debugging
+        }
+        else if (collider.Type == Collider.ColliderType.Rectangle)
+        {
+            // Draw a rectangle for rectangle colliders
+            spriteBatch.Draw(circleTexture, collider.Bounds, color * 0.5f); // Semi-transparent for debugging
+        }
+    }
+
+    public static Texture2D CreateCircleTexture(GraphicsDevice graphicsDevice, int radius, Color color)
+    {
+        int diameter = radius * 2;
+        Texture2D texture = new Texture2D(graphicsDevice, diameter, diameter);
+
+        Color[] colorData = new Color[diameter * diameter];
+        Vector2 center = new Vector2(radius, radius);
+
+        for (int y = 0; y < diameter; y++)
+        {
+            for (int x = 0; x < diameter; x++)
+            {
+                Vector2 position = new Vector2(x, y);
+                if (Vector2.Distance(position, center) <= radius)
+                {
+                    colorData[y * diameter + x] = color;
+                }
+                else
+                {
+                    colorData[y * diameter + x] = Color.Transparent;
+                }
+            }
+        }
+
+        texture.SetData(colorData);
+        return texture;
+    }
+
 }
