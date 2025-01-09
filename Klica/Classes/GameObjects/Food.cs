@@ -34,6 +34,7 @@ namespace Klica.Classes
             Speed = speed;
             Velocity = Direction * Speed;
             InitialVelocity = Velocity;
+            Mass = 1f;
         }
 
         public void Update(GameTime gameTime, Rectangle levelBounds, Vector2 playerMouthPosition, ref int score)
@@ -42,13 +43,16 @@ namespace Klica.Classes
             Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // Apply friction to slow down velocity slightly
-            Velocity *= 0.95f;
-
-            // Ensure velocity does not fall below a minimum threshold
-            if (Velocity.Length() < InitialVelocity.Length())
+            // Velocity *= 0.95f;
+            if (Velocity.Length() > InitialVelocity.Length())
             {
-                Velocity = Vector2.Normalize(Velocity != Vector2.Zero ? Velocity : Direction) * InitialVelocity.Length();
+                Velocity *= 0.95f;
             }
+            // // Ensure velocity does not fall below a minimum threshold
+            // if (Velocity.Length() < InitialVelocity.Length())
+            // {
+            //     Velocity = Vector2.Normalize(Velocity != Vector2.Zero ? Velocity : Direction) * InitialVelocity.Length();
+            // }
 
             // Cap the velocity to avoid excessive speed
             if (Velocity.Length() > MaxVelocity)

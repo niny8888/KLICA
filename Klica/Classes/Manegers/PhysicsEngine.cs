@@ -97,12 +97,12 @@ namespace Klica.Classes
             float speed = _level.Random.Next(20, 50);
 
             // Randomize mass and restitution for diversity
-            float mass = (float)_level.Random.NextDouble() * 2 + 0.5f; // Mass between 0.5 and 2.5
+            //float mass = (float)_level.Random.NextDouble() * 2 + 0.5f; // Mass between 0.5 and 2.5
             float restitution = (float)_level.Random.NextDouble() * 0.5f + 0.5f; // Restitution between 0.5 and 1.0
 
             Food food = new Food(position, direction, speed)
             {
-                Mass = mass,
+                //Mass = mass,
                 Restitution = restitution
             };
 
