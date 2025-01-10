@@ -11,7 +11,7 @@ namespace Klica.Classes
         private SpriteManager _spriteManager = SpriteManager.getInstance();
 
         public static Sprite _sprite;
-        public Vector2 Position { get; private set; }
+        public Vector2 Position { get;  set; }
         public Vector2 Velocity { get; set; }
         public Vector2 InitialVelocity { get; private set; } 
         public float Speed { get; private set; }
@@ -151,6 +151,15 @@ namespace Klica.Classes
             Console.WriteLine("Food consumed! Score incremented.");
             _vibrationDuration = 0.5f;
             GamePad.SetVibration(PlayerIndex.One, 1.0f, 1.0f);
+        }
+
+	public void OnConsumedByAI()
+        {
+            IsConsumed = true;
+
+            Console.WriteLine("Food consumed by AI.");
+            _vibrationDuration = 0.5f;
+            GamePad.SetVibration(PlayerIndex.One, 0.5f, 0.5f); // Optional vibration for feedback
         }
 
         public bool WasConsumed()

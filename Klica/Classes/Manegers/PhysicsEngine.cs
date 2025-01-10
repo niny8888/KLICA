@@ -57,6 +57,19 @@ namespace Klica.Classes
                 }
             }
 
+            //food -food collision
+            for (int i = 0; i < _foodItems.Count; i++)
+            {
+                for (int j = i + 1; j < _foodItems.Count; j++)
+                {
+                    if (IsFoodCollision(_foodItems[i], _foodItems[j]))
+                    {
+                        HandleFoodCollision(_foodItems[i], _foodItems[j]);
+                    }
+                }
+            }
+                    
+
             // Remove consumed food
             _foodItems.RemoveAll(food => food.IsConsumed);
 
@@ -111,7 +124,54 @@ namespace Klica.Classes
                 entity.Velocity -= impulseVector * invMassEntity;
             }
         }
+        private bool IsFoodCollision(Food food1, Food food2)
+        {
+            // Check if the distance between the two food items is less than the sum of their radii
+            float distance = Vector2.Distance(food1.Position, food2.Position);
+            float combinedRadius = food1.CollisionRadius + food2.CollisionRadius;
 
+            return distance < combinedRadius;
+        }
+
+        private void HandleFoodCollision(Food food1, Food food2)
+        {
+            // Calculate collision normal
+            Vector2 normal = Vector2.Normalize(food2.Position - food1.Position);
+
+            // Relative velocity
+            Vector2 relativeVelocity = food2.Velocity - food1.Velocity;
+
+            // Velocity along the normal
+            float velocityAlongNormal = Vector2.Dot(relativeVelocity, normal);
+
+            // If objects are separating, skip collision
+            if (velocityAlongNormal > 0) return;
+
+            // Combined restitution coefficient
+            float combinedRestitution = food1.Restitution * food2.Restitution;
+
+            // Inverse masses
+            float invMass1 = food1.Mass > 0 ? 1 / food1.Mass : 0;
+            float invMass2 = food2.Mass > 0 ? 1 / food2.Mass : 0;
+
+            // Impulse scalar
+            float impulse = -(1 + combinedRestitution) * velocityAlongNormal;
+            impulse /= invMass1 + invMass2;
+
+            // Apply impulse
+            Vector2 impulseVector = impulse * normal;
+            food1.Velocity -= impulseVector * invMass1;
+            food2.Velocity += impulseVector * invMass2;
+
+            // Optional: Separate overlapping food items
+            float overlap = (food1.CollisionRadius + food2.CollisionRadius) - Vector2.Distance(food1.Position, food2.Position);
+            if (overlap > 0)
+            {
+                Vector2 separation = normal * (overlap / 2);
+                food1.Position -= separation;
+                food2.Position += separation;
+            }
+        }
 
 
 

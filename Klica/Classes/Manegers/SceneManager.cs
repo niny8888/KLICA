@@ -32,6 +32,14 @@ public class SceneManager
             _currentScene.Initialize();
         }
     }
+    public IScene GetScene(SceneType sceneType)
+    {
+        if (_scenes.TryGetValue(sceneType, out var scene))
+        {
+            return scene;
+        }
+        throw new InvalidOperationException($"Scene of type {sceneType} not found.");
+    }
 
     public void LoadContent(ContentManager content)
     {

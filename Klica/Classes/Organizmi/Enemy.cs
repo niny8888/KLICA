@@ -53,7 +53,7 @@ namespace Klica.Classes.Organizmi
         }
 
 
-        public void Update(GameTime gameTime, Player player, PhysicsEngine physicsEngine, ref int score)
+        public void Update(GameTime gameTime, Player player, PhysicsEngine physicsEngine)
         {
             // Apply velocity (bouncing effect)
             _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -70,7 +70,7 @@ namespace Klica.Classes.Organizmi
                     movementDirection = UpdateIdleState(player, physicsEngine._foodItems.ToArray());
                     break;
                 case EnemyState.ChasingFood:
-                    movementDirection = UpdateChasingFoodState(physicsEngine._foodItems.ToArray(), ref score);
+                    movementDirection = UpdateChasingFoodState(physicsEngine._foodItems.ToArray());
                     break;
                 case EnemyState.ChasingPlayer:
                     movementDirection = UpdateChasingPlayerState(player);
@@ -109,7 +109,7 @@ namespace Klica.Classes.Organizmi
             return _targetPosition - _position;
         }
 
-        private Vector2 UpdateChasingFoodState(Food[] foods, ref int score)
+        private Vector2 UpdateChasingFoodState(Food[] foods)
         {
             Food closestFood = GetClosestFood(foods);
             if (closestFood != null)
@@ -118,7 +118,7 @@ namespace Klica.Classes.Organizmi
 
                 if (Vector2.Distance(_position, closestFood.Position) < 10f)
                 {
-                    closestFood.OnConsumed(ref score);
+                    closestFood.OnConsumedByAI();
                     _currentState = EnemyState.Idle;
                 }
             }

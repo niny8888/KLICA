@@ -22,6 +22,7 @@ public class MenuScene : IScene
     private Rectangle _howToPlayButton;
     private Rectangle _settingsButton;
     private MouseState _previousMouseState;
+    private Rectangle _newGameButton;
 
     private MenuState _currentState;
 
@@ -42,6 +43,7 @@ public class MenuScene : IScene
         _playButton = new Rectangle(300, 200, 200, 50);
         _howToPlayButton = new Rectangle(300, 300, 200, 50);
         _settingsButton = new Rectangle(300, 400, 200, 50);
+        _newGameButton = new Rectangle(300, 500, 200, 50);
         _previousMouseState = Mouse.GetState();
         _currentState = MenuState.MainMenu;
     }
@@ -74,34 +76,41 @@ public class MenuScene : IScene
     }
 
     public void Update(GameTime gameTime)
-    {
-        MouseState mouseState = Mouse.GetState();
+{
+    MouseState mouseState = Mouse.GetState();
 
-        if (_currentState == MenuState.MainMenu)
+    if (_currentState == MenuState.MainMenu)
+    {
+        if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
         {
-            if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+            if (_playButton.Contains(mouseState.Position))
             {
-                if (_playButton.Contains(mouseState.Position))
-                {
-                    SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
-                }
-                else if (_howToPlayButton.Contains(mouseState.Position))
-                {
-                    _currentState = MenuState.HowToPlay;
-                }
-                else if (_settingsButton.Contains(mouseState.Position))
-                {
-                    _currentState = MenuState.Settings;
-                }
+                SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
+            }
+            else if (_howToPlayButton.Contains(mouseState.Position))
+            {
+                _currentState = MenuState.HowToPlay;
+            }
+            else if (_settingsButton.Contains(mouseState.Position))
+            {
+                _currentState = MenuState.Settings;
+            }
+            else if (_newGameButton.Contains(mouseState.Position))
+            {
+                var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
+                gameScene.NewGame(); // Reset the game state
+                SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
             }
         }
-        else if (mouseState.RightButton == ButtonState.Pressed)
-        {
-            _currentState = MenuState.MainMenu;
-        }
-
-        _previousMouseState = mouseState;
     }
+    else if (mouseState.RightButton == ButtonState.Pressed)
+    {
+        _currentState = MenuState.MainMenu;
+    }
+
+    _previousMouseState = mouseState;
+}
+
 
     public void Draw(SpriteBatch spriteBatch)
     {
@@ -126,13 +135,14 @@ public class MenuScene : IScene
 
     private void DrawMainMenu(SpriteBatch spriteBatch)
     {
-
         spriteBatch.Draw(_background, Vector2.Zero, Color.White);
 
         DrawButton(spriteBatch, "Play", _playButton);
         DrawButton(spriteBatch, "How to Play", _howToPlayButton);
         DrawButton(spriteBatch, "Settings", _settingsButton);
+        DrawButton(spriteBatch, "New Game", _newGameButton); // Add "New Game" button
     }
+
 
     private void DrawHowToPlay(SpriteBatch spriteBatch)
     {
@@ -147,6 +157,7 @@ public class MenuScene : IScene
         spriteBatch.DrawString(_font, "Settings Placeholder", new Vector2(250, 250), Color.White);
         spriteBatch.DrawString(_font, "Right-click to return", new Vector2(250, 300), Color.White);
     }
+    
 
     private void DrawButton(SpriteBatch spriteBatch, string text, Rectangle buttonRect)
     {

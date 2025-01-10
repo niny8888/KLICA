@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
+using System.IO;
+using System.Text.Json;
 
 public class GameScene : IScene
 {
@@ -22,6 +24,9 @@ public class GameScene : IScene
     private Random _random;
     private int _enemyCount = 0;
     private int _enemySpawnRate = 1;
+    private GameData _gameData;
+    private string _saveFilePath;
+
 
     private CollisionManager _collisionManager;
 
@@ -61,6 +66,9 @@ public class GameScene : IScene
         _random = new Random();
         _enemies = new List<Enemy>();
         _collisionManager = new CollisionManager();
+        _saveFilePath = GetSaveFilePath();
+        _gameData = LoadGameData(); // Load game data
+        _gameScore = _gameData.LastScore; 
     }
 
     public void Initialize()
@@ -263,7 +271,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
             }
 
             // Update enemy behavior
-            enemy.Update(gameTime, _player, _physicsEngine, ref _gameScore);
+            enemy.Update(gameTime, _player, _physicsEngine);
             ConstrainToBounds(enemy);
         }
 
@@ -274,11 +282,17 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore, _player,_enemies);
         _gameStateWin = _gameplayRules.CheckWinCondition(_gameScore);
         _gameStateLost = _gameplayRules.CheckLoseCondition(_gameScore);
-        if (_gameStateWin){
-            System.Console.WriteLine("You won!");
+        
+        if (_gameStateWin)
+        {
+            Console.WriteLine("You won!");
+            SaveGameData(); 
         }
-        if(_gameStateLost){
-            System.Console.WriteLine("You lost!");
+
+        if (_gameStateLost)
+        {
+            Console.WriteLine("You lost!");
+            SaveGameData(); 
         }
         
         
@@ -339,7 +353,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         spriteBatch.Begin();
         _physicsEngine.Draw(spriteBatch);
         
-        _enemies.ForEach(enemy => enemy.Update(_game.GetGameTime(), _player, _physicsEngine, ref _gameScore));
+        _enemies.ForEach(enemy => enemy.Update(_game.GetGameTime(), _player, _physicsEngine));
          foreach (var trail in _trails)
         {
             trail.Draw(spriteBatch, _halfCircleTexture);
@@ -377,7 +391,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
 
         spriteBatch.Begin(effect: _perlinNoiseEffect, blendState: BlendState.AlphaBlend);
         spriteBatch.Draw(
-            _background, // Use a dummy texture for full-screen effect
+            _background, 
             new Rectangle(0, 0, 1920, 1080),
             Color.White
         );
@@ -387,6 +401,8 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         spriteBatch.Begin();
         DrawButton(spriteBatch, "Back to Menu", _backButton);
         _hud.Draw(spriteBatch, _player, _enemies);
+        _hud.DisplayScore(spriteBatch, _gameScore);
+
     }
 
     private void HandleInput()
@@ -445,22 +461,22 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
             _enemies.Add(enemy);
         }
     }
-    private void HandlePlayerBaseCollision(Collider other)
-    {
-        if (other.Owner is Food food && !food.IsConsumed)
-        {
-            food.OnConsumed(ref _gameScore);
-        }
-    }
+    // private void HandlePlayerBaseCollision(Collider other)
+    // {
+    //     if (other.Owner is Food food && !food.IsConsumed)
+    //     {
+    //         food.OnConsumed(ref _gameScore);
+    //     }
+    // }
 
 
-    private void HandlePlayerMouthCollision(Collider other)
-    {
-        if (other.Owner is Enemy enemy)
-        {
-            Console.WriteLine("Player's mouth hits enemy base.");
-        }
-    }
+    // private void HandlePlayerMouthCollision(Collider other)
+    // {
+    //     if (other.Owner is Enemy enemy)
+    //     {
+    //         Console.WriteLine("Player's mouth hits enemy base.");
+    //     }
+    // }
 
 
     private void ConstrainToBounds(Enemy enemy)
@@ -490,4 +506,59 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         Vector2 textPosition = new Vector2(buttonRect.X + (buttonRect.Width - textSize.X) / 2, buttonRect.Y + (buttonRect.Height - textSize.Y) / 2);
         spriteBatch.DrawString(_font, text, textPosition, Color.Black);
     }
+    private string GetSaveFilePath()
+    {
+        string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        return Path.Combine(folder, "Klica", "SaveData.json");
+    }
+    private void SaveGameData()
+    {
+        _gameData.LastScore = _gameScore; 
+        _gameData.SoundOn = true; 
+
+        string jsonData = JsonSerializer.Serialize(_gameData);
+        Directory.CreateDirectory(Path.GetDirectoryName(_saveFilePath));
+        File.WriteAllText(_saveFilePath, jsonData);
+    }
+
+
+
+    public GameData LoadGameData()
+    {
+        string filePath = GetSaveFilePath();
+
+        if (File.Exists(filePath))
+        {
+            string jsonData = File.ReadAllText(filePath);
+            return JsonSerializer.Deserialize<GameData>(jsonData);
+        }
+
+        // Return default values if no save file exists
+        return new GameData
+        {
+            LastScore = 0,
+            SoundOn = true,
+        };
+    }
+
+    public void NewGame()
+    {
+        _gameData.LastScore = 0; 
+    
+        _gameScore = 0;
+        _gameStateWin = false;
+        _gameStateLost = false;
+        
+        SaveGameData(); 
+        // Reset player and enemies
+        _player = new Player(_physicsEngine); 
+        _enemies.Clear(); 
+        SpawnEnemies(_enemySpawnRate); 
+
+        _physicsEngine = new PhysicsEngine(_level); 
+        Console.WriteLine("New game started. Data reset to default.");
+    }
+
+
+
 }

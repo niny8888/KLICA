@@ -27,4 +27,14 @@ public class HUD
             spriteBatch.DrawString(_font, $"{enemy._health}/100", enemyHealthPosition, Color.Red);
         }
     }
+    public void DisplayScore(SpriteBatch spriteBatch, int gameScore) //int highhscore
+    {
+        // Set positions for the score display
+        Vector2 scorePosition = new Vector2(800, 20); // Top-left corner of the screen
+        //Vector2 highScorePosition = new Vector2(20, 50); // Below the current score
+
+        // Draw the current score and high score
+        spriteBatch.DrawString(_font, $"Score: {gameScore}", scorePosition, Color.White);
+        //spriteBatch.DrawString(_font, $"High Score: {highScore}", highScorePosition, Color.Yellow);
+    }
 }
