@@ -19,7 +19,13 @@ namespace Klica.Classes
 
         public bool CheckLoseCondition(int elapsedTime)
         {
-            return HasTimeLimit && elapsedTime > MaxTime;
+            
+            return HasTimeLimit && elapsedTime > MaxTime; 
+            
+        }
+        public bool CheckLoseConditionPlayer(int playerHealth)
+        {
+            return playerHealth <= 0;
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Klica.Classes.Objects_sprites
 
        
 
-        public void UpdatePlayer(GameTime gameTime)
+        public void UpdatePlayer(GameTime gameTime, Rectangle bounds)
         {
             Vector2 movementDirection = Vector2.Zero;
 
@@ -91,13 +91,31 @@ namespace Klica.Classes.Objects_sprites
 
                 // Apply velocity (bouncing effect)
                 _position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                
+                Vector2 newPosition = _physics.GetPosition();
+
+                System.Console.WriteLine("1 ..... Position: " + newPosition   + "Bounds:  " + bounds);
+                
+                float halfWidth = _player_base.Width / 2f;
+                float halfHeight = _player_base.Height / 2f;
+
+                newPosition.X = MathHelper.Clamp(newPosition.X, bounds.Left + halfWidth, bounds.Right - halfWidth);
+                newPosition.Y = MathHelper.Clamp(newPosition.Y, bounds.Top + halfHeight, bounds.Bottom - halfHeight);
+
+                System.Console.WriteLine("2 ..... Position: " + newPosition   + "Bounds:  " + bounds);
+
+                // Apply the clamped position to physics and player
+                _physics._positon = newPosition;
+                _player_base.SetPosition(newPosition);
+                _position = newPosition;
 
                 // Apply friction to slow down bounce velocity
-                Velocity *= 0.95f;
+                Velocity *= 0.90f;
 
+                
                 // Set position based on physics after user input
-                _player_base.SetPosition(_physics.GetPosition());
-                _position = _player_base.GetPosition();
+                // _player_base.SetPosition(_physics.GetPosition());
+                // _position = _player_base.GetPosition();
             }
 
             _player_base.SetRotation((float)Math.Atan2(_physics._velocity.Y, _physics._velocity.X) + 1.6f);

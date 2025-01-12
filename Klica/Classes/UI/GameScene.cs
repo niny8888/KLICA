@@ -173,9 +173,13 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
 
     public void Update(GameTime gameTime)
     {
+        if (_gameStateWin || _gameStateLost)
+        {
+            return;
+        }
         System.Console.WriteLine("Updating game scene");
 
-        _player.UpdatePlayer(gameTime);
+        _player.UpdatePlayer(gameTime, _level.Bounds);
 
 
         // Add trail behind the player every 3 seconds
@@ -281,8 +285,9 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         _collisionManager.Update();
         _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore, _player,_enemies);
         _gameStateWin = _gameplayRules.CheckWinCondition(_gameScore);
-        _gameStateLost = _gameplayRules.CheckLoseCondition(_gameScore);
-        
+       // _gameStateLost = _gameplayRules.CheckLoseCondition(_gameScore);
+        _gameStateLost = _gameplayRules.CheckLoseConditionPlayer(_player._health);
+
         if (_gameStateWin)
         {
             Console.WriteLine("You won!");
@@ -386,6 +391,10 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
             Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetBaseCollider(), Color.Red);
             Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetMouthCollider(), Color.Yellow);
         }
+        if (_gameStateWin || _gameStateLost)
+        {
+            DrawGameOverOverlay(spriteBatch);
+        }
 
         spriteBatch.End();
 
@@ -455,6 +464,10 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
                 {
                     HandleBounce(enemy, _player);
                     _player.TakeDamage(10);
+                    if(_player._health <= 0)
+                    {
+                        _gameStateLost = true;
+                    }
                 }
             });
 
@@ -512,6 +525,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         return Path.Combine(folder, "Klica", "SaveData.json");
     }
     private void SaveGameData()
+    ///problem da shranjuje sam ce zmagas alpa zgubis!!!!!!!
     {
         _gameData.LastScore = _gameScore; 
         _gameData.SoundOn = true; 
@@ -557,6 +571,28 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
 
         _physicsEngine = new PhysicsEngine(_level); 
         Console.WriteLine("New game started. Data reset to default.");
+    }
+
+    private void DrawGameOverOverlay(SpriteBatch spriteBatch)
+    {
+        // Draw a semi-transparent grey overlay
+        spriteBatch.Draw(
+            _buttonTexture,
+            new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight),
+            Color.Black * 0.5f // Semi-transparent black
+        );
+
+        string message = _gameStateWin ? "YOU WIN" : "YOU LOST";
+        Color messageColor = _gameStateWin ? Color.Green : Color.Red;
+
+        // Measure the size of the message to center it
+        Vector2 textSize = _font.MeasureString(message);
+        Vector2 position = new Vector2(
+            (Game1.ScreenWidth - textSize.X) / 2,
+            (Game1.ScreenHeight - textSize.Y) / 2
+        );
+
+        spriteBatch.DrawString(_font, message, position, messageColor);
     }
 
 

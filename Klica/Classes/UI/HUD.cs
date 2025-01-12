@@ -37,4 +37,5 @@ public class HUD
         spriteBatch.DrawString(_font, $"Score: {gameScore}", scorePosition, Color.White);
         //spriteBatch.DrawString(_font, $"High Score: {highScore}", highScorePosition, Color.Yellow);
     }
+    
 }
