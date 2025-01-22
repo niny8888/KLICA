@@ -1,2 +1,2 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/PerlinNoise.fx","d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/PerlinNoise.xnb","EffectProcessor","CompiledEffectContent",2386,6724,0,2990899
+"c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3","c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/song-bg.xnb","SoundEffectProcessor","SoundEffectContent",220416,1322601,0,5071943

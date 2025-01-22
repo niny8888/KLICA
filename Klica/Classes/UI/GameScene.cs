@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using System.IO;
 using System.Text.Json;
+using Microsoft.Xna.Framework.Audio;
 
 public class GameScene : IScene
 {
@@ -59,6 +60,8 @@ public class GameScene : IScene
     private Texture2D _debugTexture;
     private Texture2D _circleTexture;
 
+    //soundeffecti
+    SoundEffectInstance se_dmg;
 
     public GameScene(Game1 game)
     {
@@ -90,7 +93,7 @@ public class GameScene : IScene
         var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
         SpriteFactory.Initialize(spriteSheet, _spriteManager, spriteDataLines);
 
-        
+        se_dmg= content.Load<SoundEffect>("SE_eat_food").CreateInstance();
 
         _waterFlowEffect = content.Load<Effect>("WaterFlow");
         _waterFlowEffect.Parameters["DistortionStrength"].SetValue(0.005f);
@@ -125,6 +128,7 @@ public class GameScene : IScene
         {
             if (collider.Owner is Enemy enemy)
             {
+                se_dmg.Play();
                 Console.WriteLine("Player mouth collided with enemy base!");
                 HandleBounce(_player, enemy);
             }
@@ -134,6 +138,7 @@ public class GameScene : IScene
         {
             if (collider.Owner is Enemy enemy)
             {
+                se_dmg.Play();
                 Console.WriteLine("Player base collided with enemy mouth!");
                 HandleBounce(enemy, _player);
             }
@@ -145,6 +150,7 @@ public class GameScene : IScene
             {
                 if (collider.Owner is Player)
                 {
+                    se_dmg.Play();
                     Console.WriteLine("Enemy mouth collided with player base!");
                     HandleBounce(enemy, _player);
                 }
@@ -154,6 +160,7 @@ public class GameScene : IScene
             {
                 if (collider.Owner is Player)
                 {
+                    se_dmg.Play();
                     Console.WriteLine("Enemy base collided with player mouth!");
                     HandleBounce(_player, enemy);
                 }

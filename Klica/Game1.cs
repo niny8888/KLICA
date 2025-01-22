@@ -2,8 +2,10 @@
 using Klica.Classes;
 using Klica.Classes.Objects_sprites;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace Klica;
 
@@ -15,6 +17,8 @@ public class Game1 : Game
     public static int ScreenHeight= 1080;
     public SpriteManager _spriteManager;
     public GameTime gameTime;
+
+    public SoundEffectInstance bg_sound;
     
 
 
@@ -37,6 +41,10 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+        bg_sound = Content.Load<SoundEffect>("song-bg").CreateInstance();
+        bg_sound.IsLooped = true;
+        bg_sound.Play();
         
         SceneManager.Instance.AddScene(SceneManager.SceneType.MainMenu, new MenuScene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Game, new GameScene(this));

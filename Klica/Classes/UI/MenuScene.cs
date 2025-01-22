@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using Klica.Classes;
 using Klica;
+using Microsoft.Xna.Framework.Audio;
 
 public class MenuScene : IScene
 {
@@ -30,6 +31,8 @@ public class MenuScene : IScene
 
     private Game1 _game;
     private bool _contentLoaded = false;
+
+    private SoundEffectInstance sound_menu_click;
 
     public MenuScene(Game1 game)
     {
@@ -66,6 +69,8 @@ public class MenuScene : IScene
             Console.WriteLine($"Error loading content: {ex.Message}");
         }
 
+        sound_menu_click= content.Load<SoundEffect>("SE_menu").CreateInstance();
+
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
 
@@ -85,18 +90,22 @@ public class MenuScene : IScene
         {
             if (_playButton.Contains(mouseState.Position))
             {
+                sound_menu_click.Play();
                 SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
             }
             else if (_howToPlayButton.Contains(mouseState.Position))
             {
+                sound_menu_click.Play();
                 _currentState = MenuState.HowToPlay;
             }
             else if (_settingsButton.Contains(mouseState.Position))
             {
+                sound_menu_click.Play();
                 _currentState = MenuState.Settings;
             }
             else if (_newGameButton.Contains(mouseState.Position))
             {
+                sound_menu_click.Play();
                 var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
                 gameScene.NewGame(); // Reset the game state
                 SceneManager.Instance.SetScene(SceneManager.SceneType.Game);

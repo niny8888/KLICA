@@ -76,6 +76,7 @@ namespace Klica.Classes
             // Add new food if needed
             if (_foodItems.Count < _level._FoodNum)
             {
+                
                 _foodItems.Add(CreateRandomFood());
             }
         }

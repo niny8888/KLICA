@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</SourceFile>
-  <SourceTime>2024-12-26T11:12:09.7970967+01:00</SourceTime>
-  <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/WaterFlow.xnb</DestFile>
-  <DestTime>2024-12-26T11:12:24.3478676+01:00</DestTime>
+  <SourceFile>c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</SourceFile>
+  <SourceTime>2025-01-09T13:27:55.826985+01:00</SourceTime>
+  <DestFile>c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/WaterFlow.xnb</DestFile>
+  <DestTime>2025-01-22T15:49:06.9790554+01:00</DestTime>
   <Importer>EffectImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>EffectProcessor</Processor>

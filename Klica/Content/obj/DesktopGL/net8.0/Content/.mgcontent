@@ -4,19 +4,27 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_1.png</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_2.png</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_3.png</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_4.png</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bg_0000_bg3.png</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/PerlinNoise.fx</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteSheet1.png</File>
-    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_1.png</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_2.png</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_3.png</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_4.png</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bg_0000_bg3.png</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/PerlinNoise.fx</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_dmg.mp3</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_eat_food.mp3</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_menu.wav</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteSheet1.png</File>
+    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

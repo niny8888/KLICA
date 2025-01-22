@@ -97,6 +97,30 @@
 /processorParam:DebugMode=Auto
 /build:PerlinNoise.fx
 
+#begin SE_dmg.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SE_dmg.mp3
+
+#begin SE_eat_food.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SE_eat_food.mp3
+
+#begin SE_menu.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SE_menu.wav
+
+#begin song-bg.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:song-bg.mp3
+
 #begin SpriteInfo.png
 /importer:TextureImporter
 /processor:TextureProcessor
