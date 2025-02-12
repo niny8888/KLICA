@@ -78,6 +78,7 @@ namespace Klica.Classes.Objects_sprites
             {
                 movementDirection += new Vector2(gamePadState.ThumbSticks.Left.X, -gamePadState.ThumbSticks.Left.Y); // Y is inverted
             }
+            GamePad.SetVibration(PlayerIndex.One, 0.0f, 0.0f);
 
             // Apply movement if started
             if (_hasStarted || movementDirection != Vector2.Zero)

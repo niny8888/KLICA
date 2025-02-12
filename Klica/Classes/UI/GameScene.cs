@@ -20,11 +20,14 @@ public class GameScene : IScene
     private PhysicsEngine _physicsEngine;
     private Player _player;
     private List<Enemy> _enemies;
+    private List<PeacefulEnemy> _enemies_peaceful;
     private Texture2D _background;
     private SpriteManager _spriteManager;
     private Random _random;
     private int _enemyCount = 0;
-    private int _enemySpawnRate = 1;
+    private int _enemySpawnRate = 4;
+     private int _enemypeacefulCount = 0;
+    private int _enemypeacefulSpawnRate = 1;
     private GameData _gameData;
     private string _saveFilePath;
 
@@ -43,6 +46,9 @@ public class GameScene : IScene
     public static int _gameScore;
     public bool _gameStateWin;
     public bool _gameStateLost;
+    private Texture2D _winTexture;
+    private Texture2D _loseTexture;
+
 
     //Shader
     private Effect _waterFlowEffect;
@@ -53,6 +59,8 @@ public class GameScene : IScene
     private List<HalfCircleTrail> _trails = new List<HalfCircleTrail>();
     private Dictionary<Enemy, List<HalfCircleTrail>> _enemyTrails = new();
     private Dictionary<Enemy, float> _enemyTrailTimers = new();
+    private Dictionary<PeacefulEnemy, List<HalfCircleTrail>> _enemypeacefulTrails = new();
+    private Dictionary<PeacefulEnemy, float> _enemypeacefulTrailTimers = new();
     private Texture2D _halfCircleTexture;
     private float _trailTimer = 0f;
     
@@ -68,6 +76,7 @@ public class GameScene : IScene
         _game = game; 
         _random = new Random();
         _enemies = new List<Enemy>();
+        _enemies_peaceful = new List<PeacefulEnemy>();
         _collisionManager = new CollisionManager();
         _saveFilePath = GetSaveFilePath();
         _gameData = LoadGameData(); // Load game data
@@ -123,6 +132,11 @@ public class GameScene : IScene
             _enemyCount++;
             SpawnEnemies(1);
         }
+        // if (_enemypeacefulCount < _enemypeacefulSpawnRate){
+        //     _enemypeacefulCount++;
+        //     SpawnEnemies(1);
+        // }
+
         // SpawnEnemies(_enemySpawnRate);
         _collisionManager.AddCollider(_player.GetMouthCollider(), collider =>
         {
@@ -174,6 +188,9 @@ public class GameScene : IScene
        
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _buttonTexture.SetData(new Color[] { Color.White });
+        _winTexture = content.Load<Texture2D>("win");
+        _loseTexture = content.Load<Texture2D>("lose");
+
     }
 private Vector2 _shaderTime = Vector2.Zero;
 private Vector2 _shaderPerlinTime = Vector2.Zero;
@@ -355,6 +372,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
 
    public void Draw(SpriteBatch spriteBatch)
     {
+        
         spriteBatch.End();
         // Draw the background with the water flow effect
         spriteBatch.Begin(effect: _waterFlowEffect,  samplerState: SamplerState.LinearWrap);
@@ -365,7 +383,9 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         spriteBatch.Begin();
         _physicsEngine.Draw(spriteBatch);
         
-        _enemies.ForEach(enemy => enemy.Update(_game.GetGameTime(), _player, _physicsEngine));
+        //to nrdi ful prevc dobre enemyje:
+        //_enemies.ForEach(enemy => enemy.Update(_game.GetGameTime(), _player, _physicsEngine));
+        
          foreach (var trail in _trails)
         {
             trail.Draw(spriteBatch, _halfCircleTexture);
@@ -389,19 +409,16 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
 
         // Draw player colliders
-        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
-        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
+        //Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
+        //Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
 
         // Draw enemy colliders
-        foreach (var enemy in _enemies)
-        {
-            Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetBaseCollider(), Color.Red);
-            Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetMouthCollider(), Color.Yellow);
-        }
-        if (_gameStateWin || _gameStateLost)
-        {
-            DrawGameOverOverlay(spriteBatch);
-        }
+        // foreach (var enemy in _enemies)
+        // {
+        //     Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetBaseCollider(), Color.Red);
+        //     Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetMouthCollider(), Color.Yellow);
+        // }
+        
 
         spriteBatch.End();
 
@@ -418,6 +435,11 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         DrawButton(spriteBatch, "Back to Menu", _backButton);
         _hud.Draw(spriteBatch, _player, _enemies);
         _hud.DisplayScore(spriteBatch, _gameScore);
+        
+        if (_gameStateWin || _gameStateLost)
+        {
+            DrawGameOverOverlay(spriteBatch);
+        }
 
     }
 
@@ -582,25 +604,27 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
 
     private void DrawGameOverOverlay(SpriteBatch spriteBatch)
     {
-        // Draw a semi-transparent grey overlay
+        // Draw a semi-transparent black overlay
+        spriteBatch.End();
+        spriteBatch.Begin();
         spriteBatch.Draw(
             _buttonTexture,
             new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight),
             Color.Black * 0.5f // Semi-transparent black
         );
 
-        string message = _gameStateWin ? "YOU WIN" : "YOU LOST";
-        Color messageColor = _gameStateWin ? Color.Green : Color.Red;
+        // Choose the appropriate image
+        Texture2D gameOverTexture = _gameStateWin ? _winTexture : _loseTexture;
 
-        // Measure the size of the message to center it
-        Vector2 textSize = _font.MeasureString(message);
+        // Center the image
         Vector2 position = new Vector2(
-            (Game1.ScreenWidth - textSize.X) / 2,
-            (Game1.ScreenHeight - textSize.Y) / 2
+            (Game1.ScreenWidth - gameOverTexture.Width) / 2,
+            (Game1.ScreenHeight - gameOverTexture.Height) / 2
         );
 
-        spriteBatch.DrawString(_font, message, position, messageColor);
+        spriteBatch.Draw(gameOverTexture, position, Color.White);
     }
+
 
 
 

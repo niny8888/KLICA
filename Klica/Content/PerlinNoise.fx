@@ -2,14 +2,15 @@ sampler TextureSampler : register(s0);
 
 float seed = 714.434;
 float iTime;
-float lineValueLimit = 0.005;
-float line2ValueLimit = 0.05;
+float lineValueLimit = 0.005; //debeline crte
+float line2ValueLimit = 0.05; ///to lahko za seeno crto da se prekrivajo barve - hotla sm da bi biu en z visjim opacityjem in pol en z mn
 
+//barva
 float3 lineColor = float3(1.0, 1.0, 1.0); // White lines
-float3 line2Color = float3(0.0, 1.0, 1.0); //
+float3 line2Color = float3(0.0, 1.0, 1.0); // Cyan lines npr
 float lineAlpha = 0.2; // 20% opacity
 
-float2 distortUv(float2 uv) {
+float2 distortUv(float2 uv) { // rdi casovno odvisne vjugice
     float x = uv.x * 10.0 + iTime;
     float y = uv.y * 10.0 + iTime;
     uv.x += sin(x - y) * 0.01 * cos(y);
@@ -17,7 +18,7 @@ float2 distortUv(float2 uv) {
     return uv;
 }
 
-float2 randomGradient(float2 corner) {
+float2 randomGradient(float2 corner) { // to nrdi psevdo-random smerni vektor na vsaki tocki v gridu
     float x = dot(corner, float2(123.4, 567.8));
     float y = dot(corner, float2(321.321, 654.654));
     float2 gradient = float2(x, y);
@@ -27,12 +28,12 @@ float2 randomGradient(float2 corner) {
     return gradient;
 }
 
-float quintic(float p) {
+float quintic(float p) { //to preventa ostre robove - smootha
     return p * p * p * (10.0 + p * (-15.0 + p * 6.0));
 }
 
 float perlinNoise(float2 uv) {
-    float gridDivision = 3.0;
+    float gridDivision = 3.0; // 3x3 grid per unit
     uv *= gridDivision;
 
     float2 gridId = floor(uv);
@@ -43,6 +44,7 @@ float perlinNoise(float2 uv) {
     float2 bl = gridId + float2(0.0, 1.0);
     float2 br = gridId + float2(1.0, 1.0);
 
+    // random gradient vectors v usakmu kotu 
     float2 gradTl = randomGradient(tl);
     float2 gradTr = randomGradient(tr);
     float2 gradBl = randomGradient(bl);
@@ -53,6 +55,7 @@ float perlinNoise(float2 uv) {
     float2 fragToBl = gridUv - float2(0.0, 1.0);
     float2 fragToBr = gridUv - float2(1.0, 1.0);
 
+    // dot product med temi vektorji
     float dotTl = dot(gradTl, fragToTl);
     float dotTr = dot(gradTr, fragToTr);
     float dotBl = dot(gradBl, fragToBl);
@@ -60,6 +63,7 @@ float perlinNoise(float2 uv) {
 
     gridUv = float2(quintic(gridUv.x), quintic(gridUv.y));
 
+    //lerp <3
     float t = lerp(dotTl, dotTr, gridUv.x);
     float b = lerp(dotBl, dotBr, gridUv.x);
     return lerp(t, b, gridUv.y);
@@ -69,11 +73,11 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD0) : COLOR {
     texCoord = distortUv(texCoord);
     float noise = abs(perlinNoise(texCoord));
 
-    // Default: Fully transparent
+    //čist transparentno
     float3 color = float3(0.0, 0.0, 0.0);
     float alpha = 0.2;
 
-    // White lines with 20% opacity
+    // bele crte with 20% opacity -- ne dela :C
     if (noise < lineValueLimit) {
         color = lineColor;
         alpha = lineAlpha;

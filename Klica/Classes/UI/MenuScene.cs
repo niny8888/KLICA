@@ -28,6 +28,11 @@ public class MenuScene : IScene
     private MenuState _currentState;
 
     private Texture2D _buttonTexture;
+    private bool isShowingIntro = false;
+    private double introStartTime;
+    private Texture2D introImage; // Load your intro image
+    private bool isGameStarting = false;
+
 
     private Game1 _game;
     private bool _contentLoaded = false;
@@ -73,6 +78,7 @@ public class MenuScene : IScene
 
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
+        introImage = content.Load<Texture2D>("intro");
 
        
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
@@ -105,8 +111,13 @@ public class MenuScene : IScene
             }
             else if (_newGameButton.Contains(mouseState.Position))
             {
+<<<<<<< Updated upstream
                 sound_menu_click.Play();
+=======
+                
+>>>>>>> Stashed changes
                 var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
+                
                 gameScene.NewGame(); // Reset the game state
                 SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
             }

@@ -4,6 +4,7 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+<<<<<<< Updated upstream
     <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png</File>
     <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_1.png</File>
     <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_2.png</File>
@@ -19,6 +20,22 @@
     <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
     <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteSheet1.png</File>
     <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</File>
+=======
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_1.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_2.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_3.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_4.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bg_0000_bg3.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/intro.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/lose.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/PerlinNoise.fx</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteSheet1.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/win.png</File>
+>>>>>>> Stashed changes
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
@@ -35,6 +52,9 @@
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
+<<<<<<< Updated upstream
     <File xsi:nil="true" />
+=======
+>>>>>>> Stashed changes
   </DestFiles>
 </SourceFileCollection>

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<<<<<<< Updated upstream
   <SourceFile>c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</SourceFile>
   <SourceTime>2024-11-07T09:16:55.7643951+01:00</SourceTime>
   <DestFile>c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/SpriteInfo.xnb</DestFile>
   <DestTime>2025-01-22T15:49:06.3080586+01:00</DestTime>
+=======
+  <SourceFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</SourceFile>
+  <SourceTime>2024-11-06T21:07:27.9117766+01:00</SourceTime>
+  <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/SpriteInfo.xnb</DestFile>
+  <DestTime>2025-02-03T17:40:37.0240697+01:00</DestTime>
+>>>>>>> Stashed changes
   <Importer>TextureImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
