@@ -17,7 +17,7 @@ public class GameScene : IScene
 {
     private Level _level;
     private GameplayRules _gameplayRules;
-    private PhysicsEngine _physicsEngine;
+    private FoodEngine _physicsEngine;
     private Player _player;
     private List<Enemy> _enemies;
     private Texture2D _background;
@@ -110,7 +110,7 @@ public class GameScene : IScene
         _circleTexture = Collider.CreateCircleTexture(_game.GraphicsDevice, 50, Color.White);
 
         _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, _gameplayRules, 20);
-        _physicsEngine = new PhysicsEngine(_level);
+        _physicsEngine = new FoodEngine(_level);
 
         var food = new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f);
         _physicsEngine.AddFood(food);
@@ -576,7 +576,7 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         _enemies.Clear(); 
         SpawnEnemies(_enemySpawnRate); 
 
-        _physicsEngine = new PhysicsEngine(_level); 
+        _physicsEngine = new FoodEngine(_level); 
         Console.WriteLine("New game started. Data reset to default.");
     }
 

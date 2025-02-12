@@ -42,6 +42,10 @@ namespace Klica.Classes.Organizmi
             _health = 100;
             Mass = 3f;
 
+            initalizations(baseSprite, eye, mouth);
+        }
+
+        public void initalizations(Base baseSprite, Eyes eye, Mouth mouth){
             // Initialize components in base class
             _organism_base.SetPosition(_position);
             _organism_mouth.SetPosition(_organism_base._position_mouth, 0, 0);
@@ -53,17 +57,15 @@ namespace Klica.Classes.Organizmi
         }
 
 
-        public void Update(GameTime gameTime, Player player, PhysicsEngine physicsEngine)
+        public void Update(GameTime gameTime, Player player, FoodEngine physicsEngine)
         {
-            // Apply velocity (bouncing effect)
+            //fizka
             _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            // Apply friction to slow down bounce velocity
             _velocity *= 0.95f;
 
             Vector2 movementDirection = Vector2.Zero;
 
-            // Existing behavior logic
+            // AI behavior
             switch (_currentState)
             {
                 case EnemyState.Idle:
@@ -182,7 +184,13 @@ namespace Klica.Classes.Organizmi
                 _random.Next(100, 600)
             );
         }
+        public void ApplyBounce(Vector2 direction, float strength)
+        {
+            _velocity += direction * strength;
+        }
 
+
+        //checkiranje
         private bool IsPlayerInRange(Player player, float range)
         {
             return Vector2.Distance(_position, player._position) <= range;
@@ -218,23 +226,24 @@ namespace Klica.Classes.Organizmi
             return closestFood;
         }
 
+        //COLIDERS
         public Collider GetBaseCollider() => _baseCollider;
 
         public Collider GetMouthCollider() => _mouthCollider;
 
+
+        //DRAW
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             DrawOrganism(spriteBatch, gameTime);
         }
+
+        //GETTERS
         public float GetRotation()
         {
             return _organism_base.GetRotation();
         }
 
-        public void ApplyBounce(Vector2 direction, float strength)
-        {
-            _velocity += direction * strength;
-        }
-
+        
     }
 }

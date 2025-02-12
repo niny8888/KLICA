@@ -11,18 +11,19 @@ namespace Klica{
         public Eyes _organism_eye;
         public Mouth _organism_mouth;
         private Physics _physics;
-        private PhysicsEngine _physicsEngine;
+        private FoodEngine _physicsEngine;
         private Vector2 _lastMovementDirection = Vector2.Zero;
         public int _health { get; internal set; }
         public Vector2 _position { get; internal set; }
 
-        public OrganismBuilder(Base baseSprite, Eyes eye, Mouth mouth, PhysicsEngine physicsEngine){
+        public OrganismBuilder(Base baseSprite, Eyes eye, Mouth mouth, FoodEngine physicsEngine){
             _organism_base = baseSprite;
             _organism_eye = eye;
             _organism_mouth = mouth;
             _physics = new Physics(_organism_base.GetPosition());
             _physicsEngine = physicsEngine;
         }
+
         public void UpdateOrganism(Vector2 movementDirection, GameTime gameTime)
         {
             if (movementDirection != Vector2.Zero)

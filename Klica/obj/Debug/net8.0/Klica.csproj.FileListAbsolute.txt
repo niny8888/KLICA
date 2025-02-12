@@ -85,3 +85,8 @@ c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\
 c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SE_menu.xnb
 c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\song-bg.ogg
 c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\song-bg.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\song-bg.ogg
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SE_dmg.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SE_eat_food.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SE_menu.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\song-bg.xnb

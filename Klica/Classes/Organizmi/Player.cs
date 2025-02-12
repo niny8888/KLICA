@@ -15,7 +15,7 @@ namespace Klica.Classes.Objects_sprites
 
         // Physics properties
         private Physics _physics;
-        private PhysicsEngine _physicsEngine;
+        private FoodEngine _physicsEngine;
         private Vector2 _lastMovementDirection = Vector2.Zero;
 
         public Vector2 _position { get; internal set; }
@@ -31,7 +31,7 @@ namespace Klica.Classes.Objects_sprites
         private Collider _mouthCollider;
 
 
-        public Player(PhysicsEngine physicsEngine)
+        public Player(FoodEngine physicsEngine)
         {   
             _position = new Vector2(1920 / 2, 1080 / 2);
             _physics = new Physics(_position);
@@ -94,7 +94,7 @@ namespace Klica.Classes.Objects_sprites
                 
                 Vector2 newPosition = _physics.GetPosition();
 
-                System.Console.WriteLine("1 ..... Position: " + newPosition   + "Bounds:  " + bounds);
+                //System.Console.WriteLine("1 ..... Position: " + newPosition   + "Bounds:  " + bounds);
                 
                 float halfWidth = _player_base.Width / 2f;
                 float halfHeight = _player_base.Height / 2f;
@@ -102,7 +102,7 @@ namespace Klica.Classes.Objects_sprites
                 newPosition.X = MathHelper.Clamp(newPosition.X, bounds.Left + halfWidth, bounds.Right - halfWidth);
                 newPosition.Y = MathHelper.Clamp(newPosition.Y, bounds.Top + halfHeight, bounds.Bottom - halfHeight);
 
-                System.Console.WriteLine("2 ..... Position: " + newPosition   + "Bounds:  " + bounds);
+                //System.Console.WriteLine("2 ..... Position: " + newPosition   + "Bounds:  " + bounds);
 
                 // Apply the clamped position to physics and player
                 _physics._positon = newPosition;
@@ -138,22 +138,28 @@ namespace Klica.Classes.Objects_sprites
                 _lastMovementDirection = movementDirection;
             }
         }
+        public void ApplyBounce(Vector2 direction, float strength)
+        {
+            Velocity += direction * strength;
+        }
+
+        // COLLiDERS
         public Collider GetBaseCollider() => _baseCollider;
         public Collider GetMouthCollider() => _mouthCollider;
 
+        // DRAW
         public void DrawPlayer(SpriteBatch _spriteBatch, GameTime _gameTime){
              _player_base.Draw(_spriteBatch);
              _player_eye.Draw(_spriteBatch,_gameTime);
              _player_mouth.Draw(_spriteBatch);
          }
+
+        // GETTERS
          public float GetRotation()
         {
             return _player_base.GetRotation();
         }
-        public void ApplyBounce(Vector2 direction, float strength)
-        {
-            Velocity += direction * strength;
-        }
+        
 
 
     }

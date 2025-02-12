@@ -19,6 +19,7 @@ namespace Klica.Classes
         public float CollisionRadius { get; private set; } = 10f;
         public bool IsConsumed { get; private set; } = false;
 
+        //fizika
         public float Mass { get; set; } = 1f; // Default mass
         public float Restitution { get;  set; } = 0.8f; // Default restitution coefficient
         private const float MaxVelocity = 300f;

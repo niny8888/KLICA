@@ -56,13 +56,8 @@ public class MenuScene : IScene
         
         try
         {
-            //Console.WriteLine("Loading background...");
             _background = content.Load<Texture2D>("bg_0000_bg3");
-            //Console.WriteLine("Background loaded successfully!");
-
-            //Console.WriteLine("Loading font...");
             _font = content.Load<BitmapFont>("Arial");
-            //Console.WriteLine("Font loaded successfully!");
         }
         catch (Exception ex)
         {
@@ -116,9 +111,8 @@ public class MenuScene : IScene
     {
         _currentState = MenuState.MainMenu;
     }
-
-    _previousMouseState = mouseState;
-}
+        _previousMouseState = mouseState;
+    }
 
 
     public void Draw(SpriteBatch spriteBatch)

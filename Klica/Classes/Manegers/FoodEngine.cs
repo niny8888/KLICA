@@ -7,12 +7,12 @@ using Klica.Classes.Organizmi;
 
 namespace Klica.Classes
 {
-    public class PhysicsEngine
+    public class FoodEngine
     {
         private Level _level;
         public List<Food> _foodItems = new List<Food>();
 
-        public PhysicsEngine(Level level)
+        public FoodEngine(Level level)
         {
             _level = level;
 
