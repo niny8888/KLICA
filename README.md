@@ -19,14 +19,14 @@ latest export in
 Klica/bin/Release/net8.0
 for linux and windows
 
-🚀 Roadmap
+## 🚀 Roadmap
  - better gameplay
  - story
  - fixing arhitecture
  - improving AI
 
 
-🤝 Contributing
+## 🤝 Contributing
 
 Contributions currently not welcome as this is still currently my school project! Any ideas or help is welcome tho :D
 
