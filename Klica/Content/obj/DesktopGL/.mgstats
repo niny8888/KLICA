@@ -1,7 +1,10 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 "c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3","c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/song-bg.xnb","SoundEffectProcessor","SoundEffectContent",220416,1322601,0,5071943
 =======
+=======
+>>>>>>> Stashed changes
 "d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png","d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Arial_0.xnb","TextureProcessor","Texture2DContent",16359,262229,0,1512228
 "d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_1.png","d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Arial_1.xnb","TextureProcessor","Texture2DContent",16549,262229,0,0260323
 "d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_2.png","d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Arial_2.xnb","TextureProcessor","Texture2DContent",19756,262229,0,0257525
@@ -16,4 +19,7 @@ Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Siz
 "d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteSheet1.png","d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/SpriteSheet1.xnb","TextureProcessor","Texture2DContent",1262320,5489461,0,2949437
 "d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx","d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/WaterFlow.xnb","EffectProcessor","CompiledEffectContent",797,1228,0,2175721
 "d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/win.png","d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/win.xnb","TextureProcessor","Texture2DContent",876977,8294485,0,2806779
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
