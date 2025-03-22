@@ -15,6 +15,7 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     public static int ScreenWidth = 1920;
     public static int ScreenHeight= 1080;
+    public bool IsFullscreen = false;
     public SpriteManager _spriteManager;
     public GameTime gameTime;
 
@@ -27,6 +28,7 @@ public class Game1 : Game
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        ApplyResolutionSettings();
 
         _graphics.PreferredBackBufferWidth = ScreenWidth;
         _graphics.PreferredBackBufferHeight = ScreenHeight;
@@ -48,6 +50,7 @@ public class Game1 : Game
         
         SceneManager.Instance.AddScene(SceneManager.SceneType.MainMenu, new MenuScene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Game, new GameScene(this));
+        SceneManager.Instance.AddScene(SceneManager.SceneType.SettingsScene, new SettingsScene(this));
 
         // Set the initial scene
         SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
@@ -59,6 +62,13 @@ public class Game1 : Game
         return gameTime;
     }
 
+    public void ApplyResolutionSettings()
+    {
+        _graphics.PreferredBackBufferWidth = ScreenWidth;
+        _graphics.PreferredBackBufferHeight = ScreenHeight;
+        _graphics.IsFullScreen = IsFullscreen;
+        _graphics.ApplyChanges();
+    }
     protected override void Update(GameTime gameTime)
     {
         this.gameTime = gameTime;

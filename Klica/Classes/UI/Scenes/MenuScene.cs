@@ -15,6 +15,7 @@ public class MenuScene : IScene
         MainMenu,
         HowToPlay,
         Settings
+
     }
 
     private Texture2D _background;
@@ -38,6 +39,7 @@ public class MenuScene : IScene
     private bool _contentLoaded = false;
 
     private SoundEffectInstance sound_menu_click;
+    private int Button_offset_width=Game1.ScreenWidth/2;
 
     public MenuScene(Game1 game)
     {
@@ -48,10 +50,10 @@ public class MenuScene : IScene
     {
         _background = null;
         _font = null;
-        _playButton = new Rectangle(300, 200, 200, 50);
-        _howToPlayButton = new Rectangle(300, 300, 200, 50);
-        _settingsButton = new Rectangle(300, 400, 200, 50);
-        _newGameButton = new Rectangle(300, 500, 200, 50);
+        _playButton = new Rectangle(Button_offset_width, 200, 200, 50);
+        _howToPlayButton = new Rectangle(Button_offset_width, 300, 200, 50);
+        _settingsButton = new Rectangle(Button_offset_width, 400, 200, 50);
+        _newGameButton = new Rectangle(Button_offset_width, 500, 200, 50);
         _previousMouseState = Mouse.GetState();
         _currentState = MenuState.MainMenu;
     }
@@ -107,12 +109,14 @@ public class MenuScene : IScene
             else if (_settingsButton.Contains(mouseState.Position))
             {
                 sound_menu_click.Play();
-                _currentState = MenuState.Settings;
+                SceneManager.Instance.SetScene(SceneManager.SceneType.SettingsScene);
             }
+
+
             else if (_newGameButton.Contains(mouseState.Position))
             {
-                sound_menu_click.Play();
 
+                sound_menu_click.Play();
                 var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
                 
                 gameScene.NewGame(); // Reset the game state

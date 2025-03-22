@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class SceneManager
 {
-    public enum SceneType { MainMenu, Game }
+    public enum SceneType { MainMenu, Game , SettingsScene}
 
     private readonly Dictionary<SceneType, IScene> _scenes = new();
     private IScene _currentScene;
