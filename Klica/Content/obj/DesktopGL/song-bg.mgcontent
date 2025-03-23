@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3</SourceFile>
-  <SourceTime>2025-01-22T15:25:08.3742742+01:00</SourceTime>
-  <DestFile>c:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/song-bg.xnb</DestFile>
-  <DestTime>2025-01-22T15:57:09.3982481+01:00</DestTime>
+  <SourceFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3</SourceFile>
+  <SourceTime>2025-02-12T10:06:39.5491815+01:00</SourceTime>
+  <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/song-bg.xnb</DestFile>
+  <DestTime>2025-03-23T10:43:30.0210528+01:00</DestTime>
   <Importer>Mp3Importer</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

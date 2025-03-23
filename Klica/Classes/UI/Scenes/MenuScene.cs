@@ -115,8 +115,8 @@ public class MenuScene : IScene
 
             else if (_newGameButton.Contains(mouseState.Position))
             {
-
                 sound_menu_click.Play();
+
                 var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
                 
                 gameScene.NewGame(); // Reset the game state
