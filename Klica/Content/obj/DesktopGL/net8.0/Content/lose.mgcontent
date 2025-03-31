@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/lose.png</SourceFile>
-  <SourceTime>2025-02-12T10:46:13.6314629+01:00</SourceTime>
-  <DestFile>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Content/lose.xnb</DestFile>
-  <DestTime>2025-03-22T10:20:37.7520623+01:00</DestTime>
+  <SourceFile>C:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/lose.png</SourceFile>
+  <SourceTime>2025-03-31T08:44:34.9446584+02:00</SourceTime>
+  <DestFile>C:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/bin/DesktopGL/Content/lose.xnb</DestFile>
+  <DestTime>2025-03-31T12:16:44.9347137+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

@@ -4,23 +4,23 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_1.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_2.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_3.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_4.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bg_0000_bg3.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/intro.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/lose.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/PerlinNoise.fx</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_dmg.mp3</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_eat_food.mp3</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_menu.wav</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/win.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/Arial_0.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/Arial_1.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/Arial_2.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/Arial_3.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/Arial_4.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/Arial.fnt</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/bg_0000_bg3.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/intro.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/lose.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/PerlinNoise.fx</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/SE_dmg.mp3</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/SE_eat_food.mp3</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/SE_menu.wav</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/song-bg.mp3</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/SpriteInfo.png</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/WaterFlow.fx</File>
+    <File>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/win.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

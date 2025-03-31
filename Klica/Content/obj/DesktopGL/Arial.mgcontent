@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</SourceFile>
-  <SourceTime>2024-12-15T22:27:46.5424053+01:00</SourceTime>
-  <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Arial.xnb</DestFile>
-  <DestTime>2025-03-23T10:43:28.6820527+01:00</DestTime>
+  <SourceFile>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/Arial.fnt</SourceFile>
+  <SourceTime>2025-03-31T08:44:34.0779307+02:00</SourceTime>
+  <DestFile>c:/Users/ninapl/Documents/faks_git/KLICA/Klica/Content/bin/DesktopGL/Arial.xnb</DestFile>
+  <DestTime>2025-03-31T12:16:56.4681469+02:00</DestTime>
   <Importer>BitmapFontImporter</Importer>
-  <ImporterTime>2024-07-09T21:47:10+02:00</ImporterTime>
+  <ImporterTime>2025-03-31T08:44:36.0575531+02:00</ImporterTime>
   <Processor>BitmapFontProcessor</Processor>
-  <ProcessorTime>2024-07-09T21:47:10+02:00</ProcessorTime>
+  <ProcessorTime>2025-03-31T08:44:36.0575531+02:00</ProcessorTime>
   <Dependencies>
     <string>Arial_0.png</string>
     <string>Arial_1.png</string>
