@@ -16,7 +16,7 @@ public class SettingsScene : IScene
 
     private int _selectedOption = 0;
     private string[] _options = { "Resolution", "Graphics", "Fullscreen", "Volume" };
-    private int _resolutionIndex = 1;
+    private int _resolutionIndex = 5;
     private string[] _resolutions =
     {
         "800x600", "1024x768", "1280x720", "1366x768",

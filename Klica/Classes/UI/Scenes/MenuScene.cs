@@ -39,7 +39,7 @@ public class MenuScene : IScene
     private bool _contentLoaded = false;
 
     private SoundEffectInstance sound_menu_click;
-    private int Button_offset_width=Game1.ScreenWidth/2;
+    private int Button_offset_width=Game1.ScreenWidth/2-100;
 
     public MenuScene(Game1 game)
     {
@@ -50,12 +50,16 @@ public class MenuScene : IScene
     {
         _background = null;
         _font = null;
+        SetButtonPosition();
+        _previousMouseState = Mouse.GetState();
+        _currentState = MenuState.MainMenu;
+    }
+
+    private void SetButtonPosition(){
         _playButton = new Rectangle(Button_offset_width, 200, 200, 50);
         _howToPlayButton = new Rectangle(Button_offset_width, 300, 200, 50);
         _settingsButton = new Rectangle(Button_offset_width, 400, 200, 50);
         _newGameButton = new Rectangle(Button_offset_width, 500, 200, 50);
-        _previousMouseState = Mouse.GetState();
-        _currentState = MenuState.MainMenu;
     }
 
     public void LoadContent(ContentManager content)
@@ -135,6 +139,8 @@ public class MenuScene : IScene
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        Button_offset_width=Game1.ScreenWidth/2-100;
+        SetButtonPosition();
         if (!_contentLoaded)
         return; 
         
@@ -156,6 +162,8 @@ public class MenuScene : IScene
 
     private void DrawMainMenu(SpriteBatch spriteBatch)
     {
+        
+        
         spriteBatch.Draw(_background, Vector2.Zero, Color.White);
 
         DrawButton(spriteBatch, "Play", _playButton);
