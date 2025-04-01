@@ -14,10 +14,10 @@ namespace Klica.Classes.Objects_sprites{
         private Sprite _base_sprite_green;
         private Sprite _base_sprite_pink;
 
-        private  bool Rotatable = true;
-        private bool Composable= true;
-        private bool Movable = true;
-        private  bool Colidable= true;  //colision shape --> sphere !! TODO
+        // private  bool Rotatable = true;
+        // private bool Composable= true;
+        // private bool Movable = true;
+        // private  bool Colidable= true;  //colision shape --> sphere !! TODO
 
         public Vector2 _position_eyes =new Vector2(0,0);
         public Vector2 _position_mouth = new Vector2(0,0);

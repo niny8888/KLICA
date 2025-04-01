@@ -245,33 +245,21 @@ public class GameScene : IScene
             if (Vector2.Distance(_player._position, enemy._position) <
                 _player.GetBaseCollider().Radius + enemy.GetBaseCollider().Radius)
             {
-                Vector2 direction = Vector2.Normalize(_player._position - enemy._position);
-                float bounceStrength = 300f;
-
-                _player.ApplyBounce(direction, bounceStrength);
-                enemy.ApplyBounce(-direction, bounceStrength);
+                _collisionManager.HandleBaseBaseCollision(_player,enemy);
             }
 
             // Collision handling for player mouth with enemy
             if (Vector2.Distance(_player.GetMouthCollider().Position, enemy._position) <
                 _player.GetMouthCollider().Radius + enemy.GetBaseCollider().Radius)
             {
-                Vector2 direction = Vector2.Normalize(_player.GetMouthCollider().Position - enemy._position);
-                float bounceStrength = 200f;
-
-                _player.ApplyBounce(direction, bounceStrength);
-                enemy.ApplyBounce(-direction, bounceStrength);
+               _collisionManager.HandlePlayerMouthWithEnemyBase(_player,enemy);
             }
 
             // Collision handling for enemy mouth with player
             if (Vector2.Distance(enemy.GetMouthCollider().Position, _player._position) <
                 enemy.GetMouthCollider().Radius + _player.GetBaseCollider().Radius)
             {
-                Vector2 direction = Vector2.Normalize(enemy.GetMouthCollider().Position - _player._position);
-                float bounceStrength = 200f;
-
-                _player.ApplyBounce(-direction, bounceStrength);
-                enemy.ApplyBounce(direction, bounceStrength);
+                _collisionManager.HandleEnemyMouthWithPlayerBase(_player,enemy);
             }
 
             // Update enemy behavior
@@ -355,6 +343,9 @@ public class GameScene : IScene
         }
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
 
+
+
+//////////////Collision DEBUG
         // Draw player colliders
         Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
         Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);

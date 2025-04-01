@@ -15,9 +15,9 @@ namespace Klica.Classes.Objects_sprites
 
         // Physics properties
         private Physics _physics;
-        private PhysicsEngine _physicsEngine;
         private Vector2 _lastMovementDirection = Vector2.Zero;
 
+        ///FIZKA
         public Vector2 _position { get; internal set; }
         public int _health { get; internal set; }
         private bool _hasStarted = false;
@@ -35,7 +35,6 @@ namespace Klica.Classes.Objects_sprites
         {   
             _position = new Vector2(1920 / 2, 1080 / 2);
             _physics = new Physics(_position);
-            _physicsEngine = physicsEngine;
             _player_base.SetPosition(_position);
             _baseCollider = new Collider(_player_base.GetPosition(), _player_base.Width/2f, this);
             _mouthCollider = new Collider(_player_base._position_mouth, 10f, this);
@@ -44,17 +43,10 @@ namespace Klica.Classes.Objects_sprites
         }
         
 
-        public void TakeDamage(int damage)
-        {
-            _health -= damage;
-            if (_health <= 0)
-            {
-                System.Console.WriteLine("Game over! U died!");
-                _health=0;
-            }
-        }
-
        
+// ==============================================
+// ============== UPDATE  =================
+// ==============================================
 
         public void UpdatePlayer(GameTime gameTime, Rectangle bounds)
         {
@@ -95,15 +87,12 @@ namespace Klica.Classes.Objects_sprites
                 
                 Vector2 newPosition = _physics.GetPosition();
 
-                System.Console.WriteLine("1 ..... Position: " + newPosition   + "Bounds:  " + bounds);
-                
                 float halfWidth = _player_base.Width / 2f;
                 float halfHeight = _player_base.Height / 2f;
 
                 newPosition.X = MathHelper.Clamp(newPosition.X, bounds.Left + halfWidth, bounds.Right - halfWidth);
                 newPosition.Y = MathHelper.Clamp(newPosition.Y, bounds.Top + halfHeight, bounds.Bottom - halfHeight);
-
-                System.Console.WriteLine("2 ..... Position: " + newPosition   + "Bounds:  " + bounds);
+                
 
                 // Apply the clamped position to physics and player
                 _physics._positon = newPosition;
@@ -139,23 +128,50 @@ namespace Klica.Classes.Objects_sprites
                 _lastMovementDirection = movementDirection;
             }
         }
-        public Collider GetBaseCollider() => _baseCollider;
-        public Collider GetMouthCollider() => _mouthCollider;
-
+        
+// ==============================================
+// ============== DRAW  =================
+// ==============================================
         public void DrawPlayer(SpriteBatch _spriteBatch, GameTime _gameTime){
              _player_base.Draw(_spriteBatch);
              _player_eye.Draw(_spriteBatch,_gameTime);
              _player_mouth.Draw(_spriteBatch);
          }
+
+// ==============================================
+// ============== GETTERS  =================
+// ==============================================
          public float GetRotation()
         {
             return _player_base.GetRotation();
         }
+        public Collider GetBaseCollider() => _baseCollider;
+        public Collider GetMouthCollider() => _mouthCollider;
+
+// ==============================================
+// ============== FIZKA =================
+// ==============================================
+        /// to ne dela...
         public void ApplyBounce(Vector2 direction, float strength)
         {
+            Console.WriteLine("Before Bounce: " + Velocity);
+            if (direction != Vector2.Zero)
+                direction.Normalize();
             Velocity += direction * strength;
+            Console.WriteLine("After Bounce: " + Velocity);
         }
-
-
+        
+// ==============================================
+// ============== DMG =================
+// ==============================================
+    public void TakeDamage(int damage)
+        {
+            _health -= damage;
+            if (_health <= 0)
+           {
+                System.Console.WriteLine("Game over! U died!");
+                _health=0;
+            }
+        }
     }
 }
