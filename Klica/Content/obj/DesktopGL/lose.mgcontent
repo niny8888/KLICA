@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/lose.png</SourceFile>
+<<<<<<< Updated upstream
   <SourceTime>2025-02-12T10:46:13.6314629+01:00</SourceTime>
   <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/lose.xnb</DestFile>
   <DestTime>2025-03-23T10:43:29.2780522+01:00</DestTime>
+=======
+  <SourceTime>2025-02-03T17:01:47.3017758+01:00</SourceTime>
+  <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/lose.xnb</DestFile>
+  <DestTime>2025-02-03T17:40:36.3284652+01:00</DestTime>
+>>>>>>> Stashed changes
   <Importer>TextureImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

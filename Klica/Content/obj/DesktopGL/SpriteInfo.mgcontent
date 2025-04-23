@@ -3,7 +3,11 @@
   <SourceFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</SourceFile>
   <SourceTime>2024-11-06T21:07:27.9117766+01:00</SourceTime>
   <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/SpriteInfo.xnb</DestFile>
+<<<<<<< Updated upstream
   <DestTime>2025-03-23T10:43:30.1360502+01:00</DestTime>
+=======
+  <DestTime>2025-02-03T17:40:37.0240697+01:00</DestTime>
+>>>>>>> Stashed changes
   <Importer>TextureImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

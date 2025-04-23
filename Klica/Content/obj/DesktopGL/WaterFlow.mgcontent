@@ -3,7 +3,11 @@
   <SourceFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</SourceFile>
   <SourceTime>2024-12-26T11:12:09.7970967+01:00</SourceTime>
   <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/WaterFlow.xnb</DestFile>
+<<<<<<< Updated upstream
   <DestTime>2025-03-23T10:43:30.323052+01:00</DestTime>
+=======
+  <DestTime>2025-02-03T17:40:37.5371554+01:00</DestTime>
+>>>>>>> Stashed changes
   <Importer>EffectImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>EffectProcessor</Processor>
