@@ -3,7 +3,6 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Klica.Classes.Objects_sprites;
-using Klica.Classes.Managers;
 
 namespace Klica{
     public class OrganismBuilder{
@@ -56,7 +55,8 @@ namespace Klica{
             _health -= damage;
             if (_health <= 0)
             {
-                System.Console.WriteLine("Game over! U died!");
+                System.Console.WriteLine("Enemy died!");
+                _health=0;
             }
         }
 
@@ -65,5 +65,6 @@ namespace Klica{
             _organism_eye.Draw(_spriteBatch, _gameTime);
             _organism_mouth.Draw(_spriteBatch);
         }
+        
     }
 }

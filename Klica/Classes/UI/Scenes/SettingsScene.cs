@@ -16,13 +16,19 @@ public class SettingsScene : IScene
 
     private int _selectedOption = 0;
     private string[] _options = { "Resolution", "Graphics", "Fullscreen", "Volume" };
-    private int _resolutionIndex = 1;
-    private string[] _resolutions = { "800x600", "1280x720", "1920x1080" };
+    private int _resolutionIndex = 5;
+    private string[] _resolutions =
+    {
+        "800x600", "1024x768", "1280x720", "1366x768",
+        "1600x900", "1920x1080"
+    };
     private int _graphicsIndex = 1;
     private string[] _graphicsLevels = { "Low", "Medium", "High" };
     private bool _isFullscreen = false;
     private MouseState _previousMouseState;
     private float _volume = 1.0f;
+    private float _inputCooldown = 0f;
+    private const float InputDelay = 0.2f; 
 
     public SettingsScene(Game1 game)
     {
@@ -44,31 +50,55 @@ public class SettingsScene : IScene
     {
         KeyboardState keyboardState = Keyboard.GetState();
         MouseState mouseState = Mouse.GetState();
+        float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        // Update input cooldown
+        if (_inputCooldown > 0)
+            _inputCooldown -= deltaTime;
 
         // Navigate settings with UP/DOWN
-        if (keyboardState.IsKeyDown(Keys.Up))
+        if (_inputCooldown <= 0)
         {
-            _selectedOption = (_selectedOption - 1 + _options.Length) % _options.Length;
-        }
-        if (keyboardState.IsKeyDown(Keys.Down))
-        {
-            _selectedOption = (_selectedOption + 1) % _options.Length;
-        }
+            if (keyboardState.IsKeyDown(Keys.Up))
+            {
+                _selectedOption = (_selectedOption - 1 + _options.Length) % _options.Length;
+                _inputCooldown = InputDelay;
+            }
+            if (keyboardState.IsKeyDown(Keys.Down))
+            {
+                _selectedOption = (_selectedOption + 1) % _options.Length;
+                _inputCooldown = InputDelay;
+            }
 
-        // Adjust settings with LEFT/RIGHT
-        if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.Right))
-        {
+            // Adjust settings with LEFT/RIGHT
             switch (_selectedOption)
             {
                 case 0: // Resolution
-                    if (keyboardState.IsKeyDown(Keys.Right)) _resolutionIndex = (_resolutionIndex + 1) % _resolutions.Length;
-                    if (keyboardState.IsKeyDown(Keys.Left)) _resolutionIndex = (_resolutionIndex - 1 + _resolutions.Length) % _resolutions.Length;
-                    ApplyResolution();
+                    if (keyboardState.IsKeyDown(Keys.Right))
+                    {
+                        _resolutionIndex = (_resolutionIndex + 1) % _resolutions.Length;
+                        ApplyResolution();
+                        _inputCooldown = InputDelay;
+                    }
+                    if (keyboardState.IsKeyDown(Keys.Left))
+                    {
+                        _resolutionIndex = (_resolutionIndex - 1 + _resolutions.Length) % _resolutions.Length;
+                        ApplyResolution();
+                        _inputCooldown = InputDelay;
+                    }
                     break;
 
                 case 1: // Graphics
-                    if (keyboardState.IsKeyDown(Keys.Right)) _graphicsIndex = (_graphicsIndex + 1) % _graphicsLevels.Length;
-                    if (keyboardState.IsKeyDown(Keys.Left)) _graphicsIndex = (_graphicsIndex - 1 + _graphicsLevels.Length) % _graphicsLevels.Length;
+                    if (keyboardState.IsKeyDown(Keys.Right))
+                    {
+                        _graphicsIndex = (_graphicsIndex + 1) % _graphicsLevels.Length;
+                        _inputCooldown = InputDelay;
+                    }
+                    if (keyboardState.IsKeyDown(Keys.Left))
+                    {
+                        _graphicsIndex = (_graphicsIndex - 1 + _graphicsLevels.Length) % _graphicsLevels.Length;
+                        _inputCooldown = InputDelay;
+                    }
                     break;
 
                 case 2: // Fullscreen
@@ -77,13 +107,21 @@ public class SettingsScene : IScene
                         _isFullscreen = !_isFullscreen;
                         _game.IsFullscreen = _isFullscreen;
                         _game.ApplyResolutionSettings();
-
+                        _inputCooldown = InputDelay;
                     }
                     break;
 
                 case 3: // Volume
-                    if (keyboardState.IsKeyDown(Keys.Right)) _volume = MathHelper.Clamp(_volume + 0.1f, 0f, 1f);
-                    if (keyboardState.IsKeyDown(Keys.Left)) _volume = MathHelper.Clamp(_volume - 0.1f, 0f, 1f);
+                    if (keyboardState.IsKeyDown(Keys.Right))
+                    {
+                        _volume = MathHelper.Clamp(_volume + 0.1f, 0f, 1f);
+                        _inputCooldown = InputDelay;
+                    }
+                    if (keyboardState.IsKeyDown(Keys.Left))
+                    {
+                        _volume = MathHelper.Clamp(_volume - 0.1f, 0f, 1f);
+                        _inputCooldown = InputDelay;
+                    }
                     break;
             }
         }

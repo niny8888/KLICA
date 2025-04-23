@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Klica.Classes.Organizmi
 {
-    public enum EnemyState
+    public enum EnemyState //AI STATES
     {
         Idle,
         ChasingFood,
@@ -23,6 +23,8 @@ namespace Klica.Classes.Organizmi
         private Vector2 _targetPosition;
         private float _speed;
         private Random _random;
+        private double _stateLockTimer;
+        private bool _isStateLocked;
 
         private Collider _baseCollider;
         private Collider _mouthCollider;
@@ -41,6 +43,7 @@ namespace Klica.Classes.Organizmi
             _targetPosition = _position;
             _health = 100;
             Mass = 3f;
+            
 
             // Initialize components in base class
             _organism_base.SetPosition(_position);
@@ -50,11 +53,26 @@ namespace Klica.Classes.Organizmi
             // Initialize colliders
             _baseCollider = new Collider(_position, baseSprite.Width/2f, this);
             _mouthCollider = new Collider(baseSprite._position_mouth, 10f, this);
+        
+            _isStateLocked = false;
+            _stateLockTimer = 0;
         }
 
-
+// ==============================================
+// ============== UPDATE  =================
+// ==============================================
         public void Update(GameTime gameTime, Player player, PhysicsEngine physicsEngine)
         {
+            // Handle state lock timer
+             if (_isStateLocked)
+            {
+                _stateLockTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                if (_stateLockTimer <= 0)
+                {
+                    _isStateLocked = false;
+                }
+                return; // Stop further state updates
+            }
             // Apply velocity (bouncing effect)
             _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -90,8 +108,13 @@ namespace Klica.Classes.Organizmi
             _mouthCollider.Position = _organism_base._position_mouth;
         }
 
+        // ==============================================
+        // ============== IDLE  =================
+        // ==============================================
+
         private Vector2 UpdateIdleState(Player player, Food[] foods)
         {
+            ///Wander(); ///to so pol tko bl na enmu kupcku
             if (_random.NextDouble() < 0.01)
             {
                 _targetPosition = GetRandomTargetPosition();
@@ -109,6 +132,9 @@ namespace Klica.Classes.Organizmi
             return _targetPosition - _position;
         }
 
+        // ==============================================
+        // ============== CHASING FOOD =================
+        // ==============================================
         private Vector2 UpdateChasingFoodState(Food[] foods)
         {
             Food closestFood = GetClosestFood(foods);
@@ -130,19 +156,34 @@ namespace Klica.Classes.Organizmi
             return _targetPosition - _position;
         }
 
-        private Vector2 UpdateChasingPlayerState(Player player)
+        // ==============================================
+        // ============== CHASING PLAYER  =================
+        // ==============================================
+
+
+        private Vector2 Seek(Vector2 target)
         {
-            _targetPosition = player._position;
-
-            if (Vector2.Distance(_position, player._position) < 20f)
-            {
-                player.TakeDamage(10);
-                _currentState = EnemyState.Idle;
-            }
-
-            return _targetPosition - _position;
+            Vector2 desiredVelocity = target - _position;
+            desiredVelocity.Normalize();
+            desiredVelocity *= _speed;
+            return desiredVelocity - _velocity; // Steering force
         }
 
+        private Vector2 UpdateChasingPlayerState(Player player)
+        {
+            Vector2 steering = Seek(player._position);
+            _velocity += steering;
+            _velocity = Vector2.Clamp(_velocity, new Vector2(-_speed, -_speed), new Vector2(_speed, _speed));
+            if (Vector2.Distance(_position, player._position) < 20f)
+            {
+                _currentState = EnemyState.Idle;
+            }
+            return _velocity;
+        }
+
+        // ==============================================
+        // ============== FLEEING  =================
+        // ==============================================
         private Vector2 UpdateFleeingState(Player player)
         {
             Vector2 directionAwayFromPlayer = _position - player._position;
@@ -159,6 +200,9 @@ namespace Klica.Classes.Organizmi
             return _targetPosition - _position;
         }
 
+        // ==============================================
+        // ============== TO TARGET  =================
+        // ==============================================
         private void MoveTowardsTarget(GameTime gameTime)
         {
             Vector2 direction = _targetPosition - _position;
@@ -175,14 +219,32 @@ namespace Klica.Classes.Organizmi
             _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        private Vector2 GetRandomTargetPosition()
+        // ==============================================
+        // ============== Wander =================
+        // ==============================================
+        private Vector2 Wander()
         {
-            return new Vector2(
-                _random.Next(100, 800),
-                _random.Next(100, 600)
-            );
+            if (_random.NextDouble() < 0.02) // Change direction occasionally
+            {
+                float angle = (float)(_random.NextDouble() * MathHelper.TwoPi);
+                _targetPosition = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * 50f + _position;
+            }
+            return Seek(_targetPosition);
         }
 
+
+// ==============================================
+// ============== DRAW  =================
+// ==============================================
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            DrawOrganism(spriteBatch, gameTime);
+        }
+
+        
+// ==============================================
+// ============== RANGE CHECK  =================
+// ==============================================
         private bool IsPlayerInRange(Player player, float range)
         {
             return Vector2.Distance(_position, player._position) <= range;
@@ -218,23 +280,43 @@ namespace Klica.Classes.Organizmi
             return closestFood;
         }
 
+// ==============================================
+// ============== GETTERS  =================
+// ==============================================
+
         public Collider GetBaseCollider() => _baseCollider;
 
         public Collider GetMouthCollider() => _mouthCollider;
-
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        private Vector2 GetRandomTargetPosition()
         {
-            DrawOrganism(spriteBatch, gameTime);
+            return new Vector2(
+                _random.Next(100, 800),
+                _random.Next(100, 600)
+            );
         }
         public float GetRotation()
         {
             return _organism_base.GetRotation();
         }
 
+
+// ==============================================
+// ============== FIZKA  =================
+// ==============================================
         public void ApplyBounce(Vector2 direction, float strength)
         {
             _velocity += direction * strength;
         }
 
+    
+// ===========================================
+// STATE LOCK SYSTEM
+// ===========================================
+        public void LockState(EnemyState state, double duration)
+        {
+            _currentState = state;
+            _stateLockTimer = duration;
+            _isStateLocked = true;
+        }
     }
 }

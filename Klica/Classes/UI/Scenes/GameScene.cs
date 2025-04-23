@@ -19,20 +19,22 @@ public class GameScene : IScene
     private GameplayRules _gameplayRules;
     private PhysicsEngine _physicsEngine;
     private Player _player;
+    private CollisionManager _collisionManager;
+    
+/// NPC STVARI
     private List<Enemy> _enemies;
     private List<PeacefulEnemy> _enemies_peaceful;
-    private Texture2D _background;
-    private SpriteManager _spriteManager;
-    private Random _random;
-    private int _enemyCount = 0;
+
+     private int _enemyCount = 0;
     private int _enemySpawnRate = 4;
      private int _enemypeacefulCount = 0;
     private int _enemypeacefulSpawnRate = 1;
-    private GameData _gameData;
-    private string _saveFilePath;
 
+/// VISUAL
+    private Texture2D _background;
+    private SpriteManager _spriteManager;
 
-    private CollisionManager _collisionManager;
+    
 
     // za gumb
     private Rectangle _backButton;
@@ -48,12 +50,17 @@ public class GameScene : IScene
     public bool _gameStateLost;
     private Texture2D _winTexture;
     private Texture2D _loseTexture;
-
+    private Random _random;
+    private GameData _gameData;
+    private string _saveFilePath;
 
     //Shader
     private Effect _waterFlowEffect;
     private Effect _perlinNoiseEffect;
     private HUD _hud;
+    private Vector2 _shaderTime = Vector2.Zero;
+    private Vector2 _shaderPerlinTime = Vector2.Zero;
+    
 
     //trail
     private List<HalfCircleTrail> _trails = new List<HalfCircleTrail>();
@@ -63,7 +70,7 @@ public class GameScene : IScene
     private Dictionary<PeacefulEnemy, float> _enemypeacefulTrailTimers = new();
     private Texture2D _halfCircleTexture;
     private float _trailTimer = 0f;
-    
+
     //debug stuuf
     private Texture2D _debugTexture;
     private Texture2D _circleTexture;
@@ -88,6 +95,11 @@ public class GameScene : IScene
         _gameplayRules = new GameplayRules(3600, 3);
         
     }
+
+// ==============================================
+// ============== LOAD =================
+// ==============================================
+
 
     public void LoadContent(ContentManager content)
     {   
@@ -138,49 +150,8 @@ public class GameScene : IScene
         // }
 
         // SpawnEnemies(_enemySpawnRate);
-        _collisionManager.AddCollider(_player.GetMouthCollider(), collider =>
-        {
-            if (collider.Owner is Enemy enemy)
-            {
-                se_dmg.Play();
-                Console.WriteLine("Player mouth collided with enemy base!");
-                HandleBounce(_player, enemy);
-            }
-        });
-
-        _collisionManager.AddCollider(_player.GetBaseCollider(), collider =>
-        {
-            if (collider.Owner is Enemy enemy)
-            {
-                se_dmg.Play();
-                Console.WriteLine("Player base collided with enemy mouth!");
-                HandleBounce(enemy, _player);
-            }
-        });
-
-        foreach (var enemy in _enemies)
-        {
-            _collisionManager.AddCollider(enemy.GetMouthCollider(), collider =>
-            {
-                if (collider.Owner is Player)
-                {
-                    se_dmg.Play();
-                    Console.WriteLine("Enemy mouth collided with player base!");
-                    HandleBounce(enemy, _player);
-                }
-            });
-
-            _collisionManager.AddCollider(enemy.GetBaseCollider(), collider =>
-            {
-                if (collider.Owner is Player)
-                {
-                    se_dmg.Play();
-                    Console.WriteLine("Enemy base collided with player mouth!");
-                    HandleBounce(_player, enemy);
-                }
-            });
-        }
-
+       
+        AddColliders();
 
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
@@ -192,8 +163,13 @@ public class GameScene : IScene
         _loseTexture = content.Load<Texture2D>("lose");
 
     }
-private Vector2 _shaderTime = Vector2.Zero;
-private Vector2 _shaderPerlinTime = Vector2.Zero;
+
+    
+
+
+// ==============================================
+// ============== UPDATE =================
+// ==============================================
 
     public void Update(GameTime gameTime)
     {
@@ -269,33 +245,21 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
             if (Vector2.Distance(_player._position, enemy._position) <
                 _player.GetBaseCollider().Radius + enemy.GetBaseCollider().Radius)
             {
-                Vector2 direction = Vector2.Normalize(_player._position - enemy._position);
-                float bounceStrength = 300f;
-
-                _player.ApplyBounce(direction, bounceStrength);
-                enemy.ApplyBounce(-direction, bounceStrength);
+                _collisionManager.HandleBaseBaseCollision(_player,enemy);
             }
 
             // Collision handling for player mouth with enemy
             if (Vector2.Distance(_player.GetMouthCollider().Position, enemy._position) <
                 _player.GetMouthCollider().Radius + enemy.GetBaseCollider().Radius)
             {
-                Vector2 direction = Vector2.Normalize(_player.GetMouthCollider().Position - enemy._position);
-                float bounceStrength = 200f;
-
-                _player.ApplyBounce(direction, bounceStrength);
-                enemy.ApplyBounce(-direction, bounceStrength);
+               _collisionManager.HandlePlayerMouthWithEnemyBase(_player,enemy);
             }
 
             // Collision handling for enemy mouth with player
             if (Vector2.Distance(enemy.GetMouthCollider().Position, _player._position) <
                 enemy.GetMouthCollider().Radius + _player.GetBaseCollider().Radius)
             {
-                Vector2 direction = Vector2.Normalize(enemy.GetMouthCollider().Position - _player._position);
-                float bounceStrength = 200f;
-
-                _player.ApplyBounce(-direction, bounceStrength);
-                enemy.ApplyBounce(direction, bounceStrength);
+                _collisionManager.HandleEnemyMouthWithPlayerBase(_player,enemy);
             }
 
             // Update enemy behavior
@@ -334,41 +298,12 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         _waterFlowEffect.Parameters["Time"].SetValue(_shaderTime);
         HandleInput();
     }
-    private void HandleBounce(dynamic entityA, dynamic entityB)
-    {
-        // Calculate collision normal
-        Vector2 normal = Vector2.Normalize(entityB.GetBaseCollider().Position - entityA.GetMouthCollider().Position);
-
-        // Relative velocity
-        Vector2 relativeVelocity = entityA.Velocity - entityB.Velocity;
-
-        // Velocity along the normal
-        float velocityAlongNormal = Vector2.Dot(relativeVelocity, normal);
-
-        // If objects are separating, skip collision
-        if (velocityAlongNormal > 0) return;
-
-        // Combined restitution coefficient
-        float combinedRestitution = entityA.Restitution * entityB.Restitution;
-
-        // Inverse masses
-        float invMassA = entityA.Mass > 0 ? 1 / entityA.Mass : 0;
-        float invMassB = entityB.Mass > 0 ? 1 / entityB.Mass : 0;
-
-        // Impulse scalar
-        float impulse = -(1 + combinedRestitution) * velocityAlongNormal;
-        impulse /= invMassA + invMassB;
-
-        // Apply impulse
-        Vector2 impulseVector = impulse * normal;
-        entityA.Velocity += impulseVector * invMassA;
-        entityB.Velocity -= impulseVector * invMassB;
-
-        // Debug output
-        Console.WriteLine($"Bounce! EntityA Velocity: {entityA.Velocity}, EntityB Velocity: {entityB.Velocity}");
-    }
+    
 
     
+// ==============================================
+// ============== DRAW  =================
+// ==============================================
 
    public void Draw(SpriteBatch spriteBatch)
     {
@@ -408,16 +343,19 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         }
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
 
-        // Draw player colliders
-        //Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
-        //Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
 
-        // Draw enemy colliders
-        // foreach (var enemy in _enemies)
-        // {
-        //     Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetBaseCollider(), Color.Red);
-        //     Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetMouthCollider(), Color.Yellow);
-        // }
+
+//////////////Collision DEBUG
+        // Draw player colliders
+        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
+        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
+
+        //Draw enemy colliders
+        foreach (var enemy in _enemies)
+        {
+            Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetBaseCollider(), Color.Red);
+            Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetMouthCollider(), Color.Yellow);
+        }
         
 
         spriteBatch.End();
@@ -443,6 +381,10 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
 
     }
 
+// ==============================================
+// ============== INPUT =================
+// ==============================================
+
     private void HandleInput()
     {
         MouseState mouseState = Mouse.GetState();
@@ -462,6 +404,10 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
 
         _previousMouseState = mouseState;
     }
+
+// ==============================================
+// ============== NPC STUFF =================
+// ==============================================
     private void SpawnEnemies(int count)
     {
         for (int i = 0; i < count; i++)
@@ -520,6 +466,9 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
     //     }
     // }
 
+// ==============================================
+// ============== LEVEL STUFF =================
+// ==============================================
 
     private void ConstrainToBounds(Enemy enemy)
     {
@@ -536,23 +485,14 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
             enemy._position = new Vector2(enemy._position.X, bounds.Bottom);
     }
 
-    private void DrawButton(SpriteBatch spriteBatch, string text, Rectangle buttonRect)
-    {
-        spriteBatch.Draw(_buttonTexture, buttonRect, Color.White);
-        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y, buttonRect.Width, 2), Color.Black);
-        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y, 2, buttonRect.Height), Color.Black);
-        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X + buttonRect.Width - 2, buttonRect.Y, 2, buttonRect.Height), Color.Black);
-        spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y + buttonRect.Height - 2, buttonRect.Width, 2), Color.Black);
+    
+    
 
-        Vector2 textSize = _font.MeasureString(text);
-        Vector2 textPosition = new Vector2(buttonRect.X + (buttonRect.Width - textSize.X) / 2, buttonRect.Y + (buttonRect.Height - textSize.Y) / 2);
-        spriteBatch.DrawString(_font, text, textPosition, Color.Black);
-    }
-    private string GetSaveFilePath()
-    {
-        string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        return Path.Combine(folder, "Klica", "SaveData.json");
-    }
+
+// ==============================================
+// ============== GAME DATA =================
+// ==============================================
+
     private void SaveGameData()
     ///problem da shranjuje sam ce zmagas alpa zgubis!!!!!!!
     {
@@ -564,7 +504,11 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         File.WriteAllText(_saveFilePath, jsonData);
     }
 
-
+    private string GetSaveFilePath()
+        {
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            return Path.Combine(folder, "Klica", "SaveData.json");
+        }
 
     public GameData LoadGameData()
     {
@@ -584,6 +528,10 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         };
     }
 
+// ==============================================
+// ============== NEW GAME =================
+// ==============================================
+
     public void NewGame()
     {
         _gameData.LastScore = 0; 
@@ -601,6 +549,10 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
         _physicsEngine = new PhysicsEngine(_level); 
         Console.WriteLine("New game started. Data reset to default.");
     }
+
+// ==============================================
+// ============== VISUAL =================
+// ==============================================
 
     private void DrawGameOverOverlay(SpriteBatch spriteBatch)
     {
@@ -624,6 +576,107 @@ private Vector2 _shaderPerlinTime = Vector2.Zero;
 
         spriteBatch.Draw(gameOverTexture, position, Color.White);
     }
+
+    private void DrawButton(SpriteBatch spriteBatch, string text, Rectangle buttonRect)
+        {
+            spriteBatch.Draw(_buttonTexture, buttonRect, Color.White);
+            spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y, buttonRect.Width, 2), Color.Black);
+            spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y, 2, buttonRect.Height), Color.Black);
+            spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X + buttonRect.Width - 2, buttonRect.Y, 2, buttonRect.Height), Color.Black);
+            spriteBatch.Draw(_buttonTexture, new Rectangle(buttonRect.X, buttonRect.Y + buttonRect.Height - 2, buttonRect.Width, 2), Color.Black);
+
+            Vector2 textSize = _font.MeasureString(text);
+            Vector2 textPosition = new Vector2(buttonRect.X + (buttonRect.Width - textSize.X) / 2, buttonRect.Y + (buttonRect.Height - textSize.Y) / 2);
+            spriteBatch.DrawString(_font, text, textPosition, Color.Black);
+        }
+
+
+// ==============================================
+// ============== FIZKA - simulacije =================
+// ==============================================
+
+
+    private void HandleBounce(dynamic entityA, dynamic entityB)
+    {
+        // Calculate collision normal
+        Vector2 normal = Vector2.Normalize(entityB.GetBaseCollider().Position - entityA.GetMouthCollider().Position);
+
+        // Relative velocity
+        Vector2 relativeVelocity = entityA.Velocity - entityB.Velocity;
+
+        // Velocity along the normal
+        float velocityAlongNormal = Vector2.Dot(relativeVelocity, normal);
+
+        // If objects are separating, skip collision
+        if (velocityAlongNormal > 0) return;
+
+        // Combined restitution coefficient
+        float combinedRestitution = entityA.Restitution * entityB.Restitution;
+
+        // Inverse masses
+        float invMassA = entityA.Mass > 0 ? 1 / entityA.Mass : 0;
+        float invMassB = entityB.Mass > 0 ? 1 / entityB.Mass : 0;
+
+        // Impulse scalar
+        float impulse = -(1 + combinedRestitution) * velocityAlongNormal;
+        impulse /= invMassA + invMassB;
+
+        // Apply impulse
+        Vector2 impulseVector = impulse * normal;
+        entityA.Velocity += impulseVector * invMassA;
+        entityB.Velocity -= impulseVector * invMassB;
+
+        // Debug output
+        Console.WriteLine($"Bounce! EntityA Velocity: {entityA.Velocity}, EntityB Velocity: {entityB.Velocity}");
+    }
+
+    public void AddColliders(){
+         _collisionManager.AddCollider(_player.GetMouthCollider(), collider =>
+        {
+            if (collider.Owner is Enemy enemy)
+            {
+                se_dmg.Play();
+                Console.WriteLine("Player mouth collided with enemy base!");
+                HandleBounce(_player, enemy);
+            }
+        });
+
+        _collisionManager.AddCollider(_player.GetBaseCollider(), collider =>
+        {
+            if (collider.Owner is Enemy enemy)
+            {
+                se_dmg.Play();
+                Console.WriteLine("Player base collided with enemy mouth!");
+                HandleBounce(enemy, _player);
+            }
+        });
+
+        foreach (var enemy in _enemies)
+        {
+            _collisionManager.AddCollider(enemy.GetMouthCollider(), collider =>
+            {
+                if (collider.Owner is Player)
+                {
+                    se_dmg.Play();
+                    Console.WriteLine("Enemy mouth collided with player base!");
+                    HandleBounce(enemy, _player);
+                }
+            });
+
+            _collisionManager.AddCollider(enemy.GetBaseCollider(), collider =>
+            {
+                if (collider.Owner is Player)
+                {
+                    se_dmg.Play();
+                    Console.WriteLine("Enemy base collided with player mouth!");
+                    HandleBounce(_player, enemy);
+                }
+            });
+        }
+    }
+
+
+
 
 
 
