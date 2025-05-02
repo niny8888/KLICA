@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/PerlinNoise.fx</SourceFile>
-<<<<<<< Updated upstream
   <SourceTime>2025-02-12T10:46:13.0997623+01:00</SourceTime>
   <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/PerlinNoise.xnb</DestFile>
-  <DestTime>2025-03-23T10:43:29.494052+01:00</DestTime>
-=======
-  <SourceTime>2025-02-01T15:31:33.5252642+01:00</SourceTime>
-  <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/PerlinNoise.xnb</DestFile>
-  <DestTime>2025-02-03T17:40:36.6095462+01:00</DestTime>
->>>>>>> Stashed changes
+  <DestTime>2025-04-24T12:26:51.7487906+02:00</DestTime>
   <Importer>EffectImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>EffectProcessor</Processor>

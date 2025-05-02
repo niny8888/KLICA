@@ -152,13 +152,17 @@ namespace Klica.Classes.Objects_sprites
 // ============== FIZKA =================
 // ==============================================
         /// to ne dela...
+        /// timer za ta cas da ga nemorem kontrolirat
+        /// impulse    
         public void ApplyBounce(Vector2 direction, float strength)
         {
+            //ne ber imput
             Console.WriteLine("Before Bounce: " + Velocity);
             if (direction != Vector2.Zero)
                 direction.Normalize();
             Velocity += direction * strength;
             Console.WriteLine("After Bounce: " + Velocity);
+            //lahko nazaj bere input
         }
         
 // ==============================================

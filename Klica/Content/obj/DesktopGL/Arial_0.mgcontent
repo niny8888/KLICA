@@ -3,11 +3,7 @@
   <SourceFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png</SourceFile>
   <SourceTime>2024-12-15T22:27:46.548408+01:00</SourceTime>
   <DestFile>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Arial_0.xnb</DestFile>
-<<<<<<< Updated upstream
-  <DestTime>2025-03-23T10:43:28.6220527+01:00</DestTime>
-=======
-  <DestTime>2025-02-03T17:40:35.3848524+01:00</DestTime>
->>>>>>> Stashed changes
+  <DestTime>2025-04-24T12:26:50.4230135+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

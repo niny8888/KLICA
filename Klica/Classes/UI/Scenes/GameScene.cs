@@ -106,7 +106,7 @@ public class GameScene : IScene
         
         _backButton = new Rectangle(20, 20, 200, 50);
         System.Console.WriteLine("Loading game scene content");
-        _background = content.Load<Texture2D>("bg_0000_bg3");
+        _background = content.Load<Texture2D>("menu_BG"); ///bg_0000_bg3
         var spriteSheet = content.Load<Texture2D>("SpriteInfo");
         _spriteManager = new SpriteManager(spriteSheet);
         _halfCircleTexture = TextureGenerator.CreateCircleRadiusLineTexture(_game.GraphicsDevice, 50); // Radius 50
@@ -347,8 +347,9 @@ public class GameScene : IScene
 
 //////////////Collision DEBUG
         // Draw player colliders
-        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
-        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
+        //Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
+        //Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
+
 
         //Draw enemy colliders
         foreach (var enemy in _enemies)
@@ -356,6 +357,7 @@ public class GameScene : IScene
             Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetBaseCollider(), Color.Red);
             Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetMouthCollider(), Color.Yellow);
         }
+
         
 
         spriteBatch.End();
@@ -674,9 +676,6 @@ public class GameScene : IScene
             });
         }
     }
-
-
-
 
 
 

@@ -8,6 +8,11 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 namespace Klica;
+public enum GameState
+{
+    Intro,
+    Menu,
+}
 
 public class Game1 : Game
 {
@@ -20,8 +25,11 @@ public class Game1 : Game
     public GameTime gameTime;
 
     public SoundEffectInstance bg_sound;
+    private GameState currentState;
     
-
+    //intro
+    private MyLogoAnimation animation;
+    private double introDuration;
 
     public Game1()
     {
@@ -55,6 +63,21 @@ public class Game1 : Game
         // Set the initial scene
         SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
         SceneManager.Instance.LoadContent(Content);
+
+
+        //intro
+        animation = new MyLogoAnimation(0.1);
+        string[] frameNames = new string[]
+        {
+            "00001", "00002", "00003", "00004", "00005", // Add all your frame names here
+            "00006", "00007", "00008", "00009", "00010",
+            "00011", "00012", "00013", "00014", "00015",
+            "00016", "00017", "00018", "00019", "00020",
+            "00021", "00022", "00023", "00024", "00025", 
+            "00025", "00025", "00025", "00025", "00025"
+        };
+        animation.LoadFrames(Content, frameNames);
+        currentState = GameState.Intro;
     }
 
     public GameTime GetGameTime()
@@ -72,6 +95,20 @@ public class Game1 : Game
     protected override void Update(GameTime gameTime)
     {
         this.gameTime = gameTime;
+        switch (currentState)
+        {
+            case GameState.Intro:
+                animation.Update(gameTime);
+                if (animation.IsFinished())
+                {
+                    currentState = GameState.Menu;
+                }
+                break;
+
+            case GameState.Menu:
+                // Handle menu logic here (e.g., button presses, menu interactions)
+                break;
+        }
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
@@ -84,7 +121,29 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         _spriteBatch.Begin();
-        SceneManager.Instance.Draw(_spriteBatch);
+        switch (currentState)
+        {
+            case GameState.Intro:
+                int screenWidth = GraphicsDevice.Viewport.Width;
+            int screenHeight = GraphicsDevice.Viewport.Height;
+
+            // Get the width and height of the current frame (the first frame, for example)
+            Texture2D currentFrame = animation.GetCurrentFrame();
+            int frameWidth = currentFrame.Width;
+            int frameHeight = currentFrame.Height;
+
+            // Calculate the scale based on screen dimensions and frame size
+            Vector2 scale = new Vector2(screenWidth / (float)frameWidth, screenHeight / (float)frameHeight);
+            
+            // Draw the intro animation, scaled to fit the screen
+            animation.Draw(_spriteBatch, new Vector2(0, 0), scale);
+            break;
+
+            case GameState.Menu:
+                SceneManager.Instance.Draw(_spriteBatch);
+                break;
+        }
+        
         _spriteBatch.End();
 
         base.Draw(gameTime);

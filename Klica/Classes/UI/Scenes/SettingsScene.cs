@@ -10,7 +10,8 @@ using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
 
 public class SettingsScene : IScene
-{private Game1 _game;
+{
+    private Game1 _game;
     private BitmapFont _font;
     private Texture2D _background;
 
@@ -43,7 +44,7 @@ public class SettingsScene : IScene
     public void LoadContent(ContentManager content)
     {
         _font = content.Load<BitmapFont>("Arial");
-        _background = content.Load<Texture2D>("bg_0000_bg3"); // Load background
+        _background = content.Load<Texture2D>("settings_BG"); // Load background
     }
 
     public void Update(GameTime gameTime)
@@ -139,12 +140,13 @@ public class SettingsScene : IScene
     public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.GraphicsDevice.Clear(Color.DarkGray);
-        spriteBatch.Draw(_background, Vector2.Zero, Color.White);
+        spriteBatch.Draw(_background, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.White);
 
-        Vector2 position = new Vector2(200, 150);
+
+        Vector2 position = new Vector2(Game1.ScreenWidth / 2 -150, 350);
         for (int i = 0; i < _options.Length; i++)
         {
-            Color color = (i == _selectedOption) ? Color.Yellow : Color.White;
+            Color color = (i == _selectedOption) ? Color.DeepSkyBlue : Color.SkyBlue;
             string value = i switch
             {
                 0 => _resolutions[_resolutionIndex],
@@ -158,7 +160,7 @@ public class SettingsScene : IScene
             position.Y += 50;
         }
 
-        spriteBatch.DrawString(_font, "[Arrow Keys] to navigate, [Left/Right] to change, Right Mouse to return", new Vector2(200, 400), Color.White);
+        spriteBatch.DrawString(_font, "[Arrow Keys] to navigate, [Left/Right] to change, Right Mouse to return", new Vector2(Game1.ScreenWidth / 2 -450, 800), Color.SkyBlue);
     }
 
     private void ApplyResolution()
