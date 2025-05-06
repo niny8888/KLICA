@@ -87,14 +87,14 @@ public class Level1_Scene : IScene
         // Back button rectangle
         _backButton = new Rectangle(20, 20, 200, 50);
 
-        _peacefulEnemies.Clear();
-        for (int i = 0; i < _peacefulEnemyCount; i++)
-        {
-            var peaceful = new PeacefulEnemy(new Base(1), new Eyes(1), new Mouth(1));
-            _peacefulEnemies.Add(peaceful);
-        }
+        // _peacefulEnemies.Clear();
+        // for (int i = 0; i < _peacefulEnemyCount; i++)
+        // {
+        //     var peaceful = new PeacefulEnemy(new Base(1), new Eyes(1), new Mouth(1));
+        //     _peacefulEnemies.Add(peaceful);
+        // }
 
-        _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
+        // _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
 
         // ... other asset loading ...
     }

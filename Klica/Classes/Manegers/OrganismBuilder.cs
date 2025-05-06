@@ -9,17 +9,19 @@ namespace Klica{
         public Base _organism_base;
         public Eyes _organism_eye;
         public Mouth _organism_mouth;
-        private Physics _physics;
+        public Physics _physics;
         private PhysicsEngine _physicsEngine;
+        private Random _random;
         private Vector2 _lastMovementDirection = Vector2.Zero;
         public int _health { get; internal set; }
         public Vector2 _position { get; internal set; }
 
         public OrganismBuilder(Base baseSprite, Eyes eye, Mouth mouth, PhysicsEngine physicsEngine){
             _organism_base = baseSprite;
+            _random = new Random();
             _organism_eye = eye;
             _organism_mouth = mouth;
-            _physics = new Physics(_organism_base.GetPosition());
+            _physics = new Physics(new Vector2(_random.Next(100, 1700), _random.Next(100, 950)));
             _physicsEngine = physicsEngine;
         }
         public void UpdateOrganism(Vector2 movementDirection, GameTime gameTime)

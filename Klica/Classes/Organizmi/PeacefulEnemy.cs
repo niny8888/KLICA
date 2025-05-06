@@ -33,7 +33,7 @@ namespace Klica.Classes.Organizmi
         {
             _currentState = PeacefulEnemyState.Idle;
             _random = new Random();
-            _position = new Vector2(_random.Next(100, 800), _random.Next(100, 600));
+            _position = new Vector2(_random.Next(100, 1700), _random.Next(100, 950));
             _speed = 0.8f;
             _targetPosition = _position;
             _health = 100;
@@ -48,24 +48,20 @@ namespace Klica.Classes.Organizmi
 
         public void Update(GameTime gameTime, PhysicsEngine physicsEngine)
         {
-            if (_random.NextDouble() < 0.005)
-                LockState(PeacefulEnemyState.Idle, 1.5); // Sit still for a moment
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            // Lock check
             if (_isStateLocked)
             {
-                _stateLockTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                _stateLockTimer -= dt;
                 if (_stateLockTimer <= 0)
                     _isStateLocked = false;
                 else
                     return;
             }
 
-            // Apply bounce velocity
-            _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            _velocity *= 0.95f; // Friction
-
+            // Decide direction
             Vector2 movementDirection = Vector2.Zero;
-
             switch (_currentState)
             {
                 case PeacefulEnemyState.Idle:
@@ -76,19 +72,22 @@ namespace Klica.Classes.Organizmi
                     break;
             }
 
+            // Movement physics
             if (movementDirection != Vector2.Zero)
             {
                 Vector2 steering = Seek(_position + movementDirection);
                 _velocity += steering;
-                _velocity = Vector2.Clamp(_velocity, new Vector2(-_speed), new Vector2(_speed));
-                _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                UpdateOrganism(_velocity, gameTime);
             }
 
+            _velocity *= 0.95f; // friction
+            _velocity = Vector2.Clamp(_velocity, new Vector2(-_speed), new Vector2(_speed));
+            _position += _velocity * dt;
+
+            UpdateOrganism(_velocity, gameTime);
             _baseCollider.Position = _position;
             _mouthCollider.Position = _organism_base._position_mouth;
         }
+
 
         private Vector2 UpdateIdleState(Food[] foods)
         {
@@ -138,7 +137,7 @@ namespace Klica.Classes.Organizmi
 
         private Vector2 GetRandomTargetPosition()
         {
-            return new Vector2(_random.Next(100, 800), _random.Next(100, 600));
+            return new Vector2(_random.Next(100, 1800), _random.Next(100, 1000));
         }
 
         private bool IsFoodInRange(IEnumerable<Food> foods, float range)
