@@ -48,6 +48,7 @@
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_menu.wav</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpritesPNG1_fixed.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/win.png</File>
   </SourceFiles>
@@ -78,6 +79,7 @@
     <File>00024.png</File>
     <File>00025.png</File>
     <File>settings_BG.png</File>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

@@ -107,7 +107,7 @@ public class GameScene : IScene
         _backButton = new Rectangle(20, 20, 200, 50);
         System.Console.WriteLine("Loading game scene content");
         _background = content.Load<Texture2D>("menu_BG"); ///bg_0000_bg3
-        var spriteSheet = content.Load<Texture2D>("SpriteInfo");
+        var spriteSheet = content.Load<Texture2D>("SpritesPNG1_fixed"); //"SpriteInfo"
         _spriteManager = new SpriteManager(spriteSheet);
         _halfCircleTexture = TextureGenerator.CreateCircleRadiusLineTexture(_game.GraphicsDevice, 50); // Radius 50
 

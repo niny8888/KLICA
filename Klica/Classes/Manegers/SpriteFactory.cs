@@ -42,10 +42,10 @@ namespace Klica
 
             // Parse data parts
             string name = parts[0];
-            int rotacijaD = int.Parse(parts[1]); /// rotacija?
+            //int rotacijaD = int.Parse(parts[1]); /// rotacija?
             //System.Console.WriteLine("Rotacija: "+rotacijaD);
 
-            int x=int.Parse(parts[2]);
+            int x = int.Parse(parts[2]);
             int y = int.Parse(parts[3]);
             int width = int.Parse(parts[4]);
             int height = int.Parse(parts[5]);
@@ -84,9 +84,9 @@ namespace Klica
                 (int)Math.Round(pivotX * width),
                 (int)Math.Round(pivotY * height)
             );
-            //System.Console.WriteLine("Name: " + name + " |  Size:"+ sourceRectangle+" |  Pivot: "+pivot);
+            System.Console.WriteLine("Name: " + name + " |  Size:"+ sourceRectangle+" |  Pivot: "+pivot);
 
-            spriteManager.AddSprite(name, position, sourceRectangle,rotacijaD,0.1f, 0 , pivot,null);
+            spriteManager.AddSprite(name, position, sourceRectangle,0,0.1f, 0 , pivot,null);
         }
     }
 }

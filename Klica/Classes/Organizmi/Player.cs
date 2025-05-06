@@ -175,7 +175,7 @@ namespace Klica.Classes.Objects_sprites
            {
                 System.Console.WriteLine("Game over! U died!");
                 _health=0;
-            }
+            } 
         }
     }
 }
