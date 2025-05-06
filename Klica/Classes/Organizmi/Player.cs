@@ -29,6 +29,8 @@ namespace Klica.Classes.Objects_sprites
         // Collision properties
         private Collider _baseCollider;
         private Collider _mouthCollider;
+        private Collider _mouthProximityCollider;
+
 
 
         public Player(PhysicsEngine physicsEngine)
@@ -38,6 +40,7 @@ namespace Klica.Classes.Objects_sprites
             _player_base.SetPosition(_position);
             _baseCollider = new Collider(_player_base.GetPosition(), _player_base.Width/2f, this);
             _mouthCollider = new Collider(_player_base._position_mouth, 10f, this);
+            _mouthProximityCollider = new Collider(_player_base._position_mouth, 25f, this); // Larger radius than mouth
             _health = 100;
             Mass = 5f;
         }
@@ -51,7 +54,7 @@ namespace Klica.Classes.Objects_sprites
         public void UpdatePlayer(GameTime gameTime, Rectangle bounds)
         {
             Vector2 movementDirection = Vector2.Zero;
-
+            
             // Keyboard input
             if (Keyboard.GetState().IsKeyDown(Keys.W)) movementDirection.Y -= 1;
             if (Keyboard.GetState().IsKeyDown(Keys.A)) movementDirection.X -= 1;
@@ -71,7 +74,7 @@ namespace Klica.Classes.Objects_sprites
                 movementDirection += new Vector2(gamePadState.ThumbSticks.Left.X, -gamePadState.ThumbSticks.Left.Y); // Y is inverted
             }
             GamePad.SetVibration(PlayerIndex.One, 0.0f, 0.0f);
-
+            
             // Apply movement if started
             if (_hasStarted || movementDirection != Vector2.Zero)
             {
@@ -115,18 +118,23 @@ namespace Klica.Classes.Objects_sprites
             _player_eye.SetRotation(_player_base.GetRotation());
 
             // Update mouth position
+            _player_mouth.Update();
             _player_mouth.SetPosition(_player_base._position_mouth, movementDirection.X, movementDirection.Y);
             _player_mouth.SetRotation(_player_base.GetRotation());
 
             // Update colliders
             _baseCollider.Position = _position;
             _mouthCollider.Position = _player_base._position_mouth;
+            _mouthProximityCollider.Position = _player_base._position_mouth;
+
 
             // Update last movement direction
             if (movementDirection != Vector2.Zero)
             {
                 _lastMovementDirection = movementDirection;
             }
+            
+
         }
         
 // ==============================================
@@ -147,6 +155,7 @@ namespace Klica.Classes.Objects_sprites
         }
         public Collider GetBaseCollider() => _baseCollider;
         public Collider GetMouthCollider() => _mouthCollider;
+        public Collider GetMouthProximityCollider() => _mouthProximityCollider;
 
 // ==============================================
 // ============== FIZKA =================

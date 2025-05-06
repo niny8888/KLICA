@@ -16,7 +16,7 @@ namespace Klica.Classes.Objects_sprites
         private float _rotationAngle; // Current rotation angle for animation
         private float _rotationSpeed = 0.05f; // Speed of rotation during opening/closing
         private bool _isOpening = false; // Whether the mouth is opening
-        private float _openThreshold = 10f; // Distance to trigger opening
+        private float _openThreshold = 100f; // Distance to trigger opening
         Boolean isSingular=false;
 
         public Mouth(int type)
@@ -26,6 +26,19 @@ namespace Klica.Classes.Objects_sprites
                 isSingular=true;
             
         }
+        public void Update()
+        {
+            // Animate mouth opening/closing
+            if (_isOpening && _rotationAngle < 0.5f)
+            {
+                _rotationAngle += _rotationSpeed;
+            }
+            else if (!_isOpening && _rotationAngle > 0f)
+            {
+                _rotationAngle -= _rotationSpeed;
+            }
+        }
+
         public void SetMouth(int mouthType)
         {
             switch (mouthType)
@@ -178,16 +191,19 @@ namespace Klica.Classes.Objects_sprites
         }
 
 
-
-
-
-
-        public void SetRotation(float rotation)
+        public void SetRotation(float baseRotation)
         {
-            _leftMouth._rotation = rotation;
-            _rightMouth._rotation = rotation;
-            
+            if (isSingular)
+            {
+                _oneMouth._rotation = baseRotation + _rotationAngle;
+            }
+            else
+            {
+                _leftMouth._rotation = baseRotation + _rotationAngle;
+                _rightMouth._rotation = baseRotation - _rotationAngle;
+            }
         }
+
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -210,6 +226,17 @@ namespace Klica.Classes.Objects_sprites
                 _rightMouth.Draw(spriteBatch);
             }
         }
+        public void Open()
+        {
+            _isOpening = true;
+            
+        }
+
+        public void Close()
+        {
+            _isOpening = false;
+        }
+
 
     }
 }

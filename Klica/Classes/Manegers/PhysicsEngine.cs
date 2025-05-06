@@ -31,9 +31,15 @@ namespace Klica.Classes
         public void Update(GameTime gameTime, Vector2 playerMouthPosition, ref int score, Player player, List<Enemy> enemies)
         {
             // Update food items
+            player._player_mouth.Close(); // Assume closed, unless proximity opens it
+
             foreach (var food in _foodItems)
             {
                 food.Update(gameTime, _level.Bounds, playerMouthPosition, ref score);
+                if (!food.IsConsumed && Vector2.Distance(food.Position, playerMouthPosition) <= food.CollisionRadius * 1.8f)
+                {
+                    player._player_mouth.Open(); // Open mouth on proximity
+                }
             }
 
             // Handle player-food collisions
@@ -226,5 +232,10 @@ namespace Klica.Classes
         {
             return rect1.Intersects(rect2);
         }
+        public List<Food> GetAllFood()
+        {
+            return _foodItems;
+        }
+
     }
 }

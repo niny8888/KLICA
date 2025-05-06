@@ -347,8 +347,8 @@ public class GameScene : IScene
 
 //////////////Collision DEBUG
         // Draw player colliders
-        //Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
-        //Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
+        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
+        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
 
 
         //Draw enemy colliders

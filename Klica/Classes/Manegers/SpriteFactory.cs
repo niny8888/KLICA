@@ -84,7 +84,7 @@ namespace Klica
                 (int)Math.Round(pivotX * width),
                 (int)Math.Round(pivotY * height)
             );
-            System.Console.WriteLine("Name: " + name + " |  Size:"+ sourceRectangle+" |  Pivot: "+pivot);
+            //System.Console.WriteLine("Name: " + name + " |  Size:"+ sourceRectangle+" |  Pivot: "+pivot);
 
             spriteManager.AddSprite(name, position, sourceRectangle,0,0.1f, 0 , pivot,null);
         }
