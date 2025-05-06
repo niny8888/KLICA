@@ -100,7 +100,7 @@ namespace Klica.Classes.Organizmi
 
             if (movementDirection != Vector2.Zero)
             {
-                UpdateOrganism(movementDirection, gameTime);
+                UpdateOrganism(gameTime);
             }
 
             // Update colliders

@@ -24,7 +24,7 @@ namespace Klica.Classes.Organizmi
 
         private Collider _baseCollider;
         private Collider _mouthCollider;
-        public float Mass { get; private set; } = 3f;
+        public float Mass { get; private set; } = 5f;
         public float Restitution { get; private set; } = 0.6f;
         public Vector2 Velocity { get; set; } = Vector2.Zero;
 
@@ -34,7 +34,7 @@ namespace Klica.Classes.Organizmi
             _currentState = PeacefulEnemyState.Idle;
             _random = new Random();
             _position = new Vector2(_random.Next(100, 1700), _random.Next(100, 950));
-            _speed = 0.8f;
+            _speed = 0.4f;
             _targetPosition = _position;
             _health = 100;
 
@@ -49,6 +49,7 @@ namespace Klica.Classes.Organizmi
         public void Update(GameTime gameTime, PhysicsEngine physicsEngine)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Console.WriteLine($"PeacefulEnemy speed: {_velocity.Length():0.000}");
 
             // Lock check
             if (_isStateLocked)
@@ -80,10 +81,12 @@ namespace Klica.Classes.Organizmi
             }
 
             _velocity *= 0.95f; // friction
-            _velocity = Vector2.Clamp(_velocity, new Vector2(-_speed), new Vector2(_speed));
-            _position += _velocity * dt;
+            if (_velocity.Length() > _speed)
+                _velocity = Vector2.Normalize(_velocity) * _speed;
+            _physics.Update(_velocity);
+            UpdateOrganism(gameTime);
+            _position = _organism_base.GetPosition(); // make sure it's synced
 
-            UpdateOrganism(_velocity, gameTime);
             _baseCollider.Position = _position;
             _mouthCollider.Position = _organism_base._position_mouth;
         }
@@ -94,7 +97,7 @@ namespace Klica.Classes.Organizmi
             if (_random.NextDouble() < 0.02) // More frequent but subtle wandering
                 _targetPosition = GetRandomTargetPosition();
 
-            if (IsFoodInRange(foods, 60f)) // Less sensitive
+            if (IsFoodInRange(foods, 30f)) // Less sensitive
                 _currentState = PeacefulEnemyState.ChasingFood;
 
             return _targetPosition - _position;
@@ -131,7 +134,7 @@ namespace Klica.Classes.Organizmi
             desired *= _speed;
 
             // Dampen steering to feel smoother
-            return (desired - _velocity) * 0.3f;
+            return (desired - _velocity) * 0.5f;
         }
 
 

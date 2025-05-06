@@ -24,32 +24,34 @@ namespace Klica{
             _physics = new Physics(new Vector2(_random.Next(100, 1700), _random.Next(100, 950)));
             _physicsEngine = physicsEngine;
         }
-        public void UpdateOrganism(Vector2 movementDirection, GameTime gameTime)
+        public void UpdateOrganism(GameTime gameTime)
         {
-            if (movementDirection != Vector2.Zero)
-            {
-                movementDirection.Normalize();
-            }
-
-            _physics.Update(movementDirection);
+            // Use existing position from physics
             _organism_base.SetPosition(_physics.GetPosition());
             _position = _organism_base.GetPosition();
-            _organism_base.SetRotation((float)Math.Atan2(_physics._velocity.Y, _physics._velocity.X) + 1.6f);
+
+            // Get velocity for rotation
+            Vector2 vel = _physics._velocity;
+            if (vel.LengthSquared() > 0.001f)
+            {
+                _organism_base.SetRotation((float)Math.Atan2(vel.Y, vel.X) + 1.6f);
+            }
 
             _organism_eye.SetPosition(_organism_base._position_eyes);
             _organism_eye.SetRotation(_organism_base.GetRotation());
-            _organism_mouth.SetPosition(_organism_base._position_mouth, movementDirection.X, movementDirection.Y);
+
+            _organism_mouth.SetPosition(_organism_base._position_mouth, vel.X, vel.Y);
             _organism_mouth.SetRotation(_organism_base.GetRotation());
-            
-            bool isMouthOpening = false;
-            bool FoodConsumed = false;
-            if (_physicsEngine != null && gameTime.TotalGameTime.Milliseconds % 100 == 0) // Check every 100 milliseconds
+
+            bool foodConsumed = false;
+            if (_physicsEngine != null && gameTime.TotalGameTime.Milliseconds % 100 == 0)
             {
-                FoodConsumed = _physicsEngine._foodItems.Exists(food => food.IsConsumed);
+                foodConsumed = _physicsEngine._foodItems.Exists(food => food.IsConsumed);
             }
 
-            _organism_mouth.CheckFoodCollisions(_organism_base._position_mouth, _organism_base.GetRotation(), ref FoodConsumed);
+            _organism_mouth.CheckFoodCollisions(_organism_base._position_mouth, _organism_base.GetRotation(), ref foodConsumed);
         }
+
 
 
         public void TakeDamage(int damage)
