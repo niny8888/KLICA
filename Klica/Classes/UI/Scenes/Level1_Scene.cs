@@ -53,7 +53,7 @@ public class Level1_Scene : IScene
 
         for (int i = 0; i < _peacefulEnemyCount; i++)
         {
-            var peaceful = new PeacefulEnemy(new Base(1), new Eyes(1), new Mouth(1));
+            var peaceful = new PeacefulEnemy(new Base(2), new Eyes(2), new Mouth(2));
             _peacefulEnemies.Add(peaceful);
         }
 
