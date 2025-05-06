@@ -38,8 +38,6 @@ namespace Klica.Classes.Objects_sprites
         private bool _canDash = true;
 
 
-
-
         public Player(PhysicsEngine physicsEngine)
         {   
             _position = new Vector2(1920 / 2, 1080 / 2);

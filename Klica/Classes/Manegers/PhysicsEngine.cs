@@ -30,6 +30,9 @@ namespace Klica.Classes
 
         public void Update(GameTime gameTime, Vector2 playerMouthPosition, ref int score, Player player, List<Enemy> enemies)
         {
+            if (enemies == null)
+                enemies = new List<Enemy>();
+
             // Update food items
             player._player_mouth.Close(); // Assume closed, unless proximity opens it
 

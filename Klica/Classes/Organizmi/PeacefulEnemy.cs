@@ -19,6 +19,8 @@ namespace Klica.Classes.Organizmi
         private Vector2 _targetPosition;
         private float _speed;
         private Random _random;
+        private double _stateLockTimer;
+        private bool _isStateLocked;
 
         private Collider _baseCollider;
         private Collider _mouthCollider;
@@ -27,31 +29,40 @@ namespace Klica.Classes.Organizmi
         public Vector2 Velocity { get; set; } = Vector2.Zero;
 
         public PeacefulEnemy(Base baseSprite, Eyes eye, Mouth mouth)
-            : base(baseSprite, eye, mouth, null) 
+            : base(baseSprite, eye, mouth, null)
         {
             _currentState = PeacefulEnemyState.Idle;
             _random = new Random();
             _position = new Vector2(_random.Next(100, 800), _random.Next(100, 600));
-            _speed = 2f;
+            _speed = 0.8f;
             _targetPosition = _position;
             _health = 100;
-            Mass = 3f;
 
-            // Initialize components in base class
             _organism_base.SetPosition(_position);
             _organism_mouth.SetPosition(_organism_base._position_mouth, 0, 0);
             _organism_eye.SetPosition(_organism_base._position_eyes);
 
-            // Initialize colliders
             _baseCollider = new Collider(_position, baseSprite.Width / 2f, this);
             _mouthCollider = new Collider(baseSprite._position_mouth, 10f, this);
         }
 
         public void Update(GameTime gameTime, PhysicsEngine physicsEngine)
         {
-            // Apply velocity (bouncing effect)
+            if (_random.NextDouble() < 0.005)
+                LockState(PeacefulEnemyState.Idle, 1.5); // Sit still for a moment
+
+            if (_isStateLocked)
+            {
+                _stateLockTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                if (_stateLockTimer <= 0)
+                    _isStateLocked = false;
+                else
+                    return;
+            }
+
+            // Apply bounce velocity
             _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            _velocity *= 0.95f; // Apply friction
+            _velocity *= 0.95f; // Friction
 
             Vector2 movementDirection = Vector2.Zero;
 
@@ -67,25 +78,25 @@ namespace Klica.Classes.Organizmi
 
             if (movementDirection != Vector2.Zero)
             {
-                UpdateOrganism(movementDirection, gameTime);
+                Vector2 steering = Seek(_position + movementDirection);
+                _velocity += steering;
+                _velocity = Vector2.Clamp(_velocity, new Vector2(-_speed), new Vector2(_speed));
+                _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                UpdateOrganism(_velocity, gameTime);
             }
 
-            // Update colliders
             _baseCollider.Position = _position;
             _mouthCollider.Position = _organism_base._position_mouth;
         }
 
         private Vector2 UpdateIdleState(Food[] foods)
         {
-            if (_random.NextDouble() < 0.01)
-            {
+            if (_random.NextDouble() < 0.02) // More frequent but subtle wandering
                 _targetPosition = GetRandomTargetPosition();
-            }
 
-            if (IsFoodInRange(foods, 100f))
-            {
+            if (IsFoodInRange(foods, 60f)) // Less sensitive
                 _currentState = PeacefulEnemyState.ChasingFood;
-            }
 
             return _targetPosition - _position;
         }
@@ -97,10 +108,10 @@ namespace Klica.Classes.Organizmi
             {
                 _targetPosition = closestFood.Position;
 
-                if (Vector2.Distance(_position, closestFood.Position) < 10f)
+                if (Vector2.Distance(_position, closestFood.Position) < 15f)
                 {
                     closestFood.OnConsumedByAI();
-                    _currentState = PeacefulEnemyState.Idle;
+                    LockState(PeacefulEnemyState.Idle, 2.0); // Pause before next move
                 }
             }
             else
@@ -108,15 +119,26 @@ namespace Klica.Classes.Organizmi
                 _currentState = PeacefulEnemyState.Idle;
             }
 
+
             return _targetPosition - _position;
         }
 
+        private Vector2 Seek(Vector2 target)
+        {
+            Vector2 desired = target - _position;
+            if (desired != Vector2.Zero)
+                desired.Normalize();
+
+            desired *= _speed;
+
+            // Dampen steering to feel smoother
+            return (desired - _velocity) * 0.3f;
+        }
+
+
         private Vector2 GetRandomTargetPosition()
         {
-            return new Vector2(
-                _random.Next(100, 800),
-                _random.Next(100, 600)
-            );
+            return new Vector2(_random.Next(100, 800), _random.Next(100, 600));
         }
 
         private bool IsFoodInRange(IEnumerable<Food> foods, float range)
@@ -124,9 +146,7 @@ namespace Klica.Classes.Organizmi
             foreach (var food in foods)
             {
                 if (Vector2.Distance(_position, food.Position) <= range)
-                {
                     return true;
-                }
             }
             return false;
         }
@@ -134,37 +154,39 @@ namespace Klica.Classes.Organizmi
         private Food GetClosestFood(IEnumerable<Food> foods)
         {
             Food closestFood = null;
-            float closestDistance = float.MaxValue;
+            float closestDist = float.MaxValue;
 
             foreach (var food in foods)
             {
-                float distance = Vector2.Distance(_position, food.Position);
-                if (distance < closestDistance)
+                float dist = Vector2.Distance(_position, food.Position);
+                if (dist < closestDist)
                 {
                     closestFood = food;
-                    closestDistance = distance;
+                    closestDist = dist;
                 }
             }
-
             return closestFood;
+        }
+
+        public void LockState(PeacefulEnemyState state, double duration)
+        {
+            _currentState = state;
+            _stateLockTimer = duration;
+            _isStateLocked = true;
         }
 
         public Collider GetBaseCollider() => _baseCollider;
         public Collider GetMouthCollider() => _mouthCollider;
-
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            DrawOrganism(spriteBatch, gameTime);
-        }
-
-        public float GetRotation()
-        {
-            return _organism_base.GetRotation();
-        }
+        public float GetRotation() => _organism_base.GetRotation();
 
         public void ApplyBounce(Vector2 direction, float strength)
         {
             _velocity += direction * strength;
+        }
+
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            DrawOrganism(spriteBatch, gameTime);
         }
     }
 }

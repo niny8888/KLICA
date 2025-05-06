@@ -166,9 +166,14 @@ public class MenuScene : IScene
                 {
                     sound_menu_click.Play();
 
-                    var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
-                    gameScene.NewGame(); // Reset the game state
-                    SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
+                    var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
+                    level1.Initialize(); // optional if already initialized earlier
+                    SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
+
+                    // var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
+                    // gameScene.NewGame(); // Reset the game state
+                    // SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
+                
                 }
             }
         }

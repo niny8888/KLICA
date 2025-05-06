@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class SceneManager
 {
-    public enum SceneType { MainMenu, Game , SettingsScene}
+    public enum SceneType { MainMenu, Level1, Game , SettingsScene}
 
     private readonly Dictionary<SceneType, IScene> _scenes = new();
     private IScene _currentScene;
@@ -56,6 +56,8 @@ public class SceneManager
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        Console.WriteLine("Drawing scene: " + _currentScene);
+
         _currentScene?.Draw(spriteBatch);
     }
 }
