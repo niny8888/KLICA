@@ -15,18 +15,40 @@ public class Physics
         _positon = initialPosition;
     }
 
+    // public void Update(Vector2 _got_acc)
+    // {
+    //     _acceleration = _got_acc;
+    //     _velocity *= 0.5f; 
+
+    //     //_velocity /= _friction * 200f;
+    //     if (_velocity.Length() > _max_velocity)
+    //     {
+    //         _velocity *= _max_velocity / _velocity.Length();
+    //     }
+
+    //     _velocity += _acceleration;
+    //     _positon += _velocity;
+    // }
     public void Update(Vector2 _got_acc)
     {
         _acceleration = _got_acc;
-        _velocity /= _friction * 200f;
+
+        // 1. Add acceleration (including dash impulse if any)
+        _velocity += _acceleration;
+
+        // 2. Clamp to max velocity
         if (_velocity.Length() > _max_velocity)
         {
-            _velocity *= _max_velocity / _velocity.Length();
+            _velocity = Vector2.Normalize(_velocity) * _max_velocity;
         }
 
-        _velocity += _acceleration;
+        // 3. Apply friction (less aggressive)
+        _velocity *= 0.7f; // instead of 0.5f — 0.9 keeps momentum while slowing over time
+
+        // 4. Move the object
         _positon += _velocity;
     }
+
 
     public Vector2 GetPosition()
     {

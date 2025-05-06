@@ -31,6 +31,13 @@ namespace Klica.Classes.Objects_sprites
         private Collider _mouthCollider;
         private Collider _mouthProximityCollider;
 
+        /// DASH
+        private float _dashCooldown = 1.5f;     // Seconds between dashes
+        private float _dashTimer = 0f;          // Time since last dash
+        private float _dashStrength = 20f;     // Velocity impulse
+        private bool _canDash = true;
+
+
 
 
         public Player(PhysicsEngine physicsEngine)
@@ -88,6 +95,31 @@ namespace Klica.Classes.Objects_sprites
                 // Apply velocity (bouncing effect)
                 _position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 
+                // DASH SYSTEM — ADD THIS BLOCK HERE
+                _dashTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_dashTimer >= _dashCooldown)
+                {
+                    _canDash = true;
+                }
+
+                if (_canDash && Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    Vector2 dashDirection = movementDirection;
+                    if (dashDirection == Vector2.Zero)
+                        dashDirection = _lastMovementDirection;
+
+                    if (dashDirection != Vector2.Zero)
+                    {
+                        dashDirection.Normalize();
+                        _physics._velocity += dashDirection * _dashStrength;
+                        _canDash = false;
+                        _dashTimer = 0f;
+                        Console.WriteLine("DASH!");
+                    }
+                }
+
+
+
                 Vector2 newPosition = _physics.GetPosition();
 
                 float halfWidth = _player_base.Width / 2f;
@@ -133,8 +165,6 @@ namespace Klica.Classes.Objects_sprites
             {
                 _lastMovementDirection = movementDirection;
             }
-            
-
         }
         
 // ==============================================

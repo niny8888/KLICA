@@ -78,6 +78,7 @@ namespace Klica
             // else{
             //     rotateAngle=0f;
             // }
+            
             Vector2 pivot;
 
             pivot = new Vector2(

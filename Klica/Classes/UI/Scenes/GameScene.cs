@@ -347,16 +347,16 @@ public class GameScene : IScene
 
 //////////////Collision DEBUG
         // Draw player colliders
-        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
-        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
+        // Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Green);
+        // Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetMouthCollider(), Color.Blue);
 
 
-        //Draw enemy colliders
-        foreach (var enemy in _enemies)
-        {
-            Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetBaseCollider(), Color.Red);
-            Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetMouthCollider(), Color.Yellow);
-        }
+        // //Draw enemy colliders
+        // foreach (var enemy in _enemies)
+        // {
+        //     Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetBaseCollider(), Color.Red);
+        //     Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetMouthCollider(), Color.Yellow);
+        // }
 
         
 

@@ -16,7 +16,7 @@ public class SettingsScene : IScene
     private Texture2D _background;
 
     private int _selectedOption = 0;
-    private string[] _options = { "Resolution", "Graphics", "Fullscreen", "Volume" };
+    private string[] _options = { "Resolution", "Graphics", "Fullscreen", "Music Volume" };
     private int _resolutionIndex = 5;
     private string[] _resolutions =
     {
@@ -116,11 +116,13 @@ public class SettingsScene : IScene
                     if (keyboardState.IsKeyDown(Keys.Right))
                     {
                         _volume = MathHelper.Clamp(_volume + 0.1f, 0f, 1f);
+                        _game.bg_sound.Volume = _volume;
                         _inputCooldown = InputDelay;
                     }
                     if (keyboardState.IsKeyDown(Keys.Left))
                     {
                         _volume = MathHelper.Clamp(_volume - 0.1f, 0f, 1f);
+                        _game.bg_sound.Volume = _volume;
                         _inputCooldown = InputDelay;
                     }
                     break;
