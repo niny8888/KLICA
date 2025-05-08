@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_3.png</SourceFile>
-  <SourceTime>2024-12-15T22:27:46.5674084+01:00</SourceTime>
-  <DestFile>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Content/Arial_3.xnb</DestFile>
-  <DestTime>2025-04-23T18:22:10.1298725+02:00</DestTime>
+  <SourceFile>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_3.png</SourceFile>
+  <SourceTime>2025-01-09T13:27:55.7936479+01:00</SourceTime>
+  <DestFile>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Content/Arial_3.xnb</DestFile>
+  <DestTime>2025-05-07T16:27:37.1251002+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

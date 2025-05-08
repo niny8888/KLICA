@@ -11,6 +11,8 @@ namespace Klica.Classes
     {
         private Level _level;
         public List<Food> _foodItems = new List<Food>();
+        // public List<PeacefulEnemy> PeacefulEnemies { get; } = new();
+
 
         public PhysicsEngine(Level level)
         {

@@ -126,3 +126,36 @@ d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Co
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\howtoplay_BG.xnb
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\settings_BG.xnb
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpritesPNG1_fixed.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00001.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00002.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00003.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00004.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00005.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00006.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00007.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00008.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00009.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00010.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00011.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00012.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00013.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00014.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00015.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00016.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00017.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00018.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00019.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00020.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00021.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00022.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00023.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00024.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\00025.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\howtoplay_BG.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\intro.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\lose.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\menu_BG.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\menu_buttons.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\settings_BG.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpritesPNG1_fixed.xnb
+c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\win.xnb

@@ -61,10 +61,20 @@ namespace Klica.Classes.Objects_sprites
             Vector2 movementDirection = Vector2.Zero;
             
             // Keyboard input
-            if (Keyboard.GetState().IsKeyDown(Keys.W)) movementDirection.Y -= 1;
-            if (Keyboard.GetState().IsKeyDown(Keys.A)) movementDirection.X -= 1;
-            if (Keyboard.GetState().IsKeyDown(Keys.S)) movementDirection.Y += 1;
-            if (Keyboard.GetState().IsKeyDown(Keys.D)) movementDirection.X += 1;
+            KeyboardState keyboardState = Keyboard.GetState();
+
+            if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+                movementDirection.Y -= 1;
+
+            if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
+                movementDirection.X -= 1;
+
+            if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
+                movementDirection.Y += 1;
+
+            if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
+                movementDirection.X += 1;
+
 
             // Normalize movement direction
             if (movementDirection == Vector2.Zero && _lastMovementDirection != Vector2.Zero)

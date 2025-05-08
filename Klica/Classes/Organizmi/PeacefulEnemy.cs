@@ -46,10 +46,10 @@ namespace Klica.Classes.Organizmi
             _mouthCollider = new Collider(baseSprite._position_mouth, 10f, this);
         }
 
-        public void Update(GameTime gameTime, PhysicsEngine physicsEngine)
+        public void Update(GameTime gameTime, List<PeacefulEnemy> PeacefulEnemies, PhysicsEngine physicsEngine)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            Console.WriteLine($"PeacefulEnemy speed: {_velocity.Length():0.000}");
+            
 
             // Lock check
             if (_isStateLocked)
@@ -60,6 +60,31 @@ namespace Klica.Classes.Organizmi
                 else
                     return;
             }
+            Vector2 separation = Vector2.Zero;
+            int neighborCount = 0;
+
+            foreach (var other in PeacefulEnemies)
+            {
+                if (other == this) continue;
+
+                float dist = Vector2.Distance(_position, other._position);
+                float separationRadius = 50f;
+
+                if (dist < separationRadius && dist > 0)
+                {
+                    separation += (_position - other._position) / dist;
+                    neighborCount++;
+                }
+            }
+
+            if (neighborCount > 0)
+            {
+                separation /= neighborCount;
+                separation.Normalize();
+                separation *= _speed * 0.5f; // reduce strength
+                _velocity += separation;
+            }
+
 
             // Decide direction
             Vector2 movementDirection = Vector2.Zero;

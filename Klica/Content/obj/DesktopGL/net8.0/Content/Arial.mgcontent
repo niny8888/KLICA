@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</SourceFile>
-  <SourceTime>2024-12-15T22:27:46.5424053+01:00</SourceTime>
-  <DestFile>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Content/Arial.xnb</DestFile>
-  <DestTime>2025-04-23T18:22:10.4078744+02:00</DestTime>
+  <SourceFile>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</SourceFile>
+  <SourceTime>2025-01-09T13:27:55.7605035+01:00</SourceTime>
+  <DestFile>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Content/Arial.xnb</DestFile>
+  <DestTime>2025-05-07T16:27:37.1730981+02:00</DestTime>
   <Importer>BitmapFontImporter</Importer>
   <ImporterTime>2024-07-09T21:47:10+02:00</ImporterTime>
   <Processor>BitmapFontProcessor</Processor>

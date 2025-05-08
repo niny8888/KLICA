@@ -20,7 +20,7 @@ public class Level1_Scene : IScene
     private PhysicsEngine _physicsEngine;
     private CollisionManager _collisionManager;
 
-    private List<PeacefulEnemy> _peacefulEnemies = new();
+    private List<PeacefulEnemy> _peacefulEnemies { get; }= new();
     private Texture2D _background, _halfCircleTexture, _buttonTexture, _winTexture, _loseTexture;
     private BitmapFont _font;
     private Rectangle _backButton;
@@ -121,7 +121,7 @@ public class Level1_Scene : IScene
         // Peaceful enemies
         foreach (var enemy in _peacefulEnemies)
         {
-            enemy.Update(gameTime, _physicsEngine);
+            enemy.Update(gameTime, _peacefulEnemies, _physicsEngine);
         }
 
         _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore, _player, null);
