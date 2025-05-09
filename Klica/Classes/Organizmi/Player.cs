@@ -33,10 +33,15 @@ namespace Klica.Classes.Objects_sprites
         private Collider _mouthProximityCollider;
 
         /// DASH
-        private float _dashCooldown = 1.5f;     // Seconds between dashes
-        private float _dashTimer = 0f;          // Time since last dash
-        private float _dashStrength = 20f;     // Velocity impulse
-        private bool _canDash = true;
+        private float _dashCooldown = 1.5f;
+        private float _dashTimer = 0f;
+        private float _dashStrength = 20f;
+        private int _dashCharges = 2;
+        private int _maxDashCharges = 2;
+        private float _dashRechargeTime = 2.5f;
+        private float _dashRechargeTimer = 0f;
+        public bool _canDash = false;
+        private bool _spacePreviouslyPressed = false;
 
 
         public Player(PhysicsEngine physicsEngine)
@@ -99,23 +104,24 @@ namespace Klica.Classes.Objects_sprites
             if (_hasStarted || movementDirection != Vector2.Zero)
             {
                 _hasStarted = true;
-
                 if (movementDirection != Vector2.Zero) movementDirection.Normalize();
 
-                // Update physics based on movement direction
                 _physics.Update(movementDirection);
-
-                // Apply velocity (bouncing effect)
                 _position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                
-                // DASH SYSTEM — ADD THIS BLOCK HERE
+
                 _dashTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (_dashTimer >= _dashCooldown)
+                if (_dashCharges < _maxDashCharges)
                 {
-                    _canDash = true;
+                    _dashRechargeTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (_dashRechargeTimer >= _dashRechargeTime)
+                    {
+                        _dashCharges++;
+                        _dashRechargeTimer = 0f;
+                    }
                 }
 
-                if (_canDash && Keyboard.GetState().IsKeyDown(Keys.Space))
+                bool spacePressed = keyboardState.IsKeyDown(Keys.Space);
+                if (_dashCharges > 0 && spacePressed && !_spacePreviouslyPressed && _canDash)
                 {
                     Vector2 dashDirection = movementDirection;
                     if (dashDirection == Vector2.Zero)
@@ -125,11 +131,12 @@ namespace Klica.Classes.Objects_sprites
                     {
                         dashDirection.Normalize();
                         _physics._velocity += dashDirection * _dashStrength;
-                        _canDash = false;
-                        _dashTimer = 0f;
+                        _dashCharges--;
+                        _dashRechargeTimer = 0f;
                         Console.WriteLine("DASH!");
                     }
                 }
+                _spacePreviouslyPressed = spacePressed;
 
 
 
@@ -244,6 +251,16 @@ namespace Klica.Classes.Objects_sprites
             spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, barWidth, barHeight), Color.Gray);
             // Fill
             spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, (int)(barWidth * healthPercent), barHeight), Color.Blue);
+            
+            if(_canDash){
+               for (int i = 0; i < _maxDashCharges; i++)
+                {
+                    Color color = i < _dashCharges ? Color.White : Color.Gray;
+                    spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)(_position.X - 20 + i * 12), (int)_position.Y - 60, 10, 5), color);
+                } 
+            }
+            
+        
         }
         public void SetPosition(Vector2 pos)
         {

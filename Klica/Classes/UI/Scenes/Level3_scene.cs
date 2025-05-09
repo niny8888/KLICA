@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using Microsoft.Xna.Framework.Audio;
 
-public class Level2_Scene : IScene
+public class Level3_Scene : IScene
 {
     private Game1 _game;
     private Level _level;
@@ -30,6 +30,7 @@ public class Level2_Scene : IScene
 
     private int _foodGoal = 10;
     private int _peacefulEnemyCount = 3;
+    private int _aggressiveEnemyCount = 3;
     private float _trailTimer = 0f;
     private List<HalfCircleTrail> _trails = new();
     private bool _gameStateWin = false;
@@ -42,7 +43,7 @@ public class Level2_Scene : IScene
 
     private double _autosaveTimer = 0;
 
-    public Level2_Scene(Game1 game)
+    public Level3_Scene(Game1 game)
     {
         _game = game;
     }
@@ -73,8 +74,14 @@ public class Level2_Scene : IScene
         }
         // Add 1 aggressive enemy
         _aggressiveEnemies = new List<Enemy>();
-        _aggressiveEnemies.Add(new Enemy(new Base(1), new Eyes(1), new Mouth(1), aggressionLevel: 100));
+        _aggressiveEnemies = new List<Enemy>();
+        for (int i = 0; i < _aggressiveEnemyCount; i++)
+        {
+            var enemy = new Enemy(new Base(1), new Eyes(1), new Mouth(1), aggressionLevel: 100);
+            _aggressiveEnemies.Add(enemy);
+        }
 
+        
         _player._canDash = true;
 
 
@@ -158,25 +165,25 @@ public class Level2_Scene : IScene
         foreach (var enemy in _aggressiveEnemies)
         {
             enemy.Update(gameTime, _physicsEngine, _player);
-            ConstrainToBounds(enemy);
+            ConstrainToBounds(enemy); // 🧠 this keeps them in bounds
         }
 
         _collisionManager.Update();
         _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore, _player, _aggressiveEnemies);
 
         _gameStateWin = _gameScore >= _foodGoal;
-        if (_gameStateWin)
-        {
-            SaveGameState();
-            var level3 = (Level3_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level3);
-            level3.Initialize();
-            SceneManager.Instance.SetScene(SceneManager.SceneType.Level3);
-        }
-        _gameStateLost = _player._health <= 0;
-        if (_gameStateLost)
-        {
-            SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
-        }
+        // if (_gameStateWin)
+        // {
+        //     SaveGameState();
+        //     var level3 = (Level3_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level3);
+        //     level3.Initialize();
+        //     SceneManager.Instance.SetScene(SceneManager.SceneType.Level3);
+        // }
+        // _gameStateLost = _player._health <= 0;
+        // if (_gameStateLost)
+        // {
+        //     SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
+        // }
 
         HandleInput();
     }
@@ -214,8 +221,8 @@ public class Level2_Scene : IScene
 
 
 
-        // if (_gameStateWin || _gameStateLost)
-        //     DrawGameOverOverlay(spriteBatch);
+        if (_gameStateWin || _gameStateLost)
+            DrawGameOverOverlay(spriteBatch);
 
         
     }
