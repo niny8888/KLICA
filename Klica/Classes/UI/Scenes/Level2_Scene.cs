@@ -179,7 +179,7 @@ public class Level2_Scene : IScene
 
         spriteBatch.Begin();
         _physicsEngine.Draw(spriteBatch);
-
+        
         foreach (var trail in _trails)
             trail.Draw(spriteBatch, _halfCircleTexture);
 
@@ -193,6 +193,12 @@ public class Level2_Scene : IScene
             enemy.Draw(spriteBatch, _game.GetGameTime());
             enemy.DrawHealthBar(spriteBatch);
         }
+
+        foreach( var enemy in _aggressiveEnemies)
+            Collider.DrawCollider(spriteBatch, _circleTexture, enemy.GetMouthCollider(), Color.Black);
+        
+        Collider.DrawCollider(spriteBatch, _circleTexture, _player.GetBaseCollider(), Color.Black);
+
 
             
 
@@ -400,7 +406,7 @@ public class Level2_Scene : IScene
             // Player mouth hits enemy base (deal damage to enemy)
             _collisionManager.AddCollider(enemy.GetBaseCollider(), other =>
             {
-                if (other.Owner == _player && other == _player.GetMouthCollider())
+                if (other.Owner is Player)
                 {
                     if (enemy._damageCooldown <= 0)
                     {
@@ -413,9 +419,9 @@ public class Level2_Scene : IScene
             });
 
             // Enemy mouth hits player base (enemy attacks player)
-            _collisionManager.AddCollider(enemy.GetMouthCollider(), other =>
+            _collisionManager.AddCollider(enemy.GetMouthCollider(), collider =>
             {
-                if (other.Owner == _player && other == _player.GetBaseCollider())
+                if (collider.Owner is Player)
                 {
                     if (enemy._damageCooldown <= 0)
                     {

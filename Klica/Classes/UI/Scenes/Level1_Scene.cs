@@ -153,6 +153,7 @@ public class Level1_Scene : IScene
         _gameStateWin = _gameScore >= _foodGoal;
         if (_gameStateWin)
         {
+            SaveGameState();
             var level2 = (Level2_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level2);
             level2.Initialize();
             SceneManager.Instance.SetScene(SceneManager.SceneType.Level2);

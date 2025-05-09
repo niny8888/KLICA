@@ -39,7 +39,7 @@ namespace Klica.Classes.Organizmi
             _currentState = AggressiveEnemyState.Idle;
             _random = new Random();
             _position = new Vector2(_random.Next(100, 1700), _random.Next(100, 950));
-            _speed = 0.6f;
+            _speed = 0.8f;
             _targetPosition = _position;
             _health = 100;
 
