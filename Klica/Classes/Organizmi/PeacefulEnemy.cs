@@ -292,11 +292,16 @@ namespace Klica.Classes.Organizmi
         }
         public Vector2 Position => _position;
         public int Health => _health;
-        public void SetPosition(Vector2 position)
+        public void SetPosition(Vector2 pos)
         {
-            _position = position;
-            _organism_base.SetPosition(position);
+            _position = pos;
+            _physics._positon = pos;
+
+            _organism_base.SetPosition(pos);
+            _baseCollider.Position = pos;
+            _mouthCollider.Position = _organism_base._position_mouth;
         }
+
 
         public void SetHealth(int health)
         {

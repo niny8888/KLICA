@@ -29,7 +29,7 @@ public class SceneManager
         if (_scenes.TryGetValue(sceneType, out var scene))
         {
             _currentScene = scene;
-            _currentScene.Initialize();
+            //_currentScene.Initialize();
         }
     }
     public IScene GetScene(SceneType sceneType)

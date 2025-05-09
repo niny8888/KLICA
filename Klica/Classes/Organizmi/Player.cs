@@ -220,31 +220,43 @@ namespace Klica.Classes.Objects_sprites
 // ==============================================
 // ============== DMG =================
 // ==============================================
-    public void TakeDamage(int damage)
+        public void TakeDamage(int damage)
+            {
+                _health -= damage;
+                if (_health <= 0)
+            {
+                    System.Console.WriteLine("Game over! U died!");
+                    _health=0;
+                } 
+            }
+
+
+        public void DrawHealthBar(SpriteBatch spriteBatch)
         {
-            _health -= damage;
-            if (_health <= 0)
-           {
-                System.Console.WriteLine("Game over! U died!");
-                _health=0;
-            } 
+            int barWidth = 40;
+            int barHeight = 5;
+            int offsetY = -50;
+
+            float healthPercent = MathHelper.Clamp(_health / 100f, 0f, 1f);
+            Vector2 barPosition = _position + new Vector2(-barWidth / 2, offsetY);
+
+            // Background
+            spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, barWidth, barHeight), Color.Gray);
+            // Fill
+            spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, (int)(barWidth * healthPercent), barHeight), Color.Blue);
+        }
+        public void SetPosition(Vector2 pos)
+        {
+            _position = pos;
+            _physics._positon = pos;
+            _player_base.SetPosition(pos);
+
+            // Also update colliders to prevent first-frame desync
+            _baseCollider.Position = pos;
+            _mouthCollider.Position = _player_base._position_mouth;
+            _mouthProximityCollider.Position = _player_base._position_mouth;
         }
 
-
-    public void DrawHealthBar(SpriteBatch spriteBatch)
-    {
-        int barWidth = 40;
-        int barHeight = 5;
-        int offsetY = -50;
-
-        float healthPercent = MathHelper.Clamp(_health / 100f, 0f, 1f);
-        Vector2 barPosition = _position + new Vector2(-barWidth / 2, offsetY);
-
-        // Background
-        spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, barWidth, barHeight), Color.Gray);
-        // Fill
-        spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, (int)(barWidth * healthPercent), barHeight), Color.Blue);
-    }
 
     }
 

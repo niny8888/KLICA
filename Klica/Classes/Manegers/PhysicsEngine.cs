@@ -1,11 +1,10 @@
 using System;
-using System.Linq;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Klica.Classes.Objects_sprites;
 using Klica.Classes.Organizmi;
+using System.Linq;
 
 namespace Klica.Classes
 {
@@ -252,7 +251,5 @@ namespace Klica.Classes
         {
             _foodItems.Clear();
         }
-
-
     }
 }

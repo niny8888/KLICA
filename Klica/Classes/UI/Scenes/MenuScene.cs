@@ -149,7 +149,7 @@ public class MenuScene : IScene
                 {
                     sound_menu_click.Play();
                     var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
-                    level1.LoadFromSave(); // new method you implement
+                    level1.LoadFromSave();
                     SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
                 }
 
@@ -166,15 +166,15 @@ public class MenuScene : IScene
                 else if (_newGameButton.Contains(mouseState.Position))
                 {
                     sound_menu_click.Play();
-
+                    SaveManager.Reset(); // Clear old save data
                     var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
-                    level1.Initialize(); 
+                    level1.Initialize();  // Setup new game state (spawns food/enemies/player)
+                    level1._gameScore=0;
+                    level1.SaveGameState(); // Save after setup so positions are included
                     SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
-                                    // var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
-                    // gameScene.NewGame(); // Reset the game state
-                    // SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
-                
                 }
+
+
             }
         }
         else if (mouseState.RightButton == ButtonState.Pressed)
