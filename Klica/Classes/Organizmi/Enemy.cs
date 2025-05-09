@@ -31,6 +31,9 @@ namespace Klica.Classes.Organizmi
         private bool _hasDroppedFood = false;
         private double _deathTimer = 1.0;
         private float _deathRotation = 0f;
+        private double _chaseTimer = 0;
+        private double _maxChaseTime = 10.0; // 10 seconds
+
 
         public Enemy(Base baseSprite, Eyes eye, Mouth mouth, int aggressionLevel)
             : base(baseSprite, eye, mouth, null)
@@ -95,8 +98,15 @@ namespace Klica.Classes.Organizmi
                     movementDirection = UpdateChasingFoodState(physicsEngine._foodItems.ToArray());
                     break;
                 case AggressiveEnemyState.ChasingPlayer:
+                    _chaseTimer += dt;
+                    if (_chaseTimer > _maxChaseTime)
+                    {
+                        _chaseTimer = 0;
+                        _currentState = AggressiveEnemyState.Idle;
+                    }
                     movementDirection = player._position - _position;
                     break;
+
             }
 
             if (movementDirection != Vector2.Zero)
@@ -126,6 +136,7 @@ namespace Klica.Classes.Organizmi
                 if (_random.NextDouble() < 0.02) // 2% chance per frame = ~0.3s delay
                 {
                     _currentState = AggressiveEnemyState.ChasingPlayer;
+                    _chaseTimer = 0;
                 }
             }
 
