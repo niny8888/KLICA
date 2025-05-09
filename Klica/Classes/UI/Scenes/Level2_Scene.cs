@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using Microsoft.Xna.Framework.Audio;
 
-public class Level1_Scene : IScene
+public class Level2_Scene : IScene
 {
     private Game1 _game;
     private Level _level;
@@ -22,6 +22,8 @@ public class Level1_Scene : IScene
     private CollisionManager _collisionManager;
 
     private List<PeacefulEnemy> _peacefulEnemies { get; }= new();
+    private List<Enemy> _aggressiveEnemies;
+
     private Texture2D _background, _halfCircleTexture, _buttonTexture, _winTexture, _loseTexture;
     private BitmapFont _font;
     private Rectangle _backButton;
@@ -40,7 +42,7 @@ public class Level1_Scene : IScene
 
     private double _autosaveTimer = 0;
 
-    public Level1_Scene(Game1 game)
+    public Level2_Scene(Game1 game)
     {
         _game = game;
     }
@@ -51,6 +53,8 @@ public class Level1_Scene : IScene
         _physicsEngine = new PhysicsEngine(_level);
         _player = new Player(_physicsEngine);
         _peacefulEnemies.Clear();
+        _aggressiveEnemies = new List<Enemy>();
+
     }
 
 
@@ -67,6 +71,11 @@ public class Level1_Scene : IScene
             var peaceful = new PeacefulEnemy(new Base(2), new Eyes(2), new Mouth(2));
             _peacefulEnemies.Add(peaceful);
         }
+        // Add 1 aggressive enemy
+        _aggressiveEnemies = new List<Enemy>();
+        _aggressiveEnemies.Add(new Enemy(new Base(1), new Eyes(1), new Mouth(1), aggressionLevel: 100));
+    
+
 
         RegisterEnemyColliders();
         _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
@@ -145,24 +154,17 @@ public class Level1_Scene : IScene
         {
             peacefulenemy.Update(gameTime, _peacefulEnemies, _physicsEngine, _player, null);
         }
+        foreach (var enemy in _aggressiveEnemies)
+        {
+            enemy.Update(gameTime, _physicsEngine, _player);
+            ConstrainToBounds(enemy); // 🧠 this keeps them in bounds
+        }
+
         _collisionManager.Update();
-
-        _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore, _player, null);
-
+        _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore, _player, _aggressiveEnemies);
 
         _gameStateWin = _gameScore >= _foodGoal;
-        if (_gameStateWin)
-        {
-            var level2 = (Level2_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level2);
-            level2.Initialize();
-            SceneManager.Instance.SetScene(SceneManager.SceneType.Level2);
-        }
         _gameStateLost = _player._health <= 0;
-        if (_gameStateLost)
-        {
-            SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
-        }
-
 
         HandleInput();
     }
@@ -181,11 +183,17 @@ public class Level1_Scene : IScene
         foreach (var trail in _trails)
             trail.Draw(spriteBatch, _halfCircleTexture);
 
-        foreach (var enemy in _peacefulEnemies){
-            enemy.Draw(spriteBatch, _game.GetGameTime());
+        foreach (var peaceful in _peacefulEnemies){
+            peaceful.Draw(spriteBatch, _game.GetGameTime());
+            peaceful.Draw(spriteBatch, _game.GetGameTime());
+            peaceful.DrawHealthBar(spriteBatch);
+        }
+        foreach (var enemy in _aggressiveEnemies)
+        {
             enemy.Draw(spriteBatch, _game.GetGameTime());
             enemy.DrawHealthBar(spriteBatch);
         }
+
             
 
         _player.DrawHealthBar(spriteBatch);
@@ -198,8 +206,8 @@ public class Level1_Scene : IScene
 
 
 
-        // if (_gameStateWin || _gameStateLost)
-        //     DrawGameOverOverlay(spriteBatch);
+        if (_gameStateWin || _gameStateLost)
+            DrawGameOverOverlay(spriteBatch);
 
         
     }
@@ -261,21 +269,20 @@ public class Level1_Scene : IScene
 
 
 
-    // private void DrawGameOverOverlay(SpriteBatch spriteBatch)
-    // {
-    //     spriteBatch.End();
-    //     spriteBatch.Begin();
-    //     spriteBatch.Draw(_buttonTexture, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.Black * 0.5f);
+    private void DrawGameOverOverlay(SpriteBatch spriteBatch)
+    {
+        spriteBatch.End();
+        spriteBatch.Begin();
+        spriteBatch.Draw(_buttonTexture, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.Black * 0.5f);
 
-        
-    //     Texture2D texture = _gameStateWin ? _winTexture : _loseTexture;
-    //     Vector2 position = new Vector2(
-    //         (Game1.ScreenWidth - texture.Width) / 2,
-    //         (Game1.ScreenHeight - texture.Height) / 2
-    //     );
+        Texture2D texture = _gameStateWin ? _winTexture : _loseTexture;
+        Vector2 position = new Vector2(
+            (Game1.ScreenWidth - texture.Width) / 2,
+            (Game1.ScreenHeight - texture.Height) / 2
+        );
 
-    //     spriteBatch.Draw(texture, position, Color.White);
-    // }
+        spriteBatch.Draw(texture, position, Color.White);
+    }
 
     public void Reset()
     {
@@ -349,6 +356,22 @@ public class Level1_Scene : IScene
         RegisterEnemyColliders();
     }
 
+    private void ConstrainToBounds(Enemy enemy)
+    {
+        var bounds = _level.Bounds;
+
+        if (enemy._position.X < bounds.Left)
+            enemy._position = new Vector2(bounds.Left, enemy._position.Y);
+        else if (enemy._position.X > bounds.Right)
+            enemy._position = new Vector2(bounds.Right, enemy._position.Y);
+
+        if (enemy._position.Y < bounds.Top)
+            enemy._position = new Vector2(enemy._position.X, bounds.Top);
+        else if (enemy._position.Y > bounds.Bottom)
+            enemy._position = new Vector2(enemy._position.X, bounds.Bottom);
+    }
+
+
     private void RegisterEnemyColliders()
     {
         foreach (var enemy in _peacefulEnemies)
@@ -372,6 +395,40 @@ public class Level1_Scene : IScene
                 Console.WriteLine("Mouth collider touched: " + other.Owner?.GetType().Name);
             });
         }
+        foreach (var enemy in _aggressiveEnemies)
+        {
+            // Player mouth hits enemy base (deal damage to enemy)
+            _collisionManager.AddCollider(enemy.GetBaseCollider(), other =>
+            {
+                if (other.Owner == _player && other == _player.GetMouthCollider())
+                {
+                    if (enemy._damageCooldown <= 0)
+                    {
+                        Console.WriteLine("Player's mouth hit aggressive enemy!");
+                        enemy.TakeDamage(20);
+                        enemy.ApplyBounce(_player.GetMouthCollider().Position - enemy.GetBaseCollider().Position, 0.5f);
+                        enemy._damageCooldown = 1.0; // 1 second cooldown
+                    }
+                }
+            });
+
+            // Enemy mouth hits player base (enemy attacks player)
+            _collisionManager.AddCollider(enemy.GetMouthCollider(), other =>
+            {
+                if (other.Owner == _player && other == _player.GetBaseCollider())
+                {
+                    if (enemy._damageCooldown <= 0)
+                    {
+                        Console.WriteLine("Aggressive enemy bit the player!");
+                        _player.TakeDamage(10);
+                        Console.WriteLine("Player health: " + _player._health);
+                        _player.ApplyBounce(_player._position - enemy._position, 0.5f);
+                        enemy._damageCooldown = 1.0; // Prevent rapid hits
+                    }
+                }
+            });
+        }
+
     }
 
 

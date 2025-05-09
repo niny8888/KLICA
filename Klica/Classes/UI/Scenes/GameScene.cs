@@ -263,7 +263,8 @@ public class GameScene : IScene
             }
 
             // Update enemy behavior
-            enemy.Update(gameTime, _player, _physicsEngine);
+            enemy.Update(gameTime, _physicsEngine, _player);
+
             ConstrainToBounds(enemy);
         }
 

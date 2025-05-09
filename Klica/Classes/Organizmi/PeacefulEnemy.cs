@@ -68,7 +68,7 @@ namespace Klica.Classes.Organizmi
                 _deathTimer -= dt;
                 _deathRotation += (float)(Math.PI * dt * 4);
                 _organism_base.SetRotation(_deathRotation);
-
+                
                 if (_deathTimer <= 0 && !_hasDroppedFood)
                 {
                     physicsEngine.AddFood(new Food(_position, new Vector2(0.5f, 0.5f), 1f));

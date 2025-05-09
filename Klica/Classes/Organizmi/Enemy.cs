@@ -1,24 +1,16 @@
 using System;
 using System.Collections.Generic;
-using Klica.Classes.Objects_sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Klica.Classes.Objects_sprites;
 
 namespace Klica.Classes.Organizmi
 {
-    public enum EnemyState //AI STATES
-    {
-        Idle,
-        ChasingFood,
-        ChasingPlayer,
-        Fleeing
-    }
-
     public class Enemy : OrganismBuilder
     {
-        private EnemyState _currentState;
-        private int _aggressionLevel;
-        private int _fleeTimer;
+        public enum AggressiveEnemyState { Idle, ChasingFood, ChasingPlayer, Dying }
+        private AggressiveEnemyState _currentState;
+
         private Vector2 _velocity;
         private Vector2 _targetPosition;
         private float _speed;
@@ -32,222 +24,150 @@ namespace Klica.Classes.Organizmi
         public float Restitution { get; private set; } = 0.6f;
         public Vector2 Velocity { get; set; } = Vector2.Zero;
 
+        public double _damageCooldown = 0;
+        private int _aggressionLevel;
+
+        private bool _isDead = false;
+        private bool _hasDroppedFood = false;
+        private double _deathTimer = 1.0;
+        private float _deathRotation = 0f;
+
         public Enemy(Base baseSprite, Eyes eye, Mouth mouth, int aggressionLevel)
-    : base(baseSprite, eye, mouth, null) 
+            : base(baseSprite, eye, mouth, null)
         {
             _aggressionLevel = aggressionLevel;
-            _currentState = EnemyState.Idle;
+            _currentState = AggressiveEnemyState.Idle;
             _random = new Random();
-            _position = new Vector2(_random.Next(100, 800), _random.Next(100, 600));
-            _speed = 2f;
+            _position = new Vector2(_random.Next(100, 1700), _random.Next(100, 950));
+            _speed = 0.6f;
             _targetPosition = _position;
             _health = 100;
-            Mass = 3f;
-            
 
-            // Initialize components in base class
             _organism_base.SetPosition(_position);
             _organism_mouth.SetPosition(_organism_base._position_mouth, 0, 0);
             _organism_eye.SetPosition(_organism_base._position_eyes);
 
-            // Initialize colliders
-            _baseCollider = new Collider(_position, baseSprite.Width/2f, this);
+            _baseCollider = new Collider(_position, baseSprite.Width / 2f, this);
             _mouthCollider = new Collider(baseSprite._position_mouth, 10f, this);
-        
-            _isStateLocked = false;
-            _stateLockTimer = 0;
         }
 
-// ==============================================
-// ============== UPDATE  =================
-// ==============================================
-        public void Update(GameTime gameTime, Player player, PhysicsEngine physicsEngine)
+        public void Update(GameTime gameTime, PhysicsEngine physicsEngine, Player player)
         {
-            // Handle state lock timer
-             if (_isStateLocked)
-            {
-                _stateLockTimer -= gameTime.ElapsedGameTime.TotalSeconds;
-                if (_stateLockTimer <= 0)
-                {
-                    _isStateLocked = false;
-                }
-                return; // Stop further state updates
-            }
-            // Apply velocity (bouncing effect)
-            _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_damageCooldown > 0) _damageCooldown -= dt;
 
-            // Apply friction to slow down bounce velocity
-            _velocity *= 0.95f;
+            if (_health <= 0 && _currentState != AggressiveEnemyState.Dying)
+            {
+                _currentState = AggressiveEnemyState.Dying;
+                _isDead = true;
+                return;
+            }
+
+            if (_isDead)
+            {
+                _deathTimer -= dt;
+                _deathRotation += (float)(Math.PI * dt * 4);
+                _organism_base.SetRotation(_deathRotation);
+
+                if (_deathTimer <= 0 && !_hasDroppedFood)
+                {
+                    physicsEngine.AddFood(new Food(_position, new Vector2(0.5f, 0.5f), 1f));
+                    physicsEngine.AddFood(new Food(_position + new Vector2(10, 10), new Vector2(-0.5f, -0.5f), 1f));
+                    _hasDroppedFood = true;
+                }
+                return;
+            }
+
+            if (_isStateLocked)
+            {
+                _stateLockTimer -= dt;
+                if (_stateLockTimer > 0) return;
+                _isStateLocked = false;
+            }
 
             Vector2 movementDirection = Vector2.Zero;
-
-            // Existing behavior logic
             switch (_currentState)
             {
-                case EnemyState.Idle:
+                case AggressiveEnemyState.Idle:
                     movementDirection = UpdateIdleState(player, physicsEngine._foodItems.ToArray());
                     break;
-                case EnemyState.ChasingFood:
+                case AggressiveEnemyState.ChasingFood:
                     movementDirection = UpdateChasingFoodState(physicsEngine._foodItems.ToArray());
                     break;
-                case EnemyState.ChasingPlayer:
-                    movementDirection = UpdateChasingPlayerState(player);
-                    break;
-                case EnemyState.Fleeing:
-                    movementDirection = UpdateFleeingState(player);
+                case AggressiveEnemyState.ChasingPlayer:
+                    movementDirection = player._position - _position;
                     break;
             }
 
             if (movementDirection != Vector2.Zero)
             {
-                UpdateOrganism(gameTime);
+                Vector2 steering = Seek(_position + movementDirection);
+                _velocity += steering;
             }
 
-            // Update colliders
+            _velocity *= 0.95f;
+            if (_velocity.Length() > _speed)
+                _velocity = Vector2.Normalize(_velocity) * _speed;
+
+            _physics.Update(_velocity);
+            UpdateOrganism(gameTime);
+            _position = _organism_base.GetPosition();
             _baseCollider.Position = _position;
             _mouthCollider.Position = _organism_base._position_mouth;
         }
 
-        // ==============================================
-        // ============== IDLE  =================
-        // ==============================================
-
         private Vector2 UpdateIdleState(Player player, Food[] foods)
         {
-            ///Wander(); ///to so pol tko bl na enmu kupcku
-            if (_random.NextDouble() < 0.01)
-            {
+            if (_random.NextDouble() < 0.02)
                 _targetPosition = GetRandomTargetPosition();
+
+            if (Vector2.Distance(_position, player._position) < 200f && _random.Next(100) < _aggressionLevel)
+            {
+                if (_random.NextDouble() < 0.02) // 2% chance per frame = ~0.3s delay
+                {
+                    _currentState = AggressiveEnemyState.ChasingPlayer;
+                }
             }
 
-            if (IsPlayerInRange(player, 150f))
-            {
-                _currentState = _random.Next(100) < _aggressionLevel ? EnemyState.ChasingPlayer : EnemyState.Fleeing;
-            }
-            else if (IsFoodInRange(foods, 100f))
-            {
-                _currentState = EnemyState.ChasingFood;
-            }
+
+            if (IsFoodInRange(foods, 50f))
+                _currentState = AggressiveEnemyState.ChasingFood;
 
             return _targetPosition - _position;
         }
 
-        // ==============================================
-        // ============== CHASING FOOD =================
-        // ==============================================
         private Vector2 UpdateChasingFoodState(Food[] foods)
         {
-            Food closestFood = GetClosestFood(foods);
-            if (closestFood != null)
+            Food closest = GetClosestFood(foods);
+            if (closest != null)
             {
-                _targetPosition = closestFood.Position;
-
-                if (Vector2.Distance(_position, closestFood.Position) < 10f)
+                _targetPosition = closest.Position;
+                if (Vector2.Distance(_position, closest.Position) < 15f)
                 {
-                    closestFood.OnConsumedByAI();
-                    _currentState = EnemyState.Idle;
+                    closest.OnConsumedByAI();
+                    LockState(AggressiveEnemyState.Idle, 1.0);
                 }
             }
             else
             {
-                _currentState = EnemyState.Idle;
+                _currentState = AggressiveEnemyState.Idle;
             }
 
             return _targetPosition - _position;
         }
-
-        // ==============================================
-        // ============== CHASING PLAYER  =================
-        // ==============================================
-
 
         private Vector2 Seek(Vector2 target)
         {
-            Vector2 desiredVelocity = target - _position;
-            desiredVelocity.Normalize();
-            desiredVelocity *= _speed;
-            return desiredVelocity - _velocity; // Steering force
+            Vector2 desired = target - _position;
+            if (desired != Vector2.Zero) desired.Normalize();
+            desired *= _speed;
+            return (desired - _velocity) * 0.3f; // used to be 0.5f
+
         }
 
-        private Vector2 UpdateChasingPlayerState(Player player)
+        private Vector2 GetRandomTargetPosition()
         {
-            Vector2 steering = Seek(player._position);
-            _velocity += steering;
-            _velocity = Vector2.Clamp(_velocity, new Vector2(-_speed, -_speed), new Vector2(_speed, _speed));
-            if (Vector2.Distance(_position, player._position) < 20f)
-            {
-                _currentState = EnemyState.Idle;
-            }
-            return _velocity;
-        }
-
-        // ==============================================
-        // ============== FLEEING  =================
-        // ==============================================
-        private Vector2 UpdateFleeingState(Player player)
-        {
-            Vector2 directionAwayFromPlayer = _position - player._position;
-            directionAwayFromPlayer.Normalize();
-            _targetPosition = _position + directionAwayFromPlayer * 100f;
-
-            _fleeTimer++;
-            if (_fleeTimer > 100)
-            {
-                _currentState = EnemyState.Idle;
-                _fleeTimer = 0;
-            }
-
-            return _targetPosition - _position;
-        }
-
-        // ==============================================
-        // ============== TO TARGET  =================
-        // ==============================================
-        private void MoveTowardsTarget(GameTime gameTime)
-        {
-            Vector2 direction = _targetPosition - _position;
-            if (direction.Length() > 1f)
-            {
-                direction.Normalize();
-                _velocity = direction * _speed;
-            }
-            else
-            {
-                _velocity = Vector2.Zero; // Stop when close enough
-            }
-
-            _position += _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        }
-
-        // ==============================================
-        // ============== Wander =================
-        // ==============================================
-        private Vector2 Wander()
-        {
-            if (_random.NextDouble() < 0.02) // Change direction occasionally
-            {
-                float angle = (float)(_random.NextDouble() * MathHelper.TwoPi);
-                _targetPosition = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * 50f + _position;
-            }
-            return Seek(_targetPosition);
-        }
-
-
-// ==============================================
-// ============== DRAW  =================
-// ==============================================
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            DrawOrganism(spriteBatch, gameTime);
-        }
-
-        
-// ==============================================
-// ============== RANGE CHECK  =================
-// ==============================================
-        private bool IsPlayerInRange(Player player, float range)
-        {
-            return Vector2.Distance(_position, player._position) <= range;
+            return new Vector2(_random.Next(100, 1800), _random.Next(100, 1000));
         }
 
         private bool IsFoodInRange(IEnumerable<Food> foods, float range)
@@ -255,68 +175,78 @@ namespace Klica.Classes.Organizmi
             foreach (var food in foods)
             {
                 if (Vector2.Distance(_position, food.Position) <= range)
-                {
                     return true;
-                }
             }
             return false;
         }
 
         private Food GetClosestFood(IEnumerable<Food> foods)
         {
-            Food closestFood = null;
-            float closestDistance = float.MaxValue;
+            Food closest = null;
+            float dist = float.MaxValue;
 
             foreach (var food in foods)
             {
-                float distance = Vector2.Distance(_position, food.Position);
-                if (distance < closestDistance)
+                float d = Vector2.Distance(_position, food.Position);
+                if (d < dist)
                 {
-                    closestFood = food;
-                    closestDistance = distance;
+                    closest = food;
+                    dist = d;
                 }
             }
 
-            return closestFood;
+            return closest;
         }
 
-// ==============================================
-// ============== GETTERS  =================
-// ==============================================
-
-        public Collider GetBaseCollider() => _baseCollider;
-
-        public Collider GetMouthCollider() => _mouthCollider;
-        private Vector2 GetRandomTargetPosition()
-        {
-            return new Vector2(
-                _random.Next(100, 800),
-                _random.Next(100, 600)
-            );
-        }
-        public float GetRotation()
-        {
-            return _organism_base.GetRotation();
-        }
-
-
-// ==============================================
-// ============== FIZKA  =================
-// ==============================================
-        public void ApplyBounce(Vector2 direction, float strength)
-        {
-            _velocity += direction * strength;
-        }
-
-    
-// ===========================================
-// STATE LOCK SYSTEM
-// ===========================================
-        public void LockState(EnemyState state, double duration)
+        public void LockState(AggressiveEnemyState state, double duration)
         {
             _currentState = state;
             _stateLockTimer = duration;
             _isStateLocked = true;
         }
+
+        public Collider GetBaseCollider() => _baseCollider;
+        public Collider GetMouthCollider() => _mouthCollider;
+        public float GetRotation() => _organism_base.GetRotation();
+
+        public void ApplyBounce(Vector2 direction, float strength)
+        {
+            _velocity += direction * strength;
+        }
+
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            if (!_isDead)
+                DrawOrganism(spriteBatch, gameTime);
+        }
+
+        public void DrawHealthBar(SpriteBatch spriteBatch)
+        {
+            if (_isDead) return;
+
+            int barWidth = 40;
+            int barHeight = 5;
+            int offsetY = -50;
+
+            float healthPercent = MathHelper.Clamp(_health / 100f, 0f, 1f);
+            Vector2 barPosition = _position + new Vector2(-barWidth / 2, offsetY);
+
+            spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, barWidth, barHeight), Color.Gray);
+            spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, (int)(barWidth * healthPercent), barHeight), Color.Red);
+        }
+
+        public Vector2 Position => _position;
+        public int Health => _health;
+
+        public void SetPosition(Vector2 pos)
+        {
+            _position = pos;
+            _physics._positon = pos;
+            _organism_base.SetPosition(pos);
+            _baseCollider.Position = pos;
+            _mouthCollider.Position = _organism_base._position_mouth;
+        }
+
+        public void SetHealth(int hp) => _health = hp;
     }
 }
