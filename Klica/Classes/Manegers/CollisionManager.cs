@@ -25,9 +25,18 @@ public class CollisionManager
 
                 if (colliderA.Item1.Intersects(colliderB.Item1))
                 {
-                    colliderA.Item2(colliderB.Item1);
-                    colliderB.Item2(colliderA.Item1);
+                    // Get owners
+                    var ownerA = colliderA.Item1.Owner;
+                    var ownerB = colliderB.Item1.Owner;
+
+                    // Avoid self-collisions
+                    if (ownerA != ownerB)
+                    {
+                        colliderA.Item2(colliderB.Item1);
+                        colliderB.Item2(colliderA.Item1);
+                    }
                 }
+
             }
         }
     }

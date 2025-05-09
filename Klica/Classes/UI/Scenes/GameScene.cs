@@ -86,8 +86,8 @@ public class GameScene : IScene
         _enemies_peaceful = new List<PeacefulEnemy>();
         _collisionManager = new CollisionManager();
         _saveFilePath = GetSaveFilePath();
-        _gameData = LoadGameData(); // Load game data
-        _gameScore = _gameData.LastScore; 
+        // _gameData = LoadGameData(); // Load game data
+        // _gameScore = _gameData.LastScore; 
     }
 
     public void Initialize()
@@ -276,17 +276,17 @@ public class GameScene : IScene
        // _gameStateLost = _gameplayRules.CheckLoseCondition(_gameScore);
         _gameStateLost = _gameplayRules.CheckLoseConditionPlayer(_player._health);
 
-        if (_gameStateWin)
-        {
-            Console.WriteLine("You won!");
-            SaveGameData(); 
-        }
+        // if (_gameStateWin)
+        // {
+        //     Console.WriteLine("You won!");
+        //     SaveGameData(); 
+        // }
 
-        if (_gameStateLost)
-        {
-            Console.WriteLine("You lost!");
-            SaveGameData(); 
-        }
+        // if (_gameStateLost)
+        // {
+        //     Console.WriteLine("You lost!");
+        //     SaveGameData(); 
+        // }
         
         
         _shaderTime.X += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -495,16 +495,16 @@ public class GameScene : IScene
 // ============== GAME DATA =================
 // ==============================================
 
-    private void SaveGameData()
-    ///problem da shranjuje sam ce zmagas alpa zgubis!!!!!!!
-    {
-        _gameData.LastScore = _gameScore; 
-        _gameData.SoundOn = true; 
+    // private void SaveGameData()
+    // ///problem da shranjuje sam ce zmagas alpa zgubis!!!!!!!
+    // {
+    //     _gameData.LastScore = _gameScore; 
+    //     _gameData.SoundOn = true; 
 
-        string jsonData = JsonSerializer.Serialize(_gameData);
-        Directory.CreateDirectory(Path.GetDirectoryName(_saveFilePath));
-        File.WriteAllText(_saveFilePath, jsonData);
-    }
+    //     string jsonData = JsonSerializer.Serialize(_gameData);
+    //     Directory.CreateDirectory(Path.GetDirectoryName(_saveFilePath));
+    //     File.WriteAllText(_saveFilePath, jsonData);
+    // }
 
     private string GetSaveFilePath()
         {
@@ -512,45 +512,45 @@ public class GameScene : IScene
             return Path.Combine(folder, "Klica", "SaveData.json");
         }
 
-    public GameData LoadGameData()
-    {
-        string filePath = GetSaveFilePath();
+    // public GameData LoadGameData()
+    // {
+    //     string filePath = GetSaveFilePath();
 
-        if (File.Exists(filePath))
-        {
-            string jsonData = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<GameData>(jsonData);
-        }
+    //     if (File.Exists(filePath))
+    //     {
+    //         string jsonData = File.ReadAllText(filePath);
+    //         return JsonSerializer.Deserialize<GameData>(jsonData);
+    //     }
 
-        // Return default values if no save file exists
-        return new GameData
-        {
-            LastScore = 0,
-            SoundOn = true,
-        };
-    }
+    //     // Return default values if no save file exists
+    //     return new GameData
+    //     {
+    //         LastScore = 0,
+    //         SoundOn = true,
+    //     };
+    // }
 
 // ==============================================
 // ============== NEW GAME =================
 // ==============================================
 
-    public void NewGame()
-    {
-        _gameData.LastScore = 0; 
+    // public void NewGame()
+    // {
+    //     _gameData.LastScore = 0; 
     
-        _gameScore = 0;
-        _gameStateWin = false;
-        _gameStateLost = false;
+    //     _gameScore = 0;
+    //     _gameStateWin = false;
+    //     _gameStateLost = false;
         
-        SaveGameData(); 
-        // Reset player and enemies
-        _player = new Player(_physicsEngine); 
-        _enemies.Clear(); 
-        SpawnEnemies(_enemySpawnRate); 
+    //     SaveGameData(); 
+    //     // Reset player and enemies
+    //     _player = new Player(_physicsEngine); 
+    //     _enemies.Clear(); 
+    //     SpawnEnemies(_enemySpawnRate); 
 
-        _physicsEngine = new PhysicsEngine(_level); 
-        Console.WriteLine("New game started. Data reset to default.");
-    }
+    //     _physicsEngine = new PhysicsEngine(_level); 
+    //     Console.WriteLine("New game started. Data reset to default.");
+    // }
 
 // ==============================================
 // ============== VISUAL =================

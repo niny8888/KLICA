@@ -64,6 +64,8 @@ public class Game1 : Game
         SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
         SceneManager.Instance.LoadContent(Content);
 
+        TextureGenerator.Init(GraphicsDevice);
+
 
         //intro
         animation = new MyLogoAnimation(0.1);
@@ -110,7 +112,11 @@ public class Game1 : Game
                 break;
         }
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        {
+            ((Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1))?.SaveGameState();
             Exit();
+        }
+            
 
         SceneManager.Instance.Update(gameTime);
         base.Update(gameTime);

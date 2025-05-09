@@ -33,4 +33,11 @@ public static class TextureGenerator
         texture.SetData(colorData);
         return texture;
     }
+    public static Texture2D Pixel { get; private set; }
+
+        public static void Init(GraphicsDevice device)
+        {
+            Pixel = new Texture2D(device, 1, 1);
+            Pixel.SetData(new[] { Color.White });
+        }
 }

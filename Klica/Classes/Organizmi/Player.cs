@@ -29,6 +29,7 @@ namespace Klica.Classes.Objects_sprites
         // Collision properties
         private Collider _baseCollider;
         private Collider _mouthCollider;
+        
         private Collider _mouthProximityCollider;
 
         /// DASH
@@ -44,7 +45,11 @@ namespace Klica.Classes.Objects_sprites
             _physics = new Physics(_position);
             _player_base.SetPosition(_position);
             _baseCollider = new Collider(_player_base.GetPosition(), _player_base.Width/2f, this);
+            _baseCollider.Owner = this; // or pass owner from Player if needed
+
             _mouthCollider = new Collider(_player_base._position_mouth, 10f, this);
+            _mouthCollider.Owner = this; // or pass owner from Player if needed
+
             _mouthProximityCollider = new Collider(_player_base._position_mouth, 25f, this); // Larger radius than mouth
             _health = 100;
             Mass = 5f;
@@ -224,5 +229,24 @@ namespace Klica.Classes.Objects_sprites
                 _health=0;
             } 
         }
+
+
+    public void DrawHealthBar(SpriteBatch spriteBatch)
+    {
+        int barWidth = 40;
+        int barHeight = 5;
+        int offsetY = -50;
+
+        float healthPercent = MathHelper.Clamp(_health / 100f, 0f, 1f);
+        Vector2 barPosition = _position + new Vector2(-barWidth / 2, offsetY);
+
+        // Background
+        spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, barWidth, barHeight), Color.Gray);
+        // Fill
+        spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, (int)(barWidth * healthPercent), barHeight), Color.Blue);
     }
+
+    }
+
+    
 }

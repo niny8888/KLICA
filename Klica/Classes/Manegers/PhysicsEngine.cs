@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -241,6 +243,16 @@ namespace Klica.Classes
         {
             return _foodItems;
         }
+        public List<Vector2> GetAllFoodPositions()
+        {
+            return _foodItems.Select(f => f.Position).ToList();
+        }
+
+        public void ClearFood()
+        {
+            _foodItems.Clear();
+        }
+
 
     }
 }

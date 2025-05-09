@@ -1,0 +1,23 @@
+Level	Food Req	Unlocks
+1	Start	Peaceful enemies only (float around, no threat)
+2	10	Dash Boost + 1 aggressive enemy + comic/animation intro to danger
+3	15	Magnet ability + 2 new aggressive enemies + dash tutorial comic
+4	20	Max Health ×2 + 2 more enemies + cutscene + health pickups appear
+5	30	🧬 Evolution: choose 1 spike type (front, back, center) + 1 new enemy
+6	40	Larger enemies appear (cells evolved further than you)
+7	50	Second Evolution — choose between:
+→ Faster cilia (speed),		
+→ Thicker membrane (resistance),		
+→ Self-repair enzymes (slow regen)		
+8	60	Low-oxygen zone appears: slows movement, ambient particles change (realism hazard)
+9	75	Enemy cooperation: some enemies move in groups or orbit each other like colonies
+10	90	Final evolution choice + end cutscene (comic) + unlock free roam mode
+
+🔬 Realistic Evolution Traits You Could Offer
+Trait	Description
+Spikes (front/back)	Defense or offense adaptation
+Cilia Boost	Faster swimming (dash and movement)
+Thick Membrane	Higher resistance (less knockback/damage)
+Enzyme Repair	Gradual health recovery
+Mouth Expansion	Eat larger food or enemies
+Chemosense	See food/enemy outlines (glow for a few sec)

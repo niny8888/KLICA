@@ -1,6 +1,13 @@
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+
 public class GameData
 {
-    public int LastScore { get; set; } = 0;
-    public bool SoundOn { get; set; } = true;
-    
+    public int Score { get; set; }
+    public int PlayerHealth { get; set; }
+    public Vector2 PlayerPosition { get; set; }
+    public List<Vector2> FoodPositions { get; set; } = new();
+    public List<Vector2> EnemyPositions { get; set; } = new();
+    public List<int> EnemyHealths { get; set; } = new();
 }
+

@@ -59,8 +59,6 @@ public class MenuScene : IScene
 
     public void Initialize()
     {
-        _background = null;
-        _font = null;
         SetButtonPosition();
         _previousMouseState = Mouse.GetState();
         _currentState = MenuState.MainMenu;
@@ -150,8 +148,11 @@ public class MenuScene : IScene
                 if (_playButton.Contains(mouseState.Position))
                 {
                     sound_menu_click.Play();
-                    SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
+                    var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
+                    level1.LoadFromSave(); // new method you implement
+                    SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
                 }
+
                 else if (_howToPlayButton.Contains(mouseState.Position))
                 {
                     sound_menu_click.Play();
@@ -167,10 +168,9 @@ public class MenuScene : IScene
                     sound_menu_click.Play();
 
                     var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
-                    level1.Initialize(); // optional if already initialized earlier
+                    level1.Initialize(); 
                     SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
-
-                    // var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
+                                    // var gameScene = (GameScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Game);
                     // gameScene.NewGame(); // Reset the game state
                     // SceneManager.Instance.SetScene(SceneManager.SceneType.Game);
                 

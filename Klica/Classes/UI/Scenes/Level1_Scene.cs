@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Klica;
+using System.Linq;
 using Klica.Classes;
 using Klica.Classes.Objects_sprites;
 using Klica.Classes.Organizmi;
@@ -36,6 +37,9 @@ public class Level1_Scene : IScene
     private Texture2D _circleTexture;
     private MouseState _previousMouseState;
 
+
+    private double _autosaveTimer = 0;
+
     public Level1_Scene(Game1 game)
     {
         _game = game;
@@ -51,11 +55,53 @@ public class Level1_Scene : IScene
         _player = new Player(_physicsEngine);
         _peacefulEnemies.Clear();
 
+        // Spawn enemies first
         for (int i = 0; i < _peacefulEnemyCount; i++)
         {
             var peaceful = new PeacefulEnemy(new Base(2), new Eyes(2), new Mouth(2));
             _peacefulEnemies.Add(peaceful);
         }
+
+        // Then register collisions
+        foreach (var enemy in _peacefulEnemies)
+        {
+            var collider = enemy.GetBaseCollider();
+            // _collisionManager.AddCollider(_player.GetMouthCollider(), other => {
+            // foreach (var enemy in _peacefulEnemies)
+            //     {
+            //         if (other == enemy.GetBaseCollider())
+            //         {
+            //             Console.WriteLine("Player's mouth collided with enemy's base");
+            //             enemy.TakeDamage(50);
+            //             enemy.ApplyBounce(_player.GetMouthCollider().Position - enemy.GetBaseCollider().Position, 0.5f);
+            //         }
+            //     }
+            // });
+            _collisionManager.AddCollider(enemy.GetBaseCollider(), other =>
+            {
+                if (other.Owner == _player && other == _player.GetMouthCollider())
+                    {
+                        if (enemy._damageCooldown <= 0)
+                        {
+                            Console.WriteLine("Player's mouth collided with enemy's base");
+                            enemy.TakeDamage(20);
+                            enemy.ApplyBounce(_player.GetMouthCollider().Position - enemy.GetBaseCollider().Position, 0.5f);
+                            enemy._damageCooldown = 0.5; // 0.5 seconds between hits
+                        }
+                    }
+
+            });
+
+            _collisionManager.AddCollider(_player.GetMouthCollider(), other =>
+            {
+                Console.WriteLine("Mouth collider touched: " + other.Owner?.GetType().Name);
+            });
+
+
+            
+        }
+
+
 
         _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
     }
@@ -102,6 +148,12 @@ public class Level1_Scene : IScene
 
     public void Update(GameTime gameTime)
     {
+        _autosaveTimer += gameTime.ElapsedGameTime.TotalSeconds;
+        if (_autosaveTimer >= 5)
+        {
+            SaveGameState();
+            _autosaveTimer = 0;
+        }
         if (_gameStateWin || _gameStateLost)
             return;
 
@@ -119,10 +171,13 @@ public class Level1_Scene : IScene
         _trails.RemoveAll(t => t.IsExpired);
 
         // Peaceful enemies
-        foreach (var enemy in _peacefulEnemies)
+        foreach (var peacefulenemy in _peacefulEnemies)
         {
-            enemy.Update(gameTime, _peacefulEnemies, _physicsEngine);
+            peacefulenemy.Update(gameTime, _peacefulEnemies, _physicsEngine, _player, null);
+
+
         }
+        _collisionManager.Update();
 
         _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore, _player, null);
 
@@ -147,9 +202,14 @@ public class Level1_Scene : IScene
         foreach (var trail in _trails)
             trail.Draw(spriteBatch, _halfCircleTexture);
 
-        foreach (var enemy in _peacefulEnemies)
+        foreach (var enemy in _peacefulEnemies){
             enemy.Draw(spriteBatch, _game.GetGameTime());
+            enemy.Draw(spriteBatch, _game.GetGameTime());
+            enemy.DrawHealthBar(spriteBatch);
+        }
+            
 
+        _player.DrawHealthBar(spriteBatch);
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
 
         DrawButton(spriteBatch, "Back to Menu", _backButton);
@@ -223,4 +283,45 @@ public class Level1_Scene : IScene
         _physicsEngine = new PhysicsEngine(_level);
         _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
     }
+    public void SaveGameState()
+    {
+        var data = new GameData
+        {
+            Score = _gameScore,
+            PlayerHealth = _player._health,
+            PlayerPosition = _player._position,
+            FoodPositions = _physicsEngine.GetAllFoodPositions(),
+            EnemyPositions = _peacefulEnemies.Select(e => e.Position).ToList(),
+            EnemyHealths = _peacefulEnemies.Select(e => e.Health).ToList()
+        };
+        SaveManager.Save(data);
+    }
+    public void LoadFromSave()
+    {
+        var data = SaveManager.Load();
+        if (data == null)
+        {
+            Initialize(); // fallback
+            return;
+        }
+
+        Initialize(); // optional: clear before loading state
+        _gameScore = data.Score;
+        _player._health = data.PlayerHealth;
+        _player._position = data.PlayerPosition;
+        
+        _physicsEngine.ClearFood();
+        foreach (var pos in data.FoodPositions)
+            _physicsEngine.AddFood(new Food(pos, Vector2.One, 1f));
+
+        _peacefulEnemies.Clear();
+        for (int i = 0; i < data.EnemyPositions.Count; i++)
+        {
+            var enemy = new PeacefulEnemy(new Base(2), new Eyes(2), new Mouth(2));
+            enemy.SetPosition(data.EnemyPositions[i]);
+            enemy.SetHealth(data.EnemyHealths[i]);
+            _peacefulEnemies.Add(enemy);
+        }
+    }
+
 }
