@@ -51,7 +51,8 @@ public class Level2_Scene : IScene
     {
         _collisionManager = new CollisionManager();
         _physicsEngine = new PhysicsEngine(_level);
-        _player = new Player(_physicsEngine);
+        _player = _game.CurrentPlayer;
+
         _peacefulEnemies.Clear();
         _aggressiveEnemies = new List<Enemy>();
 
@@ -62,6 +63,7 @@ public class Level2_Scene : IScene
     {
         _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 20);
         SetupSystems();
+        
 
         _physicsEngine.ClearFood();
         _peacefulEnemies.Clear();
@@ -75,7 +77,7 @@ public class Level2_Scene : IScene
         _aggressiveEnemies = new List<Enemy>();
         _aggressiveEnemies.Add(new Enemy(new Base(1), new Eyes(1), new Mouth(1), aggressionLevel: 100));
 
-        _player._canDash = true;
+        //_player._canDash = true;
 
 
         RegisterEnemyColliders();
@@ -127,6 +129,7 @@ public class Level2_Scene : IScene
 
     public void Update(GameTime gameTime)
     {
+        _game.CurrentLevel=2;
         _autosaveTimer += gameTime.ElapsedGameTime.TotalSeconds;
         if (_autosaveTimer >= 5.0)
         {
@@ -168,9 +171,7 @@ public class Level2_Scene : IScene
         if (_gameStateWin)
         {
             SaveGameState();
-            var level3 = (Level3_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level3);
-            level3.Initialize();
-            SceneManager.Instance.SetScene(SceneManager.SceneType.Level3);
+            SceneManager.Instance.SetScene(SceneManager.SceneType.EvolutionScene);
         }
         _gameStateLost = _player._health <= 0;
         if (_gameStateLost)

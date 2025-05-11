@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Klica.Classes.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,6 +21,8 @@ namespace Klica.Classes.Objects_sprites
         ///FIZKA
         public Vector2 _position { get; internal set; }
         public int _health { get; internal set; }
+
+        public float _maxhealth { get; internal set; }
         private bool _hasStarted = false;
         public Vector2 Velocity { get; set; }
         public float Mass { get; private set; } = 5f;
@@ -36,12 +39,14 @@ namespace Klica.Classes.Objects_sprites
         private float _dashCooldown = 1.5f;
         private float _dashTimer = 0f;
         private float _dashStrength = 20f;
-        private int _dashCharges = 2;
-        private int _maxDashCharges = 2;
+        private int _dashCharges = 1;
+        private int _maxDashCharges = 1;
         private float _dashRechargeTime = 2.5f;
         private float _dashRechargeTimer = 0f;
         public bool _canDash = false;
         private bool _spacePreviouslyPressed = false;
+        public List<EvolutionTrait> ActiveTraits { get; private set; } = new();
+
 
 
         public Player(PhysicsEngine physicsEngine)
@@ -57,6 +62,7 @@ namespace Klica.Classes.Objects_sprites
 
             _mouthProximityCollider = new Collider(_player_base._position_mouth, 25f, this); // Larger radius than mouth
             _health = 100;
+            _maxhealth=_health;
             Mass = 5f;
         }
         
@@ -244,7 +250,7 @@ namespace Klica.Classes.Objects_sprites
             int barHeight = 5;
             int offsetY = -50;
 
-            float healthPercent = MathHelper.Clamp(_health / 100f, 0f, 1f);
+            float healthPercent = MathHelper.Clamp(_health / _maxhealth, 0f, 1f);
             Vector2 barPosition = _position + new Vector2(-barWidth / 2, offsetY);
 
             // Background
@@ -273,6 +279,37 @@ namespace Klica.Classes.Objects_sprites
             _mouthCollider.Position = _player_base._position_mouth;
             _mouthProximityCollider.Position = _player_base._position_mouth;
         }
+
+    
+        public void AddTrait(EvolutionTrait trait)
+        {
+            if (!ActiveTraits.Contains(trait))
+                ActiveTraits.Add(trait);
+
+            switch (trait)
+            {
+                case EvolutionTrait.BonusHealth:
+                    _health += 50;
+                    _maxhealth += 50;
+                    break;
+
+                case EvolutionTrait.Dash:
+                    _canDash=true;
+                    break;
+                
+                case EvolutionTrait.ExtraDash:
+                    _dashCharges++;
+                    _maxDashCharges++;
+                    break;
+                // You can add logic here for other traits if needed
+            }
+        }
+
+        public bool HasTrait(EvolutionTrait trait)
+        {
+            return ActiveTraits.Contains(trait);
+        }
+
 
 
     }

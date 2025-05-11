@@ -52,7 +52,8 @@ public class Level3_Scene : IScene
     {
         _collisionManager = new CollisionManager();
         _physicsEngine = new PhysicsEngine(_level);
-        _player = new Player(_physicsEngine);
+        _player = _game.CurrentPlayer;
+
         _peacefulEnemies.Clear();
         _aggressiveEnemies = new List<Enemy>();
 
@@ -134,6 +135,7 @@ public class Level3_Scene : IScene
 
     public void Update(GameTime gameTime)
     {
+        _game.CurrentLevel=3;
         _autosaveTimer += gameTime.ElapsedGameTime.TotalSeconds;
         if (_autosaveTimer >= 5.0)
         {
@@ -435,7 +437,7 @@ public class Level3_Scene : IScene
                     if (enemy._damageCooldown <= 0)
                     {
                         Console.WriteLine("Aggressive enemy bit the player!");
-                        _player.TakeDamage(10);
+                        _player.TakeDamage(20);
                         Console.WriteLine("Player health: " + _player._health);
                         _player.ApplyBounce(_player._position - enemy._position, 0.5f);
                         enemy._damageCooldown = 1.0; // Prevent rapid hits

@@ -43,6 +43,7 @@ public class Level1_Scene : IScene
     public Level1_Scene(Game1 game)
     {
         _game = game;
+        _game.CurrentLevel=1;
     }
 
     private void SetupSystems()
@@ -50,6 +51,8 @@ public class Level1_Scene : IScene
         _collisionManager = new CollisionManager();
         _physicsEngine = new PhysicsEngine(_level);
         _player = new Player(_physicsEngine);
+        _game.CurrentPlayer = _player;
+
         _peacefulEnemies.Clear();
     }
 
@@ -154,9 +157,10 @@ public class Level1_Scene : IScene
         if (_gameStateWin)
         {
             SaveGameState();
-            var level2 = (Level2_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level2);
-            level2.Initialize();
-            SceneManager.Instance.SetScene(SceneManager.SceneType.Level2);
+            SceneManager.Instance.SetScene(SceneManager.SceneType.EvolutionScene);
+            // var level2 = (Level2_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level2);
+            // level2.Initialize();
+            // SceneManager.Instance.SetScene(SceneManager.SceneType.Level2);
         }
         _gameStateLost = _player._health <= 0;
         if (_gameStateLost)
@@ -296,6 +300,9 @@ public class Level1_Scene : IScene
         _physicsEngine = new PhysicsEngine(_level);
         _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
     }
+
+    public Player GetPlayer() => _player;
+
     public void SaveGameState()
     {
         var data = new GameData

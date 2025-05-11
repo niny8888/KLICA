@@ -23,6 +23,9 @@ public class Game1 : Game
     public bool IsFullscreen = false;
     public SpriteManager _spriteManager;
     public GameTime gameTime;
+    public int CurrentLevel { get; set; } = 1; // Start from Level 1
+    public Player CurrentPlayer { get; set; }
+
 
     public SoundEffectInstance bg_sound;
     private GameState currentState;
@@ -62,6 +65,8 @@ public class Game1 : Game
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level1, new Level1_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level2, new Level2_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level3, new Level3_Scene(this));
+        SceneManager.Instance.AddScene(SceneManager.SceneType.EvolutionScene, new EvolutionScene(this));
+
 
         // Set the initial scene
         SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_menu.wav</SourceFile>
-  <SourceTime>2025-02-12T10:06:39.0053851+01:00</SourceTime>
-  <DestFile>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Content/SE_menu.xnb</DestFile>
-  <DestTime>2025-05-09T10:22:41.5924109+02:00</DestTime>
+  <SourceFile>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_menu.wav</SourceFile>
+  <SourceTime>2025-01-22T15:46:59.0687084+01:00</SourceTime>
+  <DestFile>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bin/DesktopGL/Content/SE_menu.xnb</DestFile>
+  <DestTime>2025-05-11T11:35:20.7432556+02:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2024-08-16T19:05:56+02:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>
