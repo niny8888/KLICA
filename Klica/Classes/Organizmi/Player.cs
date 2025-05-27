@@ -47,6 +47,18 @@ namespace Klica.Classes.Objects_sprites
         private bool _spacePreviouslyPressed = false;
         public List<EvolutionTrait> ActiveTraits { get; private set; } = new();
 
+        /// TRAIT SPECIFIC
+        private float _regenTimer = 0f;
+        private const float RegenRate = 1f; // 1 HP/sec
+        private const float RegenCooldown = 3f;
+        private float _lastDamageTime = 0f;
+
+        private float _frenzyTimer = 0f;
+        private float _frenzyDuration = 0f;
+
+        private bool _hasShellArmor = false;
+
+
 
 
         public Player(PhysicsEngine physicsEngine)
@@ -169,6 +181,46 @@ namespace Klica.Classes.Objects_sprites
                 // _position = _player_base.GetPosition();
             }
 
+
+            ///TRAITS
+            
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Regen logic
+            if (HasTrait(EvolutionTrait.Regeneration))
+            {
+                _regenTimer += dt;
+                _lastDamageTime += dt;
+
+                if (_lastDamageTime >= RegenCooldown && _regenTimer >= 1f && _health < _maxhealth)
+                {
+                    _health += 1;
+                    _regenTimer = 0f;
+                }
+            }
+
+            // Frenzy logic
+            if (_frenzyDuration > 0f)
+            {
+                _frenzyTimer += dt;
+                if (_frenzyTimer <= _frenzyDuration)
+                {
+                    // Apply buff
+                    _physics._velocity *= 1.1f;
+                    _dashStrength = 30f;
+                }
+                else
+                {
+                    // Reset
+                    _frenzyTimer = 0f;
+                    _frenzyDuration = 0f;
+                    _dashStrength = 20f;
+                }
+            }
+
+
+            /// KOSI
+
             _player_base.SetRotation((float)Math.Atan2(_physics._velocity.Y, _physics._velocity.X) + 1.6f);
 
             // Update eye position
@@ -234,14 +286,19 @@ namespace Klica.Classes.Objects_sprites
 // ============== DMG =================
 // ==============================================
         public void TakeDamage(int damage)
+        {
+            _lastDamageTime = 0f;
+
+            if (_hasShellArmor)
+                damage = (int)(damage * 0.5f);
+
+            _health -= damage;
+            if (_health <= 0)
             {
-                _health -= damage;
-                if (_health <= 0)
-            {
-                    System.Console.WriteLine("Game over! U died!");
-                    _health=0;
-                } 
+                System.Console.WriteLine("Game over! U died!");
+                _health = 0;
             }
+        }
 
 
         public void DrawHealthBar(SpriteBatch spriteBatch)
@@ -280,6 +337,17 @@ namespace Klica.Classes.Objects_sprites
             _mouthProximityCollider.Position = _player_base._position_mouth;
         }
 
+        /// TRAITS
+        public void TriggerFrenzy()
+        {
+            if (HasTrait(EvolutionTrait.FrenzyMode))
+            {
+                _frenzyDuration = 5f;
+                _frenzyTimer = 0f;
+            }
+        }
+
+
     
         public void AddTrait(EvolutionTrait trait)
         {
@@ -301,7 +369,34 @@ namespace Klica.Classes.Objects_sprites
                     _dashCharges++;
                     _maxDashCharges++;
                     break;
-                // You can add logic here for other traits if needed
+                case EvolutionTrait.Regeneration:
+                // No immediate stat change — regen logic will be in UpdatePlayer
+                    break;
+
+                case EvolutionTrait.StunDash:
+                    // You’ll trigger the stun externally on collision, just track it here
+                    break;
+
+                case EvolutionTrait.FrenzyMode:
+                    _frenzyDuration = 5f;
+                    break;
+
+                case EvolutionTrait.ShellArmor:
+                    _hasShellArmor = true;
+                    break;
+
+                case EvolutionTrait.FeederMode:
+                    // Used in PeacefulEnemy death logic
+                    break;
+
+                case EvolutionTrait.TraitMemory:
+                    // Trait memory logic likely handled outside player (in evolution system)
+                    break;
+
+                case EvolutionTrait.SlowTouch:
+                    // This will be triggered on collisions
+                    break;
+
             }
         }
 

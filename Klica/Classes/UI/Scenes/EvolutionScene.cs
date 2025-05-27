@@ -105,7 +105,7 @@ public class EvolutionScene : IScene
         switch (level)
         {
             case 1:
-                _availableTraits.Add((EvolutionTrait.Dash, "Dash")); //- Quick burst forward
+                _availableTraits.Add((EvolutionTrait.Dash, "Dash")); // Quick burst forward
                 break;
             case 2:
                 _availableTraits.Add((EvolutionTrait.ExtraDash, "+1 Dash"));
@@ -113,13 +113,21 @@ public class EvolutionScene : IScene
                 break;
             case 3:
                 _availableTraits.Add((EvolutionTrait.Regeneration, "Regeneration over time"));
-                _availableTraits.Add((EvolutionTrait.Invisibility, "5s Invisibility"));
+                _availableTraits.Add((EvolutionTrait.StunDash, "Stun Dash - Freezes enemies on impact"));
                 break;
             case 4:
-                _availableTraits.Add((EvolutionTrait.Magnet, "Magnet - Pull in food"));
-                _availableTraits.Add((EvolutionTrait.PoisonTrail, "Poison Trail - Damages enemies"));
+                _availableTraits.Add((EvolutionTrait.SlowTouch, "Skin Adaptation - Slows enemies on contact"));
+                _availableTraits.Add((EvolutionTrait.FeederMode, "Feeder Mode - More food drops from kills"));
+                break;
+            case 5:
+                _availableTraits.Add((EvolutionTrait.FrenzyMode, "Frenzy - Speed & damage boost on kill"));
+                _availableTraits.Add((EvolutionTrait.ShellArmor, "Shell Armor - Reduce all damage"));
+                break;
+            case 6:
+                _availableTraits.Add((EvolutionTrait.TraitMemory, "Trait Memory - Random traits you skipped"));
                 break;
         }
+
         _traitButtons = new Rectangle[_availableTraits.Count];
 
         for (int i = 0; i < _availableTraits.Count; i++)
@@ -147,7 +155,10 @@ public enum EvolutionTrait
     ExtraDash,
     BonusHealth,
     Regeneration,
-    Invisibility,
-    Magnet,
-    PoisonTrail
+    StunDash,
+    FrenzyMode,
+    ShellArmor,
+    FeederMode,
+    TraitMemory,
+    SlowTouch
 } 
