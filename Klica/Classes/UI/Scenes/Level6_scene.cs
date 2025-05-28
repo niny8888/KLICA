@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using Microsoft.Xna.Framework.Audio;
 
-public class Level3_Scene : IScene
+public class Level6_Scene : IScene
 {
     private Game1 _game;
     private Level _level;
@@ -28,9 +28,9 @@ public class Level3_Scene : IScene
     private BitmapFont _font;
     private Rectangle _backButton;
 
-    private int _foodGoal = 10;
-    private int _peacefulEnemyCount = 3;
-    private int _aggressiveEnemyCount = 3;
+    private int _foodGoal = 15;
+    private int _peacefulEnemyCount = 2;
+    private int _aggressiveEnemyCount = 7;
     private float _trailTimer = 0f;
     private List<HalfCircleTrail> _trails = new();
     private bool _gameStateWin = false;
@@ -39,11 +39,15 @@ public class Level3_Scene : IScene
 
     private Texture2D _circleTexture;
     private MouseState _previousMouseState;
-
+    //Shader
+    private Effect _waterFlowEffect;
+    private Effect _perlinNoiseEffect;
+    private Vector2 _shaderTime = Vector2.Zero;
+    private Vector2 _shaderPerlinTime = Vector2.Zero;
 
     private double _autosaveTimer = 0;
 
-    public Level3_Scene(Game1 game)
+    public Level6_Scene(Game1 game)
     {
         _game = game;
     }
@@ -62,7 +66,7 @@ public class Level3_Scene : IScene
 
     public void Initialize()
     {
-        _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 20);
+        _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 15);
         SetupSystems();
 
         _physicsEngine.ClearFood();
@@ -101,6 +105,16 @@ public class Level3_Scene : IScene
         _background = content.Load<Texture2D>("menu_BG");
         _halfCircleTexture = TextureGenerator.CreateCircleRadiusLineTexture(_game.GraphicsDevice, 50);
 
+        _waterFlowEffect = content.Load<Effect>("WaterFlow");
+        _waterFlowEffect.Parameters["DistortionStrength"].SetValue(0.005f);
+        _waterFlowEffect.Parameters["Frequency"].SetValue(0.005f);
+
+        _perlinNoiseEffect = content.Load<Effect>("PerlinNoise");
+        _perlinNoiseEffect.Parameters["seed"].SetValue(714.434f);
+        _perlinNoiseEffect.Parameters["lineValueLimit"].SetValue(0.005f); // Adjust for less intense lines
+        _perlinNoiseEffect.Parameters["lineColor"].SetValue(new Vector3(1.0f, 1.0f, 1.0f)); // White lines
+        _perlinNoiseEffect.Parameters["lineAlpha"].SetValue(0.5f); // Adjust for less intense lines
+
 
         _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 20);
         _physicsEngine = new PhysicsEngine(_level);
@@ -138,7 +152,7 @@ public class Level3_Scene : IScene
 
     public void Update(GameTime gameTime)
     {
-        _game.CurrentLevel=3;
+        _game.CurrentLevel=6;
         _autosaveTimer += gameTime.ElapsedGameTime.TotalSeconds;
         if (_autosaveTimer >= 5.0)
         {
@@ -170,7 +184,7 @@ public class Level3_Scene : IScene
         foreach (var enemy in _aggressiveEnemies)
         {
             enemy.Update(gameTime, _physicsEngine, _player);
-            ConstrainToBounds(enemy);
+            ConstrainToBounds(enemy); 
         }
 
         _collisionManager.Update();
@@ -188,6 +202,16 @@ public class Level3_Scene : IScene
             SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
         }
 
+
+        //perlin
+        _shaderTime.X += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _shaderTime.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 0.5f;
+
+        _shaderPerlinTime.X += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _perlinNoiseEffect.Parameters["iTime"].SetValue(_shaderPerlinTime.X);
+
+        _waterFlowEffect.Parameters["Time"].SetValue(_shaderTime);
+
         HandleInput();
     }
 
@@ -195,7 +219,7 @@ public class Level3_Scene : IScene
     {
         try { spriteBatch.End(); } catch { }
 
-        spriteBatch.Begin();
+        spriteBatch.Begin(effect: _waterFlowEffect,  samplerState: SamplerState.LinearWrap);
         _level.DrawBackground(spriteBatch);
         spriteBatch.End();
 
@@ -226,6 +250,28 @@ public class Level3_Scene : IScene
 
         if (_gameStateWin || _gameStateLost)
             DrawGameOverOverlay(spriteBatch);
+        
+        spriteBatch.End();
+
+        spriteBatch.Begin(effect: _perlinNoiseEffect, blendState: BlendState.AlphaBlend);
+        spriteBatch.Draw(
+            _background, 
+            new Rectangle(0, 0, 1920, 1080),
+            Color.White
+        );
+
+        //GUMB ZA NAZAJ
+        // spriteBatch.End();
+
+        // spriteBatch.Begin();
+        // DrawButton(spriteBatch, "Back to Menu", _backButton);
+        // _hud.Draw(spriteBatch, _player, _enemies);
+        // _hud.DisplayScore(spriteBatch, _gameScore);
+        
+        // if (_gameStateWin || _gameStateLost)
+        // {
+        //     DrawGameOverOverlay(spriteBatch);
+        // }
 
         
     }
@@ -404,6 +450,10 @@ public class Level3_Scene : IScene
                         enemy.TakeDamage(20);
                         enemy.ApplyBounce(_player.GetMouthCollider().Position - enemy.GetBaseCollider().Position, 0.5f);
                         enemy._damageCooldown = 0.5;
+                        
+                    }
+                    if(_player._hasSlowTouch){
+                            enemy.ApplySlow(1.5f);
                     }
                 }
             });
@@ -423,9 +473,18 @@ public class Level3_Scene : IScene
                     if (enemy._damageCooldown <= 0)
                     {
                         Console.WriteLine("Player's mouth hit aggressive enemy!");
-                        enemy.TakeDamage(20);
+                        enemy.TakeDamage(34);
                         enemy.ApplyBounce(_player.GetMouthCollider().Position - enemy.GetBaseCollider().Position, 0.5f);
                         enemy._damageCooldown = 1.0; // 1 second cooldown
+
+                        if (_player._hasStunDash && _player._isDashing)
+                        {
+                            enemy.LockState(Enemy.AggressiveEnemyState.Locked, 2.0); // Stun for 2 seconds
+                            Console.WriteLine("Enemy stunned by Stun Dash!");
+                        }
+                        if(_player._hasSlowTouch){
+                            enemy.ApplySlow(1.5f);
+                        }
                     }
                 }
             });
@@ -438,10 +497,21 @@ public class Level3_Scene : IScene
                     if (enemy._damageCooldown <= 0)
                     {
                         Console.WriteLine("Aggressive enemy bit the player!");
-                        _player.TakeDamage(20);
-                        Console.WriteLine("Player health: " + _player._health);
-                        _player.ApplyBounce(_player._position - enemy._position, 7f, 0.3f);
-                        enemy._damageCooldown = 1.0; // Prevent rapid hits
+                        
+                        if (_player._hasStunDash && _player._isDashing)
+                        {
+                            enemy.LockState(Enemy.AggressiveEnemyState.Locked, 2.0); // Stun for 2 seconds
+                            Console.WriteLine("Enemy stunned by Stun Dash!");
+                        }
+                        else{
+                            _player.TakeDamage(20);
+                            Console.WriteLine("Player health: " + _player._health);
+                             _player.ApplyBounce(_player._position - enemy._position, 7f, 0.3f);
+                            enemy._damageCooldown = 1.0; // Prevent rapid hits
+                            if(_player._hasSlowTouch){
+                            enemy.ApplySlow(1.5f);
+                            }
+                        }
                     }
                 }
             });

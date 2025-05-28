@@ -22,11 +22,23 @@ namespace Klica.Classes.Objects_sprites
         public Vector2 _position { get; internal set; }
         public int _health { get; internal set; }
 
-        public float _maxhealth { get; internal set; }
+        public int _maxhealth { get; internal set; }
         private bool _hasStarted = false;
         public Vector2 Velocity { get; set; }
         public float Mass { get; private set; } = 5f;
         public float Restitution { get; private set; } = 0.5f;
+
+        private Vector2 _bounceImpulse = Vector2.Zero;
+        private float _inputLockTimer = 0f;
+        private bool _bounceActive = false;
+        private float _bounceTimer = 0f;
+        private float _bounceDuration = 0f;
+        private Vector2 _currentBounceDirection = Vector2.Zero;
+        private float _currentBounceStrength = 0f;
+
+
+
+
 
 
         // Collision properties
@@ -39,11 +51,12 @@ namespace Klica.Classes.Objects_sprites
         private float _dashCooldown = 1.5f;
         private float _dashTimer = 0f;
         private float _dashStrength = 20f;
-        private int _dashCharges = 1;
-        private int _maxDashCharges = 1;
+        public int _dashCharges = 1;
+        public int _maxDashCharges = 1;
         private float _dashRechargeTime = 2.5f;
         private float _dashRechargeTimer = 0f;
         public bool _canDash = false;
+        public bool _isDashing = false;
         private bool _spacePreviouslyPressed = false;
         public List<EvolutionTrait> ActiveTraits { get; private set; } = new();
 
@@ -52,11 +65,16 @@ namespace Klica.Classes.Objects_sprites
         private const float RegenRate = 1f; // 1 HP/sec
         private const float RegenCooldown = 3f;
         private float _lastDamageTime = 0f;
-
         private float _frenzyTimer = 0f;
         private float _frenzyDuration = 0f;
 
-        private bool _hasShellArmor = false;
+        public bool _hasShellArmor = false;
+        public bool _hasStunDash = false;
+        public bool _hasSlowTouch = false;
+        public bool _hasFeederMode= false;
+        public bool _hasFrenzyMode = true;
+        private bool _isFrenzy = false;
+
 
 
 
@@ -91,41 +109,92 @@ namespace Klica.Classes.Objects_sprites
             // Keyboard input
             KeyboardState keyboardState = Keyboard.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
-                movementDirection.Y -= 1;
-
-            if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-                movementDirection.X -= 1;
-
-            if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
-                movementDirection.Y += 1;
-
-            if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-                movementDirection.X += 1;
-
-
-            // Normalize movement direction
-            if (movementDirection == Vector2.Zero && _lastMovementDirection != Vector2.Zero)
+            if (_inputLockTimer <= 0f)
             {
-                movementDirection = _lastMovementDirection;
+                if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+                    movementDirection.Y -= 1;
+
+                if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
+                    movementDirection.X -= 1;
+
+                if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
+                    movementDirection.Y += 1;
+
+                if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
+                    movementDirection.X += 1;
+                
+                // Normalize movement direction
+                if (movementDirection == Vector2.Zero && _lastMovementDirection != Vector2.Zero)
+                {
+                    movementDirection = _lastMovementDirection;
+                }
+                // Gamepad input
+                GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+                if (gamePadState.IsConnected)
+                {
+                    movementDirection += new Vector2(gamePadState.ThumbSticks.Left.X, -gamePadState.ThumbSticks.Left.Y); // Y is inverted
+                }
+                GamePad.SetVibration(PlayerIndex.One, 0.0f, 0.0f);
             }
 
-            // Gamepad input
-            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
-            if (gamePadState.IsConnected)
-            {
-                movementDirection += new Vector2(gamePadState.ThumbSticks.Left.X, -gamePadState.ThumbSticks.Left.Y); // Y is inverted
-            }
-            GamePad.SetVibration(PlayerIndex.One, 0.0f, 0.0f);
             
+
+            
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+           
+            if (_inputLockTimer > 0)
+                _inputLockTimer -= dt;
+
+            if (_frenzyDuration > 0f)
+            {
+                _frenzyTimer += dt;
+                if (_frenzyTimer <= _frenzyDuration)
+                {
+                    _physics._velocity *= 1.1f;
+                    _dashStrength = 30f;
+                }
+                else
+                {
+                    _frenzyTimer = 0f;
+                    _frenzyDuration = 0f;
+                    _dashStrength = 20f;
+                    _isFrenzy = false;
+                }
+            }
+
             // Apply movement if started
             if (_hasStarted || movementDirection != Vector2.Zero)
             {
                 _hasStarted = true;
                 if (movementDirection != Vector2.Zero) movementDirection.Normalize();
 
-                _physics.Update(movementDirection);
-                _position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                // _physics.Update(movementDirection);
+
+                if (_bounceTimer > 0f)
+                {
+                    _bounceTimer -= dt;
+
+                    // Reduce the strength gradually over time
+                    float decayFactor = _bounceTimer / _bounceDuration;
+                    Vector2 bounceForce = _currentBounceDirection * _currentBounceStrength * decayFactor;
+
+                    _physics.Update(bounceForce);
+                    _physics._velocity *= 0.92f;
+
+                }
+                else
+                {
+                    _physics.Update(movementDirection);
+                }
+
+
+
+
+
+                _physics._velocity += _bounceImpulse;
+                _bounceImpulse = Vector2.Zero;
+                _position += _physics._velocity * dt;
+
 
                 _dashTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (_dashCharges < _maxDashCharges)
@@ -151,11 +220,20 @@ namespace Klica.Classes.Objects_sprites
                         _physics._velocity += dashDirection * _dashStrength;
                         _dashCharges--;
                         _dashRechargeTimer = 0f;
+                        _isDashing = true;
+                        _dashTimer = 0f;
                         Console.WriteLine("DASH!");
                     }
                 }
-                _spacePreviouslyPressed = spacePressed;
 
+                // End dash after 0.2s
+                if (_isDashing && _dashTimer > 0.2f)
+                {
+                    _isDashing = false;
+                }
+
+
+                _spacePreviouslyPressed = spacePressed;
 
 
                 Vector2 newPosition = _physics.GetPosition();
@@ -165,15 +243,28 @@ namespace Klica.Classes.Objects_sprites
 
                 newPosition.X = MathHelper.Clamp(newPosition.X, bounds.Left + halfWidth, bounds.Right - halfWidth);
                 newPosition.Y = MathHelper.Clamp(newPosition.Y, bounds.Top + halfHeight, bounds.Bottom - halfHeight);
+
+                _physics._positon = newPosition;
+                _position = newPosition;
+                _player_base.SetPosition(newPosition);
+
+                // Vector2 newPosition = _physics.GetPosition();
+
+                // float halfWidth = _player_base.Width / 2f;
+                // float halfHeight = _player_base.Height / 2f;
+
+                // newPosition.X = MathHelper.Clamp(newPosition.X, bounds.Left + halfWidth, bounds.Right - halfWidth);
+                // newPosition.Y = MathHelper.Clamp(newPosition.Y, bounds.Top + halfHeight, bounds.Bottom - halfHeight);
                 
 
-                // Apply the clamped position to physics and player
-                _physics._positon = newPosition;
-                _player_base.SetPosition(newPosition);
-                _position = newPosition;
+                // // Apply the clamped position to physics and player
+                // _physics._positon = newPosition;
+                // _player_base.SetPosition(newPosition);
+                // _position = newPosition;
 
                 // Apply friction to slow down bounce velocity
                 Velocity *= 0.90f;
+                _physics._velocity *= 0.90f;
 
                 
                 // Set position based on physics after user input
@@ -182,10 +273,7 @@ namespace Klica.Classes.Objects_sprites
             }
 
 
-            ///TRAITS
-            
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
+            //TRAITS
             // Regen logic
             if (HasTrait(EvolutionTrait.Regeneration))
             {
@@ -199,24 +287,6 @@ namespace Klica.Classes.Objects_sprites
                 }
             }
 
-            // Frenzy logic
-            if (_frenzyDuration > 0f)
-            {
-                _frenzyTimer += dt;
-                if (_frenzyTimer <= _frenzyDuration)
-                {
-                    // Apply buff
-                    _physics._velocity *= 1.1f;
-                    _dashStrength = 30f;
-                }
-                else
-                {
-                    // Reset
-                    _frenzyTimer = 0f;
-                    _frenzyDuration = 0f;
-                    _dashStrength = 20f;
-                }
-            }
 
 
             /// KOSI
@@ -249,9 +319,14 @@ namespace Klica.Classes.Objects_sprites
 // ============== DRAW  =================
 // ==============================================
         public void DrawPlayer(SpriteBatch _spriteBatch, GameTime _gameTime){
-             _player_base.Draw(_spriteBatch);
-             _player_eye.Draw(_spriteBatch,_gameTime);
-             _player_mouth.Draw(_spriteBatch);
+            Color tint = _frenzyDuration > 0 ? Color.OrangeRed : Color.White;
+            _player_base.Draw(_spriteBatch, tint);
+            _player_eye.Draw(_spriteBatch, _gameTime);
+            _player_mouth.Draw(_spriteBatch, tint);
+
+            //  _player_base.Draw(_spriteBatch);
+            //  _player_eye.Draw(_spriteBatch,_gameTime);
+            //  _player_mouth.Draw(_spriteBatch);
          }
 
 // ==============================================
@@ -268,19 +343,24 @@ namespace Klica.Classes.Objects_sprites
 // ==============================================
 // ============== FIZKA =================
 // ==============================================
-        /// to ne dela...
-        /// timer za ta cas da ga nemorem kontrolirat
-        /// impulse    
-        public void ApplyBounce(Vector2 direction, float strength)
+          
+        public void ApplyBounce(Vector2 direction, float strength, float duration = 0.3f)
         {
-            //ne ber imput
-            Console.WriteLine("Before Bounce: " + Velocity);
             if (direction != Vector2.Zero)
+            {
                 direction.Normalize();
-            Velocity += direction * strength;
-            Console.WriteLine("After Bounce: " + Velocity);
-            //lahko nazaj bere input
+                _currentBounceDirection = direction;
+                _currentBounceStrength = strength;
+                _bounceTimer = duration;
+                _bounceDuration = duration;
+                _inputLockTimer = duration * 0.3f;
+            }
         }
+
+
+
+
+
         
 // ==============================================
 // ============== DMG =================
@@ -307,7 +387,7 @@ namespace Klica.Classes.Objects_sprites
             int barHeight = 5;
             int offsetY = -50;
 
-            float healthPercent = MathHelper.Clamp(_health / _maxhealth, 0f, 1f);
+            float healthPercent = MathHelper.Clamp(_health / (float) _maxhealth, 0f, 1f);
             Vector2 barPosition = _position + new Vector2(-barWidth / 2, offsetY);
 
             // Background
@@ -340,10 +420,13 @@ namespace Klica.Classes.Objects_sprites
         /// TRAITS
         public void TriggerFrenzy()
         {
-            if (HasTrait(EvolutionTrait.FrenzyMode))
+            if (_hasFrenzyMode && !_isFrenzy)
             {
-                _frenzyDuration = 5f;
+                _isFrenzy = true;
+                // Start frenzy mode
                 _frenzyTimer = 0f;
+                _frenzyDuration = 5f; // Set duration for frenzy mode
+                _dashStrength = 30f; // Increase dash strength during frenzy
             }
         }
 
@@ -374,10 +457,11 @@ namespace Klica.Classes.Objects_sprites
                     break;
 
                 case EvolutionTrait.StunDash:
-                    // You’ll trigger the stun externally on collision, just track it here
+                    _hasStunDash = true;
                     break;
 
                 case EvolutionTrait.FrenzyMode:
+                    _hasFrenzyMode = true;
                     _frenzyDuration = 5f;
                     break;
 
@@ -386,7 +470,7 @@ namespace Klica.Classes.Objects_sprites
                     break;
 
                 case EvolutionTrait.FeederMode:
-                    // Used in PeacefulEnemy death logic
+                    _hasFeederMode = true;
                     break;
 
                 case EvolutionTrait.TraitMemory:
@@ -394,7 +478,7 @@ namespace Klica.Classes.Objects_sprites
                     break;
 
                 case EvolutionTrait.SlowTouch:
-                    // This will be triggered on collisions
+                    _hasSlowTouch = true;
                     break;
 
             }

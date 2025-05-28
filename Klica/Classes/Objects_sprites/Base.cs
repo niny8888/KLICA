@@ -118,6 +118,10 @@ namespace Klica.Classes.Objects_sprites{
         public void Draw(SpriteBatch _spriteBatch){
             _currentSprite.Draw(_spriteBatch);
         }
+        public void Draw(SpriteBatch _spriteBatch, Color overrideTint)
+        {
+            _currentSprite.Draw(_spriteBatch, overrideTint);
+        }
 
         //custop prorps: rotatable itd.
 

@@ -9,5 +9,7 @@ public class GameData
     public List<Vector2> FoodPositions { get; set; } = new();
     public List<Vector2> EnemyPositions { get; set; } = new();
     public List<int> EnemyHealths { get; set; } = new();
+    public List<EvolutionTrait> Traits { get; set; } = new();
+
 }
 

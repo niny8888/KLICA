@@ -68,6 +68,21 @@ public class EvolutionScene : IScene
                         level3.Initialize();
                         SceneManager.Instance.SetScene(SceneManager.SceneType.Level3);
                         break;
+                    case 3:
+                        var level4 = (Level4_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level4);
+                        level4.Initialize();
+                        SceneManager.Instance.SetScene(SceneManager.SceneType.Level4);
+                        break;
+                    case 4:
+                        var level5 = (Level5_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level5);
+                        level5.Initialize();
+                        SceneManager.Instance.SetScene(SceneManager.SceneType.Level5);
+                        break;
+                    case 5:
+                        var level6 = (Level6_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level6);
+                        level6.Initialize();
+                        SceneManager.Instance.SetScene(SceneManager.SceneType.Level6);
+                        break;
                 }
                 
                 _game.CurrentLevel++;
@@ -112,8 +127,8 @@ public class EvolutionScene : IScene
                 _availableTraits.Add((EvolutionTrait.BonusHealth, "+50 Health"));
                 break;
             case 3:
-                _availableTraits.Add((EvolutionTrait.Regeneration, "Regeneration over time"));
-                _availableTraits.Add((EvolutionTrait.StunDash, "Stun Dash - Freezes enemies on impact"));
+                _availableTraits.Add((EvolutionTrait.Regeneration, "Regeneration"));
+                _availableTraits.Add((EvolutionTrait.StunDash, "Stun Dash"));
                 break;
             case 4:
                 _availableTraits.Add((EvolutionTrait.SlowTouch, "Skin Adaptation - Slows enemies on contact"));

@@ -34,6 +34,10 @@ namespace Klica.Classes
         {
             spriteBatch.Draw(BackgroundTexture, Bounds, Color.White);
         }
+        // public void DrawBackground(SpriteBatch spriteBatch,Color tint)
+        // {
+        //     spriteBatch.Draw(BackgroundTexture, Bounds, tint);
+        // }
 
         public bool IsOutOfBounds(Vector2 position)
         {

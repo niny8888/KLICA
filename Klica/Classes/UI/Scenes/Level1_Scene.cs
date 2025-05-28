@@ -64,6 +64,7 @@ public class Level1_Scene : IScene
 
         _physicsEngine.ClearFood();
         _peacefulEnemies.Clear();
+        _player._health = _player._maxhealth;
 
         for (int i = 0; i < _peacefulEnemyCount; i++)
         {

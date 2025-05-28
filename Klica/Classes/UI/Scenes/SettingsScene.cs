@@ -144,7 +144,6 @@ public class SettingsScene : IScene
         spriteBatch.GraphicsDevice.Clear(Color.DarkGray);
         spriteBatch.Draw(_background, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.White);
 
-
         Vector2 position = new Vector2(Game1.ScreenWidth / 2 -150, 350);
         for (int i = 0; i < _options.Length; i++)
         {
@@ -157,11 +156,9 @@ public class SettingsScene : IScene
                 3 => $"{_volume * 100:F0}%",
                 _ => ""
             };
-
             spriteBatch.DrawString(_font, $"{_options[i]}: {value}", position, color);
             position.Y += 50;
         }
-
         spriteBatch.DrawString(_font, "[Arrow Keys] to navigate, [Left/Right] to change, Right Mouse to return", new Vector2(Game1.ScreenWidth / 2 -450, 800), Color.SkyBlue);
     }
 

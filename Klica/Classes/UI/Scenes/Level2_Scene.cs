@@ -78,6 +78,8 @@ public class Level2_Scene : IScene
         _aggressiveEnemies.Add(new Enemy(new Base(1), new Eyes(1), new Mouth(1), aggressionLevel: 100));
 
         //_player._canDash = true;
+        _player._canDash = true;
+        _player._health = _player._maxhealth;
 
 
         RegisterEnemyColliders();
@@ -431,7 +433,7 @@ public class Level2_Scene : IScene
                         Console.WriteLine("Aggressive enemy bit the player!");
                         _player.TakeDamage(10);
                         Console.WriteLine("Player health: " + _player._health);
-                        _player.ApplyBounce(_player._position - enemy._position, 0.5f);
+                        _player.ApplyBounce(_player._position - enemy._position, 7f, 0.3f);
                         enemy._damageCooldown = 1.0; // Prevent rapid hits
                     }
                 }

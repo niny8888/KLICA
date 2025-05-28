@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using Microsoft.Xna.Framework.Audio;
 
-public class Level3_Scene : IScene
+public class Level4_Scene : IScene
 {
     private Game1 _game;
     private Level _level;
@@ -28,9 +28,9 @@ public class Level3_Scene : IScene
     private BitmapFont _font;
     private Rectangle _backButton;
 
-    private int _foodGoal = 10;
+    private int _foodGoal = 15;
     private int _peacefulEnemyCount = 3;
-    private int _aggressiveEnemyCount = 3;
+    private int _aggressiveEnemyCount = 4;
     private float _trailTimer = 0f;
     private List<HalfCircleTrail> _trails = new();
     private bool _gameStateWin = false;
@@ -43,7 +43,7 @@ public class Level3_Scene : IScene
 
     private double _autosaveTimer = 0;
 
-    public Level3_Scene(Game1 game)
+    public Level4_Scene(Game1 game)
     {
         _game = game;
     }
@@ -62,7 +62,7 @@ public class Level3_Scene : IScene
 
     public void Initialize()
     {
-        _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 20);
+        _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 15);
         SetupSystems();
 
         _physicsEngine.ClearFood();
@@ -138,7 +138,7 @@ public class Level3_Scene : IScene
 
     public void Update(GameTime gameTime)
     {
-        _game.CurrentLevel=3;
+        _game.CurrentLevel=4;
         _autosaveTimer += gameTime.ElapsedGameTime.TotalSeconds;
         if (_autosaveTimer >= 5.0)
         {
@@ -170,7 +170,7 @@ public class Level3_Scene : IScene
         foreach (var enemy in _aggressiveEnemies)
         {
             enemy.Update(gameTime, _physicsEngine, _player);
-            ConstrainToBounds(enemy);
+            ConstrainToBounds(enemy); 
         }
 
         _collisionManager.Update();
@@ -423,9 +423,15 @@ public class Level3_Scene : IScene
                     if (enemy._damageCooldown <= 0)
                     {
                         Console.WriteLine("Player's mouth hit aggressive enemy!");
-                        enemy.TakeDamage(20);
+                        enemy.TakeDamage(34);
                         enemy.ApplyBounce(_player.GetMouthCollider().Position - enemy.GetBaseCollider().Position, 0.5f);
                         enemy._damageCooldown = 1.0; // 1 second cooldown
+
+                        if (_player._hasStunDash && _player._isDashing)
+                        {
+                            enemy.LockState(Enemy.AggressiveEnemyState.Locked, 2.0); // Stun for 2 seconds
+                            Console.WriteLine("Enemy stunned by Stun Dash!");
+                        }
                     }
                 }
             });
@@ -438,10 +444,18 @@ public class Level3_Scene : IScene
                     if (enemy._damageCooldown <= 0)
                     {
                         Console.WriteLine("Aggressive enemy bit the player!");
-                        _player.TakeDamage(20);
-                        Console.WriteLine("Player health: " + _player._health);
-                        _player.ApplyBounce(_player._position - enemy._position, 7f, 0.3f);
-                        enemy._damageCooldown = 1.0; // Prevent rapid hits
+                        
+                        if (_player._hasStunDash && _player._isDashing)
+                        {
+                            enemy.LockState(Enemy.AggressiveEnemyState.Locked, 2.0); // Stun for 2 seconds
+                            Console.WriteLine("Enemy stunned by Stun Dash!");
+                        }
+                        else{
+                            _player.TakeDamage(20);
+                            Console.WriteLine("Player health: " + _player._health);
+                             _player.ApplyBounce(_player._position - enemy._position, 7f, 0.3f);
+                            enemy._damageCooldown = 1.0; // Prevent rapid hits
+                        }
                     }
                 }
             });

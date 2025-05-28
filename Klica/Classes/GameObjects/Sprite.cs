@@ -45,6 +45,21 @@ namespace Klica.Classes
                 0f
             );
         }
+        public void Draw(SpriteBatch spriteBatch, Color overrideTint)
+        {   
+            spriteBatch.Draw(
+                _texture,
+                _position,
+                _sourceRectangle,
+                overrideTint,
+                AdjustedRotation,
+                _origin,
+                _scale,
+                SpriteEffects.None,
+                0f
+            );
+        }
+
         public Sprite Clone()
         {
             return new Sprite(

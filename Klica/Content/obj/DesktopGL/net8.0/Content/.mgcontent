@@ -4,53 +4,53 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00001.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00002.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00003.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00004.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00005.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00006.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00007.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00008.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00009.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00010.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00011.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00012.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00013.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00014.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00015.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00016.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00017.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00018.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00019.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00020.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00021.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00022.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00023.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00024.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00025.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../settings_BG.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_1.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_2.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_3.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_4.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bg_0000_bg3.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/howtoplay_BG.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/intro.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/lose.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/menu_BG.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/menu_buttons.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/PerlinNoise.fx</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_dmg.mp3</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_eat_food.mp3</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_menu.wav</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpritesPNG1_fixed.png</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</File>
-    <File>C:/Users/ninyp/Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/win.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00001.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00002.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00003.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00004.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00005.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00006.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00007.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00008.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00009.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00010.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00011.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00012.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00013.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00014.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00015.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00016.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00017.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00018.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00019.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00020.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00021.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00022.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00023.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00024.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00025.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../settings_BG.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_1.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_2.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_3.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_4.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bg_0000_bg3.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/howtoplay_BG.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/intro.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/lose.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/menu_BG.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/menu_buttons.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/PerlinNoise.fx</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_dmg.mp3</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_eat_food.mp3</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_menu.wav</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpritesPNG1_fixed.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/WaterFlow.fx</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/win.png</File>
   </SourceFiles>
   <DestFiles>
     <File>00001.png</File>

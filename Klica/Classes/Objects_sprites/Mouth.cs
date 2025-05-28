@@ -226,6 +226,18 @@ namespace Klica.Classes.Objects_sprites
                 _rightMouth.Draw(spriteBatch);
             }
         }
+        public void Draw(SpriteBatch _spriteBatch, Color overrideTint)
+        {
+            if (isSingular)
+            {
+                _oneMouth.Draw(_spriteBatch, overrideTint);
+            }
+            else
+            {
+                _leftMouth.Draw(_spriteBatch, overrideTint);
+                _rightMouth.Draw(_spriteBatch, overrideTint);
+            }
+        }
         public void Open()
         {
             _isOpening = true;

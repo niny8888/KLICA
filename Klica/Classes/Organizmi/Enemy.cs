@@ -8,7 +8,15 @@ namespace Klica.Classes.Organizmi
 {
     public class Enemy : OrganismBuilder
     {
-        public enum AggressiveEnemyState { Idle, ChasingFood, ChasingPlayer, Dying }
+        public enum AggressiveEnemyState
+        {
+            Idle,
+            ChasingFood,
+            ChasingPlayer,
+            Dying,
+            Locked
+        }
+
         private AggressiveEnemyState _currentState;
 
         private Vector2 _velocity;
@@ -32,7 +40,22 @@ namespace Klica.Classes.Organizmi
         private double _deathTimer = 1.0;
         private float _deathRotation = 0f;
         private double _chaseTimer = 0;
-        private double _maxChaseTime = 10.0; // 10 seconds
+        private double _maxChaseTime = 5.0; // 5 seconds
+
+        //slow
+        private float _originalSpeed;
+        private float _slowTimer = 0f;
+        private bool _isSlowed = false;
+
+        private bool _wasBounced = false;
+
+        //SUS
+        private float _suspicionTimer = 0f;
+        private bool _playerSpottedOnce = false;
+        private const float _suspicionCheckTime = 5f;
+        private const float _suspicionRange = 200f;
+
+
 
 
         public Enemy(Base baseSprite, Eyes eye, Mouth mouth, int aggressionLevel)
@@ -45,6 +68,8 @@ namespace Klica.Classes.Organizmi
             _speed = 0.8f;
             _targetPosition = _position;
             _health = 100;
+            _originalSpeed = _speed; 
+
 
             _organism_base.SetPosition(_position);
             _organism_mouth.SetPosition(_organism_base._position_mouth, 0, 0);
@@ -57,6 +82,17 @@ namespace Klica.Classes.Organizmi
         public void Update(GameTime gameTime, PhysicsEngine physicsEngine, Player player)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_isSlowed)
+            {
+                _slowTimer -= dt;
+                if (_slowTimer <= 0f)
+                {
+                    _isSlowed = false;
+                    _speed = _originalSpeed;
+                    Console.WriteLine("Enemy speed restored.");
+                }
+            }
+
             if (_damageCooldown > 0) _damageCooldown -= dt;
 
             if (_health <= 0 && _currentState != AggressiveEnemyState.Dying)
@@ -72,12 +108,27 @@ namespace Klica.Classes.Organizmi
                 _deathRotation += (float)(Math.PI * dt * 4);
                 _organism_base.SetRotation(_deathRotation);
 
+                if (player.HasTrait(EvolutionTrait.FrenzyMode))
+                {
+                    player.TriggerFrenzy();
+                }
+
                 if (_deathTimer <= 0 && !_hasDroppedFood)
                 {
-                    physicsEngine.AddFood(new Food(_position, new Vector2(0.5f, 0.5f), 1f));
-                    physicsEngine.AddFood(new Food(_position + new Vector2(10, 10), new Vector2(-0.5f, -0.5f), 1f));
+                    int foodDropCount = player.HasTrait(EvolutionTrait.FeederMode) ? 4 : 2;
+
+                    for (int i = 0; i < foodDropCount; i++)
+                    {
+                        Vector2 offset = new Vector2(_random.Next(-10, 10), _random.Next(-10, 10));
+                        Vector2 dir = Vector2.Normalize(offset + new Vector2(1, 1));
+                        physicsEngine.AddFood(new Food(_position + offset, dir, 1f));
+                    }
+
                     _hasDroppedFood = true;
                 }
+                
+
+
                 return;
             }
 
@@ -86,13 +137,14 @@ namespace Klica.Classes.Organizmi
                 _stateLockTimer -= dt;
                 if (_stateLockTimer > 0) return;
                 _isStateLocked = false;
+                
             }
 
             Vector2 movementDirection = Vector2.Zero;
             switch (_currentState)
             {
                 case AggressiveEnemyState.Idle:
-                    movementDirection = UpdateIdleState(player, physicsEngine._foodItems.ToArray());
+                    movementDirection = UpdateIdleState(player, physicsEngine._foodItems.ToArray(),dt);
                     break;
                 case AggressiveEnemyState.ChasingFood:
                     movementDirection = UpdateChasingFoodState(physicsEngine._foodItems.ToArray());
@@ -106,6 +158,13 @@ namespace Klica.Classes.Organizmi
                     }
                     movementDirection = player._position - _position;
                     break;
+                case AggressiveEnemyState.Locked:
+                    _velocity = Vector2.Zero;
+                    if (_stateLockTimer <= 0)
+                    {
+                        _currentState = AggressiveEnemyState.Idle;
+                    }
+                    break;
 
             }
 
@@ -115,9 +174,13 @@ namespace Klica.Classes.Organizmi
                 _velocity += steering;
             }
 
-            _velocity *= 0.95f;
-            if (_velocity.Length() > _speed)
-                _velocity = Vector2.Normalize(_velocity) * _speed;
+            if (!_wasBounced)
+            {
+                _velocity *= 0.95f;
+                if (_velocity.Length() > _speed)
+                    _velocity = Vector2.Normalize(_velocity) * _speed;
+            }
+            _wasBounced = false; // reset
 
             _physics.Update(_velocity);
             UpdateOrganism(gameTime);
@@ -126,19 +189,38 @@ namespace Klica.Classes.Organizmi
             _mouthCollider.Position = _organism_base._position_mouth;
         }
 
-        private Vector2 UpdateIdleState(Player player, Food[] foods)
+        private Vector2 UpdateIdleState(Player player, Food[] foods, float dt)
         {
             if (_random.NextDouble() < 0.02)
                 _targetPosition = GetRandomTargetPosition();
 
-            if (Vector2.Distance(_position, player._position) < 200f && _random.Next(100) < _aggressionLevel)
+            float distanceToPlayer = Vector2.Distance(_position, player._position);
+
+            if (distanceToPlayer < _suspicionRange)
             {
-                if (_random.NextDouble() < 0.02) // 2% chance per frame = ~0.3s delay
+                if (!_playerSpottedOnce)
                 {
-                    _currentState = AggressiveEnemyState.ChasingPlayer;
-                    _chaseTimer = 0;
+                    _playerSpottedOnce = true;
+                    _suspicionTimer = _suspicionCheckTime;
+                }
+                else
+                {
+                    _suspicionTimer -= dt;
+                    if (_suspicionTimer <= 0f)
+                    {
+                        _currentState = AggressiveEnemyState.ChasingPlayer;
+                        _chaseTimer = 0;
+                        _playerSpottedOnce = false; // reset suspicion
+                    }
                 }
             }
+            else
+            {
+                // Reset suspicion if player left the area
+                _playerSpottedOnce = false;
+                _suspicionTimer = 0f;
+            }
+
 
 
             if (IsFoodInRange(foods, 50f))
@@ -222,7 +304,12 @@ namespace Klica.Classes.Organizmi
 
         public void ApplyBounce(Vector2 direction, float strength)
         {
-            _velocity += direction * strength;
+            if (direction != Vector2.Zero)
+            {
+                direction.Normalize();
+                _velocity += direction * strength;
+                _wasBounced = true;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -245,6 +332,17 @@ namespace Klica.Classes.Organizmi
             spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, barWidth, barHeight), Color.Gray);
             spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, (int)(barWidth * healthPercent), barHeight), Color.Red);
         }
+        public void ApplySlow(float duration)
+        {
+            if (!_isSlowed)
+            {
+                _isSlowed = true;
+                _speed *= 0.4f; // slow to 40% of normal speed
+                _slowTimer = duration;
+                Console.WriteLine("Enemy slowed!");
+            }
+        }
+
 
         public Vector2 Position => _position;
         public int Health => _health;

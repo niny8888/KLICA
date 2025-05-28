@@ -57,6 +57,7 @@ public class CollisionManager
                 _player.ApplyBounce(direction, bounceStrength);
                 _enemy.ApplyBounce(-direction, bounceStrength);
                 _enemy.TakeDamage(10);
+                
     }
 
     public void HandleEnemyMouthWithPlayerBase(Player _player, Enemy _enemy){

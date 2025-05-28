@@ -38,6 +38,12 @@ namespace Klica.Classes.Organizmi
         private float _deathRotation = 0f;
         public double _damageCooldown = 0;
 
+        //slow
+        private float _originalSpeed;
+        private float _slowTimer = 0f;
+        private bool _isSlowed = false;
+
+
 
         public PeacefulEnemy(Base baseSprite, Eyes eye, Mouth mouth)
             : base(baseSprite, eye, mouth, null)
@@ -48,6 +54,7 @@ namespace Klica.Classes.Organizmi
             _speed = 0.4f;
             _targetPosition = _position;
             _health = 100;
+            _originalSpeed = _speed; 
 
             _organism_base.SetPosition(_position);
             _organism_mouth.SetPosition(_organism_base._position_mouth, 0, 0);
@@ -60,6 +67,19 @@ namespace Klica.Classes.Organizmi
         public void Update(GameTime gameTime, List<PeacefulEnemy> peacefulEnemies, PhysicsEngine physicsEngine, Player player, List<Enemy> enemies)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
+            if (_isSlowed)
+            {
+                _slowTimer -= dt;
+                if (_slowTimer <= 0f)
+                {
+                    _isSlowed = false;
+                    _speed = _originalSpeed;
+                    Console.WriteLine("Enemy speed restored.");
+                }
+            }
+            
+            
             if (_damageCooldown > 0)
                 _damageCooldown -= dt;
 
@@ -69,12 +89,25 @@ namespace Klica.Classes.Organizmi
                 _deathRotation += (float)(Math.PI * dt * 4);
                 _organism_base.SetRotation(_deathRotation);
                 
+                if (player.HasTrait(EvolutionTrait.FrenzyMode))
+                {
+                    player.TriggerFrenzy();
+                }
+                
                 if (_deathTimer <= 0 && !_hasDroppedFood)
                 {
-                    physicsEngine.AddFood(new Food(_position, new Vector2(0.5f, 0.5f), 1f));
-                    physicsEngine.AddFood(new Food(_position + new Vector2(10, 10), new Vector2(-0.5f, -0.5f), 1f));
+                    int foodDropCount = player.HasTrait(EvolutionTrait.FeederMode) ? 4 : 2;
+
+                    for (int i = 0; i < foodDropCount; i++)
+                    {
+                        Vector2 offset = new Vector2(_random.Next(-10, 10), _random.Next(-10, 10));
+                        Vector2 dir = Vector2.Normalize(offset + new Vector2(1, 1));
+                        physicsEngine.AddFood(new Food(_position + offset, dir, 1f));
+                    }
+
                     _hasDroppedFood = true;
                 }
+
                 return;
             }
 
@@ -300,6 +333,16 @@ namespace Klica.Classes.Organizmi
             _organism_base.SetPosition(pos);
             _baseCollider.Position = pos;
             _mouthCollider.Position = _organism_base._position_mouth;
+        }
+        public void ApplySlow(float duration)
+        {
+            if (!_isSlowed)
+            {
+                _isSlowed = true;
+                _speed *= 0.4f; // slow to 40% of normal speed
+                _slowTimer = duration;
+                Console.WriteLine("Enemy slowed!");
+            }
         }
 
 
