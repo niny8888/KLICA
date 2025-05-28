@@ -148,9 +148,13 @@ public class MenuScene : IScene
                 if (_playButton.Contains(mouseState.Position))
                 {
                     sound_menu_click.Play();
-                    var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
-                    level1.LoadFromSave();
-                    SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
+                    var level1Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
+                    level1Intro.SetLevelId(1); // Set level ID for Level 1 Intro
+                    SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
+                    
+                    // var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
+                    // level1.LoadFromSave();
+                    // SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
                 }
 
                 else if (_howToPlayButton.Contains(mouseState.Position))
@@ -166,15 +170,17 @@ public class MenuScene : IScene
                 else if (_newGameButton.Contains(mouseState.Position))
                 {
                     sound_menu_click.Play();
-                    SaveManager.Reset(); // Clear old save data
-                    var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
-                    level1.Initialize();  // Setup new game state (spawns food/enemies/player)
-                    level1._gameScore=0;
-                    level1.SaveGameState(); // Save after setup so positions are included
-                    SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
+
+                    var level1Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
+                    SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
+
+                    // SaveManager.Reset(); // Clear old save
+                    // var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
+                    // level1.Initialize();  
+                    // level1._gameScore=0;
+                    // level1.SaveGameState(); // Save after setup so positions are included
+                    // SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
                 }
-
-
             }
         }
         else if (mouseState.RightButton == ButtonState.Pressed)

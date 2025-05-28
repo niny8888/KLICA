@@ -69,7 +69,7 @@ public class Game1 : Game
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level5, new Level5_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level6, new Level6_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.EvolutionScene, new EvolutionScene(this));
-
+        SceneManager.Instance.AddScene(SceneManager.SceneType.Level1Intro, new Level1IntroScene(this));
 
         // Set the initial scene
         SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);

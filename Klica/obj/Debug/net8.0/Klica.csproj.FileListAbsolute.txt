@@ -159,3 +159,6 @@ c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\
 c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\settings_BG.xnb
 c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\SpritesPNG1_fixed.xnb
 c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\win.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\controls.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\food_chain1.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\food_chain2.xnb
