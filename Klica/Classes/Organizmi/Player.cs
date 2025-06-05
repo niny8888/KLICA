@@ -371,8 +371,14 @@ namespace Klica.Classes.Objects_sprites
             _lastDamageTime = 0f;
 
             if (_hasShellArmor)
-                damage = (int)(damage * 0.5f);
-
+            {
+                if(damage == 1){//toxic zone
+                    damage = 1;
+                }else{
+                    damage = (int)(damage * 0.5f);
+                }
+                
+            }
             _health -= damage;
             if (_health <= 0)
             {

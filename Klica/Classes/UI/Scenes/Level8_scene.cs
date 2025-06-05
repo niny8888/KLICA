@@ -57,6 +57,8 @@ public class Level8_Scene : IScene
     private Texture2D _toxicTexture;
     private Texture2D _particleTexture;
 
+    private Camera2D _camera;
+
     public Level8_Scene(Game1 game)
     {
         _game = game;
@@ -103,6 +105,7 @@ public class Level8_Scene : IScene
         _player._dashCharges = _player._maxDashCharges;
 
 
+        _camera = new Camera2D(Game1.ScreenWidth, Game1.ScreenHeight, 1920, 1080);
         RegisterEnemyColliders();
         _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
     }
@@ -149,11 +152,13 @@ public class Level8_Scene : IScene
 
         _toxicTexture = content.Load<Texture2D>("toxic_blob");
         _particleTexture = TextureGenerator.CreateCircleTexture(_game.GraphicsDevice, 12, Color.White); // or load a PNG
-        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(800, 600), 100f));
-        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1400, 200), 250f));
-        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1500, 700), 120f));
-        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1200, 400), 90f));
-        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(600, 800), 300f));
+        
+        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(100, 300), 200f));   // Top-left zone
+        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1520, 280), 100f));  // Top-right zone
+        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(560, 540), 120f));   // Center zone
+        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(600, 850), 140f));   // Bottom-left zone
+        _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1450, 800), 280f));  // Bottom-right zone
+
     }
 
 
@@ -213,6 +218,7 @@ public class Level8_Scene : IScene
             zone.Update(gameTime, _player);
 
 
+        _camera.Follow(_player._position);
         //perlin
         _shaderTime.X += (float)gameTime.ElapsedGameTime.TotalSeconds;
         _shaderTime.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 0.5f;
@@ -235,11 +241,12 @@ public class Level8_Scene : IScene
             return;
         }
         try { spriteBatch.End(); } catch { }
-        spriteBatch.Begin(effect: _waterFlowEffect, samplerState: SamplerState.LinearWrap);
-        _level.DrawBackground(spriteBatch);
-        spriteBatch.End();
+        // spriteBatch.Begin(effect: _waterFlowEffect, samplerState: SamplerState.LinearWrap);
+        // 
+        // spriteBatch.End();
 
-        spriteBatch.Begin();
+        spriteBatch.Begin(transformMatrix: _camera.Transform);
+        _level.DrawBackground(spriteBatch);
         _physicsEngine.Draw(spriteBatch);
 
         foreach (var zone in _toxicZones)
@@ -265,12 +272,7 @@ public class Level8_Scene : IScene
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
 
         //DrawButton(spriteBatch, "Back to Menu", _backButton);
-        DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal);
-
-
-
-        if (_gameStateWin || _gameStateLost)
-            DrawGameOverOverlay(spriteBatch);
+       
 
         spriteBatch.End();
 
@@ -281,18 +283,9 @@ public class Level8_Scene : IScene
             Color.White
         );
 
-        //GUMB ZA NAZAJ
-        // spriteBatch.End();
-
-        // spriteBatch.Begin();
-        // DrawButton(spriteBatch, "Back to Menu", _backButton);
-        // _hud.Draw(spriteBatch, _player, _enemies);
-        // _hud.DisplayScore(spriteBatch, _gameScore);
-
-        // if (_gameStateWin || _gameStateLost)
-        // {
-        //     DrawGameOverOverlay(spriteBatch);
-        // }
+        spriteBatch.End();
+        spriteBatch.Begin();
+        DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal);
 
 
     }

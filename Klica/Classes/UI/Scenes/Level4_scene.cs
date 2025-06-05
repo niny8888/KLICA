@@ -91,6 +91,7 @@ public class Level4_Scene : IScene
         _player._health = _player._maxhealth;
         _player._dashCharges = _player._maxDashCharges;
 
+        _camera = new Camera2D(Game1.ScreenWidth, Game1.ScreenHeight, 1920, 1080);
 
         RegisterEnemyColliders();
         _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
@@ -190,6 +191,7 @@ public class Level4_Scene : IScene
         {
             SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
         }
+        _camera.Follow(_player._position);
 
         HandleInput();
     }
@@ -204,11 +206,9 @@ public class Level4_Scene : IScene
             return;
         }
         try { spriteBatch.End(); } catch { }
-        spriteBatch.Begin();
+        
+        spriteBatch.Begin(transformMatrix: _camera.Transform);
         _level.DrawBackground(spriteBatch);
-        spriteBatch.End();
-
-        spriteBatch.Begin();
         _physicsEngine.Draw(spriteBatch);
 
         foreach (var trail in _trails)
@@ -229,14 +229,9 @@ public class Level4_Scene : IScene
         _player.DrawHealthBar(spriteBatch);
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
 
-        // DrawButton(spriteBatch, "Back to Menu", _backButton);
+        spriteBatch.End();
+        spriteBatch.Begin();
         DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal);
-
-
-
-        if (_gameStateWin || _gameStateLost)
-            DrawGameOverOverlay(spriteBatch);
-
 
     }
 

@@ -41,16 +41,19 @@ namespace Klica.Classes.Environment
         public void Update(GameTime gameTime, Player player)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
+            Console.WriteLine($"ToxicZone Update: dt={dt}, playerPos={player._position}, zonePos={_position}, radius={_radius}");
+
             if (Vector2.Distance(player._position, _position) < _radius)
             {
                 float damageThisFrame = _damagePerSecond * dt;
                 _damageBuffer += damageThisFrame;
-                
+                Console.WriteLine($"Player in toxic zone! Accumulated Damage Buffer: {_damageBuffer}");
+
                 if (_damageBuffer >= 1f)
                 {
                     int wholeDamage = (int)_damageBuffer;
                     player.TakeDamage(wholeDamage);
+                    Console.WriteLine($"--> Damage applied: {wholeDamage}, HP now: {player._health}");
                     _damageBuffer -= wholeDamage;
                 }
             }

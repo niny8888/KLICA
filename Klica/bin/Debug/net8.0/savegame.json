@@ -1,7 +1,9 @@
 {
   "Traits": [
     "Dash",
-    "ExtraDash"
+    "ExtraDash",
+    "SlowTouch",
+    "ShellArmor"
   ],
-  "LastCompletedLevel": 7
+  "LastCompletedLevel": 8
 }
