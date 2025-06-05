@@ -57,7 +57,8 @@ public class EvolutionScene : IScene
             {
                 ApplyTrait(_availableTraits[i].Trait);
 
-                switch(_currentLevel){
+                switch (_currentLevel)
+                {
                     case 1:
                         var level2 = (Level2_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level2);
                         level2.Initialize();
@@ -82,6 +83,16 @@ public class EvolutionScene : IScene
                         var level6 = (Level6_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level6);
                         level6.Initialize();
                         SceneManager.Instance.SetScene(SceneManager.SceneType.Level6);
+                        break;
+                    case 6:
+                        var level7 = (Level7_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level7);
+                        level7.Initialize();
+                        SceneManager.Instance.SetScene(SceneManager.SceneType.Level7);
+                        break;
+                    case 7:
+                        var level8 = (Level8_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level8);
+                        level8.Initialize();
+                        SceneManager.Instance.SetScene(SceneManager.SceneType.Level8);
                         break;
                 }
                 
@@ -140,6 +151,10 @@ public class EvolutionScene : IScene
                 break;
             case 6:
                 _availableTraits.Add((EvolutionTrait.TraitMemory, "Trait Memory - Random traits you skipped"));
+                break;
+            case 7: //temp
+                _availableTraits.Add((EvolutionTrait.SlowTouch, "Skin Adaptation - Slows enemies on contact"));
+                _availableTraits.Add((EvolutionTrait.FeederMode, "Feeder Mode - More food drops from kills"));
                 break;
         }
 

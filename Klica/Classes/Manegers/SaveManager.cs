@@ -1,5 +1,7 @@
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+
 
 public static class SaveManager
 {
@@ -9,9 +11,9 @@ public static class SaveManager
     {
         var options = new JsonSerializerOptions
         {
-            WriteIndented = true
+            WriteIndented = true,
+            Converters = { new JsonStringEnumConverter(), new Vector2Converter() }
         };
-        options.Converters.Add(new Vector2Converter());
 
         var json = JsonSerializer.Serialize(data, options);
         File.WriteAllText(SaveFilePath, json);
@@ -22,7 +24,10 @@ public static class SaveManager
     {
         if (!File.Exists(SaveFilePath)) return null;
 
-        var options = new JsonSerializerOptions();
+        var options = new JsonSerializerOptions
+        {
+            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase), new Vector2Converter() }
+        };
         options.Converters.Add(new Vector2Converter());
 
         var json = File.ReadAllText(SaveFilePath);

@@ -21,7 +21,7 @@ public class Level3_Scene : IScene
     private PhysicsEngine _physicsEngine;
     private CollisionManager _collisionManager;
 
-    private List<PeacefulEnemy> _peacefulEnemies { get; }= new();
+    private List<PeacefulEnemy> _peacefulEnemies { get; } = new();
     private List<Enemy> _aggressiveEnemies;
 
     private Texture2D _background, _halfCircleTexture, _buttonTexture, _winTexture, _loseTexture;
@@ -40,8 +40,11 @@ public class Level3_Scene : IScene
     private Texture2D _circleTexture;
     private MouseState _previousMouseState;
 
+    public bool _isPaused = false;
+    private Rectangle _resumeButton, _settingsButton, _mainMenuButton, _exitButton;
 
     private double _autosaveTimer = 0;
+    private Camera2D _camera;
 
     public Level3_Scene(Game1 game)
     {
@@ -82,11 +85,11 @@ public class Level3_Scene : IScene
             _aggressiveEnemies.Add(enemy);
         }
 
-        
+
         _player._canDash = true;
         _player._canDash = true;
         _player._health = _player._maxhealth;
-        _player._dashCharges=_player._maxDashCharges;
+        _player._dashCharges = _player._maxDashCharges;
 
 
         RegisterEnemyColliders();
@@ -104,7 +107,7 @@ public class Level3_Scene : IScene
 
         _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 20);
         _physicsEngine = new PhysicsEngine(_level);
-        
+
         _player = new Player(_physicsEngine);
         // Font & HUD
         _font = content.Load<BitmapFont>("Arial");
@@ -138,14 +141,14 @@ public class Level3_Scene : IScene
 
     public void Update(GameTime gameTime)
     {
-        _game.CurrentLevel=3;
-        _autosaveTimer += gameTime.ElapsedGameTime.TotalSeconds;
-        if (_autosaveTimer >= 5.0)
+        _game.CurrentLevel = 3;
+        if (_isPaused)
         {
-            Console.WriteLine("Autosaving game state...");
-            SaveGameState();
-            _autosaveTimer = 0;
+            HandlePauseMenuInput();
+            return;
         }
+        _autosaveTimer += gameTime.ElapsedGameTime.TotalSeconds;
+        
         if (_gameStateWin || _gameStateLost)
             return;
 
@@ -194,18 +197,25 @@ public class Level3_Scene : IScene
     public void Draw(SpriteBatch spriteBatch)
     {
         try { spriteBatch.End(); } catch { }
-
+        spriteBatch.Begin();
+        if (_isPaused)
+        {
+            DrawPauseMenu(spriteBatch);
+            return;
+        }
+        try { spriteBatch.End(); } catch { }
         spriteBatch.Begin();
         _level.DrawBackground(spriteBatch);
         spriteBatch.End();
 
         spriteBatch.Begin();
         _physicsEngine.Draw(spriteBatch);
-        
+
         foreach (var trail in _trails)
             trail.Draw(spriteBatch, _halfCircleTexture);
 
-        foreach (var peaceful in _peacefulEnemies){
+        foreach (var peaceful in _peacefulEnemies)
+        {
             peaceful.Draw(spriteBatch, _game.GetGameTime());
             peaceful.Draw(spriteBatch, _game.GetGameTime());
             peaceful.DrawHealthBar(spriteBatch);
@@ -219,7 +229,7 @@ public class Level3_Scene : IScene
         _player.DrawHealthBar(spriteBatch);
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
 
-        DrawButton(spriteBatch, "Back to Menu", _backButton);
+        // DrawButton(spriteBatch, "Back to Menu", _backButton);
         DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal);
 
 
@@ -227,26 +237,19 @@ public class Level3_Scene : IScene
         if (_gameStateWin || _gameStateLost)
             DrawGameOverOverlay(spriteBatch);
 
-        
+
     }
 
     private void HandleInput()
     {
         MouseState mouseState = Mouse.GetState();
 
-        if (mouseState.LeftButton == ButtonState.Pressed &&
-            _previousMouseState.LeftButton == ButtonState.Released &&
-            _backButton.Contains(mouseState.Position))
+
+        if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !_previousMouseState.Equals(Mouse.GetState()))
         {
-            SaveGameState();
-            SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
+            _isPaused = !_isPaused;
         }
 
-        if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-        {
-            SaveGameState();
-            SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
-        }
 
         _previousMouseState = mouseState;
     }
@@ -322,57 +325,53 @@ public class Level3_Scene : IScene
     }
     public void SaveGameState()
     {
-        var data = new GameData
-        {
-            Score = _gameScore,
-            PlayerHealth = _player._health,
-            PlayerPosition = _player._position,
-            FoodPositions = _physicsEngine.GetAllFoodPositions(),
-            EnemyPositions = _peacefulEnemies.Select(e => e.Position).ToList(),
-            EnemyHealths = _peacefulEnemies.Select(e => e.Health).ToList()
-        };
+        var data = SaveManager.Load() ?? new GameData();
+
+        data.LastCompletedLevel = 3; // This scene = Level 1
+        data.Traits = _player.ActiveTraits; // Replace with however you store selected traits
+
         SaveManager.Save(data);
     }
-    public void LoadFromSave()
-    {
-        var data = SaveManager.Load();
-        if (data == null)
-        {
-            Initialize(); // fallback
-            return;
-        }
+    // public void LoadFromSave()
+    // {
+    //     var data = SaveManager.Load();
+    //     if (data == null)
+    //     {
+    //         Initialize(); // fallback
+    //         return;
+    //     }
 
-        // Setup level and systems without overwriting player/enemy states
-        _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 20);
-        SetupSystems();
+    //     // Setup level and systems without overwriting player/enemy states
+    //     _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 20);
+    //     SetupSystems();
 
-        _gameScore = data.Score;
-        _player._health = data.PlayerHealth;
-        // _player._position = data.PlayerPosition;
-        _player.SetPosition(data.PlayerPosition);
+    //     _gameScore = data.Score;
+    //     _player._health = data.PlayerHealth;
+    //     // _player._position = data.PlayerPosition;
+    //     _player.SetPosition(data.PlayerPosition);
 
-        _physicsEngine.ClearFood();
-        Random rand = new Random();
-        foreach (var pos in data.FoodPositions)
-        {
-            float angle = (float)(rand.NextDouble() * Math.PI * 2);
-            Vector2 dir = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-            float speed = rand.Next(20, 50);
+    //     _physicsEngine.ClearFood();
+    //     Random rand = new Random();
+    //     foreach (var pos in data.FoodPositions)
+    //     {
+    //         float angle = (float)(rand.NextDouble() * Math.PI * 2);
+    //         Vector2 dir = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+    //         float speed = rand.Next(20, 50);
 
-            _physicsEngine.AddFood(new Food(pos, dir, speed));
-        }
+    //         _physicsEngine.AddFood(new Food(pos, dir, speed));
+    //     }
 
-        _peacefulEnemies.Clear();
-        for (int i = 0; i < data.EnemyPositions.Count; i++)
-        {
-            var enemy = new PeacefulEnemy(new Base(2), new Eyes(2), new Mouth(2));
-            enemy.SetPosition(data.EnemyPositions[i]);
-            enemy.SetHealth(data.EnemyHealths[i]);
-            _peacefulEnemies.Add(enemy);
-        }
+    //     _peacefulEnemies.Clear();
+    //     for (int i = 0; i < data.EnemyPositions.Count; i++)
+    //     {
+    //         var enemy = new PeacefulEnemy(new Base(2), new Eyes(2), new Mouth(2));
+    //         enemy.SetPosition(data.EnemyPositions[i]);
+    //         enemy.SetHealth(data.EnemyHealths[i]);
+    //         _peacefulEnemies.Add(enemy);
+    //     }
 
-        RegisterEnemyColliders();
-    }
+    //     RegisterEnemyColliders();
+    // }
 
     private void ConstrainToBounds(Enemy enemy)
     {
@@ -447,6 +446,65 @@ public class Level3_Scene : IScene
             });
         }
 
+    }
+    private void DrawPauseMenu(SpriteBatch spriteBatch)
+    {
+        spriteBatch.End();
+        spriteBatch.Begin();
+
+        // Grey overlay
+        spriteBatch.Draw(_buttonTexture, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.SkyBlue);
+
+        int boxWidth = 300, boxHeight = 300;
+        int boxX = (Game1.ScreenWidth - boxWidth) / 2;
+        int boxY = (Game1.ScreenHeight - boxHeight) / 2;
+
+        Rectangle box = new Rectangle(boxX, boxY, boxWidth, boxHeight);
+        spriteBatch.Draw(_buttonTexture, box, Color.White);
+
+        int buttonHeight = 50;
+        int padding = 10;
+
+        _resumeButton = new Rectangle(box.X + 25, box.Y + 25, box.Width - 50, buttonHeight);
+        _settingsButton = new Rectangle(box.X + 25, _resumeButton.Bottom + padding, box.Width - 50, buttonHeight);
+        _mainMenuButton = new Rectangle(box.X + 25, _settingsButton.Bottom + padding, box.Width - 50, buttonHeight);
+        _exitButton = new Rectangle(box.X + 25, _mainMenuButton.Bottom + padding, box.Width - 50, buttonHeight);
+
+        DrawButton(spriteBatch, "Resume", _resumeButton);
+        DrawButton(spriteBatch, "Settings", _settingsButton);
+        DrawButton(spriteBatch, "Main Menu", _mainMenuButton);
+        DrawButton(spriteBatch, "Exit", _exitButton);
+
+        
+    }
+    private void HandlePauseMenuInput()
+    {
+        MouseState mouseState = Mouse.GetState();
+
+        if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+        {
+            if (_resumeButton.Contains(mouseState.Position))
+                _isPaused = false;
+            else if (_settingsButton.Contains(mouseState.Position))
+            {
+                var settings = (SettingsScene)SceneManager.Instance.GetScene(SceneManager.SceneType.SettingsScene);
+                settings.SetCaller(SceneManager.SceneType.Level3);
+                SceneManager.Instance.SetScene(SceneManager.SceneType.SettingsScene);
+
+                _isPaused = false;
+            }
+            else if (_mainMenuButton.Contains(mouseState.Position))
+            {
+                SaveGameState();
+                SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
+            }
+            else if (_exitButton.Contains(mouseState.Position))
+            {
+                _game.Exit(); // close the game
+            }
+        }
+
+        _previousMouseState = mouseState;
     }
 
 

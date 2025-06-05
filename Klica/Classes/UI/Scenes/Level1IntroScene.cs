@@ -48,13 +48,15 @@ public class Level1IntroScene : IScene
             {
                 case 1:
                     var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
-                    level1.LoadFromSave();
+                    level1.Initialize();
+                    level1._isPaused = false;
                     SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
                     break;
 
                 case 2:
                     var level2 = (Level2_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level2);
-                    level2.LoadFromSave();
+                    level2.Initialize();
+                    level2._isPaused = false;
                     SceneManager.Instance.SetScene(SceneManager.SceneType.Level2);
                     break;
 

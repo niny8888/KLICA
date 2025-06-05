@@ -55,6 +55,10 @@ namespace Klica.Classes.Organizmi
         private const float _suspicionCheckTime = 5f;
         private const float _suspicionRange = 200f;
 
+        //Drunkards
+        private float _drunkAngle;
+        private float _drunkTurnRate = 0.2f;
+        private float _drunkSpeed = 0.5f;
 
 
 
@@ -68,7 +72,7 @@ namespace Klica.Classes.Organizmi
             _speed = 0.8f;
             _targetPosition = _position;
             _health = 100;
-            _originalSpeed = _speed; 
+            _originalSpeed = _speed;
 
 
             _organism_base.SetPosition(_position);
@@ -77,6 +81,8 @@ namespace Klica.Classes.Organizmi
 
             _baseCollider = new Collider(_position, baseSprite.Width / 2f, this);
             _mouthCollider = new Collider(baseSprite._position_mouth, 10f, this);
+            _drunkAngle = (float)(_random.NextDouble() * MathHelper.TwoPi);
+
         }
 
         public void Update(GameTime gameTime, PhysicsEngine physicsEngine, Player player)
@@ -165,8 +171,7 @@ namespace Klica.Classes.Organizmi
                         _currentState = AggressiveEnemyState.Idle;
                     }
                     break;
-
-            }
+            } 
 
             if (movementDirection != Vector2.Zero)
             {
@@ -185,15 +190,45 @@ namespace Klica.Classes.Organizmi
             _physics.Update(_velocity);
             UpdateOrganism(gameTime);
             _position = _organism_base.GetPosition();
+            // Clamp and bounce
+            float halfWidth = _organism_base.Width / 2f;
+            float halfHeight = _organism_base.Height / 2f;
+
+            Vector2 clampedPos = _position;
+            bool hitWall = false;
+
+            if (_position.X < halfWidth || _position.X > 1920 - halfWidth)
+            {
+                _drunkAngle = MathHelper.Pi - _drunkAngle;
+                hitWall = true;
+            }
+            if (_position.Y < halfHeight || _position.Y > 1080 - halfHeight)
+            {
+                _drunkAngle = -_drunkAngle;
+                hitWall = true;
+            }
+            if (hitWall)
+                _drunkAngle += (float)(_random.NextDouble() - 0.5f) * 0.3f;
+
+            clampedPos.X = MathHelper.Clamp(clampedPos.X, halfWidth, 1920 - halfWidth);
+            clampedPos.Y = MathHelper.Clamp(clampedPos.Y, halfHeight, 1080 - halfHeight);
+
+            _position = clampedPos;
+            _physics._positon = clampedPos;
+            _organism_base.SetPosition(clampedPos);
+
             _baseCollider.Position = _position;
             _mouthCollider.Position = _organism_base._position_mouth;
         }
 
         private Vector2 UpdateIdleState(Player player, Food[] foods, float dt)
         {
-            if (_random.NextDouble() < 0.02)
-                _targetPosition = GetRandomTargetPosition();
+            // Drunkard wandering
+            _drunkAngle += (float)(_random.NextDouble() - 0.5f) * _drunkTurnRate;
+            Vector2 direction = new Vector2((float)Math.Cos(_drunkAngle), (float)Math.Sin(_drunkAngle));
+            _targetPosition = _position + direction * 50f;
 
+            // Maintain food and player detection logic below
             float distanceToPlayer = Vector2.Distance(_position, player._position);
 
             if (distanceToPlayer < _suspicionRange)
@@ -210,23 +245,21 @@ namespace Klica.Classes.Organizmi
                     {
                         _currentState = AggressiveEnemyState.ChasingPlayer;
                         _chaseTimer = 0;
-                        _playerSpottedOnce = false; // reset suspicion
+                        _playerSpottedOnce = false;
                     }
                 }
             }
             else
             {
-                // Reset suspicion if player left the area
                 _playerSpottedOnce = false;
                 _suspicionTimer = 0f;
             }
 
-
-
             if (IsFoodInRange(foods, 50f))
                 _currentState = AggressiveEnemyState.ChasingFood;
 
-            return _targetPosition - _position;
+            return direction * _drunkSpeed;
+
         }
 
         private Vector2 UpdateChasingFoodState(Food[] foods)

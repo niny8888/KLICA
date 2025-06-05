@@ -162,3 +162,5 @@ c:\Users\ninyp\Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\controls.xnb
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\food_chain1.xnb
 d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\food_chain2.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\toxic_blob.xnb
+d:\My Documents\faks\3.letnik\1.semester\TINR\TINR2024\Klica\bin\Debug\net8.0\Content\ToxicBG.xnb

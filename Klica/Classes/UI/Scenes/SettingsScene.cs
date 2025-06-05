@@ -29,11 +29,13 @@ public class SettingsScene : IScene
     private MouseState _previousMouseState;
     private float _volume = 1.0f;
     private float _inputCooldown = 0f;
-    private const float InputDelay = 0.2f; 
+    private const float InputDelay = 0.2f;
+    private SceneManager.SceneType _callerScene;
 
-    public SettingsScene(Game1 game)
+    public SettingsScene(Game1 game, SceneManager.SceneType caller)
     {
         _game = game;
+        _callerScene = caller;
     }
 
     public void Initialize()
@@ -132,9 +134,9 @@ public class SettingsScene : IScene
         // Return to menu
         if (_previousMouseState.RightButton == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released)
         {
-            SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
-            SceneManager.Instance.LoadContent(_game.Content); // Ensure content is reloaded
+            SceneManager.Instance.SetScene(_callerScene);
         }
+
 
         _previousMouseState = mouseState;
     }
@@ -144,7 +146,7 @@ public class SettingsScene : IScene
         spriteBatch.GraphicsDevice.Clear(Color.DarkGray);
         spriteBatch.Draw(_background, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.White);
 
-        Vector2 position = new Vector2(Game1.ScreenWidth / 2 -150, 350);
+        Vector2 position = new Vector2(Game1.ScreenWidth / 2 - 150, 350);
         for (int i = 0; i < _options.Length; i++)
         {
             Color color = (i == _selectedOption) ? Color.DeepSkyBlue : Color.SkyBlue;
@@ -159,7 +161,7 @@ public class SettingsScene : IScene
             spriteBatch.DrawString(_font, $"{_options[i]}: {value}", position, color);
             position.Y += 50;
         }
-        spriteBatch.DrawString(_font, "[Arrow Keys] to navigate, [Left/Right] to change, Right Mouse to return", new Vector2(Game1.ScreenWidth / 2 -450, 800), Color.SkyBlue);
+        spriteBatch.DrawString(_font, "[Arrow Keys] to navigate, [Left/Right] to change, Right Mouse to return", new Vector2(Game1.ScreenWidth / 2 - 450, 800), Color.SkyBlue);
     }
 
     private void ApplyResolution()
@@ -168,6 +170,10 @@ public class SettingsScene : IScene
         Game1.ScreenWidth = int.Parse(parts[0]);
         Game1.ScreenHeight = int.Parse(parts[1]);
         _game.ApplyResolutionSettings();
+    }
+    public void SetCaller(SceneManager.SceneType caller)
+    {
+        _callerScene = caller;
     }
 
 }

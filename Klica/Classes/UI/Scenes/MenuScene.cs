@@ -7,6 +7,7 @@ using MonoGame.Extended.BitmapFonts;
 using Klica.Classes;
 using Klica;
 using Microsoft.Xna.Framework.Audio;
+using Klica.Classes.Objects_sprites;
 
 public class MenuScene : IScene
 {
@@ -145,17 +146,101 @@ public class MenuScene : IScene
 
             if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
             {
+                // if (_playButton.Contains(mouseState.Position))
+                // {
+                //     sound_menu_click.Play();
+                //     var level1Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
+                //     level1Intro.SetLevelId(1); // Set level ID for Level 1 Intro
+                //     SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
+
+                //     // var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
+                //     // level1.LoadFromSave();
+                //     // SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
+                // }
                 if (_playButton.Contains(mouseState.Position))
                 {
                     sound_menu_click.Play();
-                    var level1Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
-                    level1Intro.SetLevelId(1); // Set level ID for Level 1 Intro
-                    SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
-                    
-                    // var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
-                    // level1.LoadFromSave();
-                    // SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
+                    var data = SaveManager.Load();
+
+                    if (data.Traits != null && data.Traits.Count > 0)
+                    {
+                        _game.CurrentPlayer ??= new Player(null); // fallback if player not created yet
+                        _game.CurrentPlayer.LoadTraits(data.Traits);
+                    }
+
+
+
+                    int nextLevel = data.LastCompletedLevel;
+
+                    switch (nextLevel)
+                    {
+                        case 0:
+                            // If no levels completed, start with Level 1 Intro
+                            var level1Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
+                            level1Intro.SetLevelId(1); // Set level ID for Level 1 Intro
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
+                            break;
+                        case 1:
+                            var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
+                            level1.Initialize();
+                            level1._isPaused = false;
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
+                            break;
+
+                        case 2:
+                            var level2Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
+                            level2Intro.SetLevelId(2); // Set level ID for Level 1 Intro
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
+                            break;
+
+                        case 3:
+                            var level3 = (Level3_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level3);
+                            level3.Initialize();
+                            level3._isPaused = false;
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level3);
+                            break;
+
+                        case 4:
+                            var level4 = (Level4_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level4);
+                            level4._isPaused = false;
+                            level4.Initialize();
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level4);
+                            break;
+
+                        case 5:
+                            var level5 = (Level5_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level5);
+                            level5._isPaused = false;
+                            level5.Initialize();
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level5);
+                            break;
+
+                        case 6:
+                            var level6 = (Level6_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level6);
+                            level6._isPaused = false;
+                            level6.Initialize();
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level6);
+                            break;
+                        case 7: 
+                            var level7 = (Level7_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level7);
+                            level7._isPaused = false;
+                            level7.Initialize();
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level7);
+                            break;
+                        case 8:
+                            var level8 = (Level8_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level8);
+                            level8._isPaused = false;
+                            level8.Initialize();
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level8);
+                            break;
+
+                        default:
+                            // All levels completed – go to Main Menu or credits
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
+                            break;
+                    }
+
                 }
+
 
                 else if (_howToPlayButton.Contains(mouseState.Position))
                 {
@@ -165,13 +250,18 @@ public class MenuScene : IScene
                 else if (_settingsButton.Contains(mouseState.Position))
                 {
                     sound_menu_click.Play();
+                    var settings = (SettingsScene)SceneManager.Instance.GetScene(SceneManager.SceneType.SettingsScene);
+                    settings.SetCaller(SceneManager.SceneType.MainMenu);
                     SceneManager.Instance.SetScene(SceneManager.SceneType.SettingsScene);
+
                 }
                 else if (_newGameButton.Contains(mouseState.Position))
                 {
                     sound_menu_click.Play();
-
+                    var data = SaveManager.Load();
+                    data.LastCompletedLevel = 0; // Reset to level 0
                     var level1Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
+                    level1Intro.SetLevelId(1); // Set level ID for Level 1 Intro
                     SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
 
                     // SaveManager.Reset(); // Clear old save
@@ -246,10 +336,11 @@ public class MenuScene : IScene
         spriteBatch.Draw(_background, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
 
         // Draw buttons
+        DrawButton(spriteBatch, _newGameButton, _srcNewGame);
         DrawButton(spriteBatch, _playButton, _srcMenu);         // "Menu" = Play
         DrawButton(spriteBatch, _howToPlayButton, _srcHowToPlay);
         DrawButton(spriteBatch, _settingsButton, _srcSettings);
-        DrawButton(spriteBatch, _newGameButton, _srcNewGame);
+        
     }
 
 

@@ -43,6 +43,10 @@ namespace Klica.Classes.Organizmi
         private float _slowTimer = 0f;
         private bool _isSlowed = false;
 
+        /// DRUNKARD
+        private float _drunkAngle;
+        private float _drunkTurnRate = 0.2f; // How sharply direction changes
+        private float _drunkSpeed = 0.3f;
 
 
         public PeacefulEnemy(Base baseSprite, Eyes eye, Mouth mouth)
@@ -54,7 +58,7 @@ namespace Klica.Classes.Organizmi
             _speed = 0.4f;
             _targetPosition = _position;
             _health = 100;
-            _originalSpeed = _speed; 
+            _originalSpeed = _speed;
 
             _organism_base.SetPosition(_position);
             _organism_mouth.SetPosition(_organism_base._position_mouth, 0, 0);
@@ -62,6 +66,8 @@ namespace Klica.Classes.Organizmi
 
             _baseCollider = new Collider(_position, baseSprite.Width / 2f, this);
             _mouthCollider = new Collider(baseSprite._position_mouth, 10f, this);
+            _drunkAngle = (float)(_random.NextDouble() * MathHelper.TwoPi);
+            
         }
 
         public void Update(GameTime gameTime, List<PeacefulEnemy> peacefulEnemies, PhysicsEngine physicsEngine, Player player, List<Enemy> enemies)
@@ -208,21 +214,59 @@ namespace Klica.Classes.Organizmi
 
             _physics.Update(_velocity);
             UpdateOrganism(gameTime);
-            _position = _organism_base.GetPosition();
+            // Clamp position to screen bounds
+            float halfWidth = _organism_base.Width / 2f;
+            float halfHeight = _organism_base.Height / 2f;
+
+            Vector2 clampedPos = _position;
+            bool hitWall = false;
+
+            if (_position.X < halfWidth || _position.X > 1920 - halfWidth)
+            {
+                _drunkAngle = MathHelper.Pi - _drunkAngle; // Reflect angle horizontally
+                hitWall = true;
+            }
+            if (_position.Y < halfHeight || _position.Y > 1080 - halfHeight)
+            {
+                _drunkAngle = -_drunkAngle; // Reflect angle vertically
+                hitWall = true;
+            }
+
+            if (hitWall)
+            {
+                _drunkAngle += (float)(_random.NextDouble() - 0.5f) * 0.3f; // Add jitter to avoid perfect bounce loops
+            }
+
+            // Clamp the final position
+            clampedPos.X = MathHelper.Clamp(clampedPos.X, halfWidth, 1920 - halfWidth);
+            clampedPos.Y = MathHelper.Clamp(clampedPos.Y, halfHeight, 1080 - halfHeight);
+
+            _position = clampedPos;
+            _physics._positon = clampedPos;
+            _organism_base.SetPosition(clampedPos);
+
             _baseCollider.Position = _position;
             _mouthCollider.Position = _organism_base._position_mouth;
         }
 
         private Vector2 UpdateIdleState(Food[] foods)
         {
-            if (_random.NextDouble() < 0.02)
-                _targetPosition = GetRandomTargetPosition();
+            // Small random angle perturbation
+            _drunkAngle += (float)(_random.NextDouble() - 0.5f) * _drunkTurnRate;
 
+            // Get a new direction vector
+            Vector2 direction = new Vector2((float)Math.Cos(_drunkAngle), (float)Math.Sin(_drunkAngle));
+
+            // Move forward slightly
+            _targetPosition = _position + direction * 50f;
+
+            // Switch to chase if food is near
             if (IsFoodInRange(foods, 30f))
                 _currentState = PeacefulEnemyState.ChasingFood;
 
-            return _targetPosition - _position;
+            return direction * _drunkSpeed;
         }
+
 
         private Vector2 UpdateChasingFoodState(Food[] foods)
         {
@@ -257,7 +301,7 @@ namespace Klica.Classes.Organizmi
 
         private Vector2 GetRandomTargetPosition()
         {
-            return new Vector2(_random.Next(100, 1800), _random.Next(100, 1000));
+            return new Vector2(_random.Next(10, 1920), _random.Next(10, 1080));
         }
 
         private bool IsFoodInRange(IEnumerable<Food> foods, float range)

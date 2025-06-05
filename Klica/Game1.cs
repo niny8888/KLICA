@@ -61,13 +61,15 @@ public class Game1 : Game
         
         SceneManager.Instance.AddScene(SceneManager.SceneType.MainMenu, new MenuScene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Game, new GameScene(this));
-        SceneManager.Instance.AddScene(SceneManager.SceneType.SettingsScene, new SettingsScene(this));
+        SceneManager.Instance.AddScene(SceneManager.SceneType.SettingsScene, new SettingsScene(this,SceneManager.SceneType.MainMenu ));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level1, new Level1_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level2, new Level2_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level3, new Level3_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level4, new Level4_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level5, new Level5_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level6, new Level6_Scene(this));
+        SceneManager.Instance.AddScene(SceneManager.SceneType.Level7, new Level7_Scene(this));
+        SceneManager.Instance.AddScene(SceneManager.SceneType.Level8, new Level8_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.EvolutionScene, new EvolutionScene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level1Intro, new Level1IntroScene(this));
 
@@ -122,11 +124,11 @@ public class Game1 : Game
                 // Handle menu logic here (e.g., button presses, menu interactions)
                 break;
         }
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-        {
-            ((Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1))?.SaveGameState();
-            Exit();
-        }
+        // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        // {
+        //     ((Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1))?.SaveGameState();
+        //     Exit();
+        // }
             
 
         SceneManager.Instance.Update(gameTime);

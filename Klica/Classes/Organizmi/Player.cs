@@ -11,7 +11,7 @@ namespace Klica.Classes.Objects_sprites
     {
         // Player properties
         private Base _player_base = new Base(0);
-        private Eyes _player_eye= new Eyes(0);
+        private Eyes _player_eye = new Eyes(0);
         public Mouth _player_mouth = new Mouth(0);
 
         // Physics properties
@@ -44,7 +44,7 @@ namespace Klica.Classes.Objects_sprites
         // Collision properties
         private Collider _baseCollider;
         private Collider _mouthCollider;
-        
+
         private Collider _mouthProximityCollider;
 
         /// DASH
@@ -71,7 +71,7 @@ namespace Klica.Classes.Objects_sprites
         public bool _hasShellArmor = false;
         public bool _hasStunDash = false;
         public bool _hasSlowTouch = false;
-        public bool _hasFeederMode= false;
+        public bool _hasFeederMode = false;
         public bool _hasFrenzyMode = true;
         private bool _isFrenzy = false;
 
@@ -80,11 +80,11 @@ namespace Klica.Classes.Objects_sprites
 
 
         public Player(PhysicsEngine physicsEngine)
-        {   
+        {
             _position = new Vector2(1920 / 2, 1080 / 2);
             _physics = new Physics(_position);
             _player_base.SetPosition(_position);
-            _baseCollider = new Collider(_player_base.GetPosition(), _player_base.Width/2f, this);
+            _baseCollider = new Collider(_player_base.GetPosition(), _player_base.Width / 2f, this);
             _baseCollider.Owner = this; // or pass owner from Player if needed
 
             _mouthCollider = new Collider(_player_base._position_mouth, 10f, this);
@@ -92,20 +92,20 @@ namespace Klica.Classes.Objects_sprites
 
             _mouthProximityCollider = new Collider(_player_base._position_mouth, 25f, this); // Larger radius than mouth
             _health = 100;
-            _maxhealth=_health;
+            _maxhealth = _health;
             Mass = 5f;
         }
-        
 
-       
-// ==============================================
-// ============== UPDATE  =================
-// ==============================================
+
+
+        // ==============================================
+        // ============== UPDATE  =================
+        // ==============================================
 
         public void UpdatePlayer(GameTime gameTime, Rectangle bounds)
         {
             Vector2 movementDirection = Vector2.Zero;
-            
+
             // Keyboard input
             KeyboardState keyboardState = Keyboard.GetState();
 
@@ -122,7 +122,7 @@ namespace Klica.Classes.Objects_sprites
 
                 if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                     movementDirection.X += 1;
-                
+
                 // Normalize movement direction
                 if (movementDirection == Vector2.Zero && _lastMovementDirection != Vector2.Zero)
                 {
@@ -137,11 +137,11 @@ namespace Klica.Classes.Objects_sprites
                 GamePad.SetVibration(PlayerIndex.One, 0.0f, 0.0f);
             }
 
-            
 
-            
+
+
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-           
+
             if (_inputLockTimer > 0)
                 _inputLockTimer -= dt;
 
@@ -255,7 +255,7 @@ namespace Klica.Classes.Objects_sprites
 
                 // newPosition.X = MathHelper.Clamp(newPosition.X, bounds.Left + halfWidth, bounds.Right - halfWidth);
                 // newPosition.Y = MathHelper.Clamp(newPosition.Y, bounds.Top + halfHeight, bounds.Bottom - halfHeight);
-                
+
 
                 // // Apply the clamped position to physics and player
                 // _physics._positon = newPosition;
@@ -266,7 +266,7 @@ namespace Klica.Classes.Objects_sprites
                 Velocity *= 0.90f;
                 _physics._velocity *= 0.90f;
 
-                
+
                 // Set position based on physics after user input
                 // _player_base.SetPosition(_physics.GetPosition());
                 // _position = _player_base.GetPosition();
@@ -314,11 +314,12 @@ namespace Klica.Classes.Objects_sprites
                 _lastMovementDirection = movementDirection;
             }
         }
-        
-// ==============================================
-// ============== DRAW  =================
-// ==============================================
-        public void DrawPlayer(SpriteBatch _spriteBatch, GameTime _gameTime){
+
+        // ==============================================
+        // ============== DRAW  =================
+        // ==============================================
+        public void DrawPlayer(SpriteBatch _spriteBatch, GameTime _gameTime)
+        {
             Color tint = _frenzyDuration > 0 ? Color.OrangeRed : Color.White;
             _player_base.Draw(_spriteBatch, tint);
             _player_eye.Draw(_spriteBatch, _gameTime);
@@ -327,12 +328,12 @@ namespace Klica.Classes.Objects_sprites
             //  _player_base.Draw(_spriteBatch);
             //  _player_eye.Draw(_spriteBatch,_gameTime);
             //  _player_mouth.Draw(_spriteBatch);
-         }
+        }
 
-// ==============================================
-// ============== GETTERS  =================
-// ==============================================
-         public float GetRotation()
+        // ==============================================
+        // ============== GETTERS  =================
+        // ==============================================
+        public float GetRotation()
         {
             return _player_base.GetRotation();
         }
@@ -340,10 +341,10 @@ namespace Klica.Classes.Objects_sprites
         public Collider GetMouthCollider() => _mouthCollider;
         public Collider GetMouthProximityCollider() => _mouthProximityCollider;
 
-// ==============================================
-// ============== FIZKA =================
-// ==============================================
-          
+        // ==============================================
+        // ============== FIZKA =================
+        // ==============================================
+
         public void ApplyBounce(Vector2 direction, float strength, float duration = 0.3f)
         {
             if (direction != Vector2.Zero)
@@ -361,10 +362,10 @@ namespace Klica.Classes.Objects_sprites
 
 
 
-        
-// ==============================================
-// ============== DMG =================
-// ==============================================
+
+        // ==============================================
+        // ============== DMG =================
+        // ==============================================
         public void TakeDamage(int damage)
         {
             _lastDamageTime = 0f;
@@ -387,23 +388,24 @@ namespace Klica.Classes.Objects_sprites
             int barHeight = 5;
             int offsetY = -50;
 
-            float healthPercent = MathHelper.Clamp(_health / (float) _maxhealth, 0f, 1f);
+            float healthPercent = MathHelper.Clamp(_health / (float)_maxhealth, 0f, 1f);
             Vector2 barPosition = _position + new Vector2(-barWidth / 2, offsetY);
 
             // Background
             spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, barWidth, barHeight), Color.Gray);
             // Fill
             spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, (int)(barWidth * healthPercent), barHeight), Color.Blue);
-            
-            if(_canDash){
-               for (int i = 0; i < _maxDashCharges; i++)
+
+            if (_canDash)
+            {
+                for (int i = 0; i < _maxDashCharges; i++)
                 {
                     Color color = i < _dashCharges ? Color.White : Color.Gray;
                     spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)(_position.X - 20 + i * 12), (int)_position.Y - 60, 10, 5), color);
-                } 
+                }
             }
-            
-        
+
+
         }
         public void SetPosition(Vector2 pos)
         {
@@ -431,7 +433,7 @@ namespace Klica.Classes.Objects_sprites
         }
 
 
-    
+
         public void AddTrait(EvolutionTrait trait)
         {
             if (!ActiveTraits.Contains(trait))
@@ -445,15 +447,15 @@ namespace Klica.Classes.Objects_sprites
                     break;
 
                 case EvolutionTrait.Dash:
-                    _canDash=true;
+                    _canDash = true;
                     break;
-                
+
                 case EvolutionTrait.ExtraDash:
-                    _dashCharges++;
-                    _maxDashCharges++;
+                    _dashCharges=2;
+                    _maxDashCharges=2;
                     break;
                 case EvolutionTrait.Regeneration:
-                // No immediate stat change — regen logic will be in UpdatePlayer
+                    // No immediate stat change — regen logic will be in UpdatePlayer
                     break;
 
                 case EvolutionTrait.StunDash:
@@ -488,6 +490,16 @@ namespace Klica.Classes.Objects_sprites
         {
             return ActiveTraits.Contains(trait);
         }
+        
+        public void LoadTraits(List<EvolutionTrait> traits)
+        {
+            foreach (var trait in traits)
+            {
+                AddTrait(trait); // your existing trait logic
+            }
+        }
+
+
 
 
 
