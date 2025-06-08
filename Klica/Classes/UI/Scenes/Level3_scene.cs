@@ -231,6 +231,7 @@ public class Level3_Scene : IScene
         spriteBatch.End();
         spriteBatch.Begin();
         DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal);
+        spriteBatch.End();
     }
 
     private void HandleInput()

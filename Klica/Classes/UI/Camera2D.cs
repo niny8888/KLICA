@@ -32,11 +32,11 @@ namespace Klica.Classes
 
         public void Follow(Vector2 targetPosition)
         {
-            System.Console.WriteLine($"Camera2D.Follow: Target Position: {targetPosition}, Viewport: {_viewportWidth}x{_viewportHeight}, Zoom: {Zoom}");
+            //System.Console.WriteLine($"Camera2D.Follow: Target Position: {targetPosition}, Viewport: {_viewportWidth}x{_viewportHeight}, Zoom: {Zoom}");
             
             float halfViewportWidth = _viewportWidth / (2f * Zoom);
             float halfViewportHeight = _viewportHeight / (2f * Zoom);
-            System.Console.WriteLine($"Camera2D.Follow: Half Viewport: {halfViewportWidth}x{halfViewportHeight}, Level Size: {_levelWidth}x{_levelHeight}");
+            //System.Console.WriteLine($"Camera2D.Follow: Half Viewport: {halfViewportWidth}x{halfViewportHeight}, Level Size: {_levelWidth}x{_levelHeight}");
 
             float clampedX = MathHelper.Clamp(
                 targetPosition.X,

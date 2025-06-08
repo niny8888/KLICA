@@ -60,9 +60,9 @@ public class EvolutionScene : IScene
                 switch (_currentLevel)
                 {
                     case 1:
-                        var level2 = (Level2_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level2);
-                        level2.Initialize();
-                        SceneManager.Instance.SetScene(SceneManager.SceneType.Level2);
+                        var level2Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
+                        level2Intro.SetLevelId(2); // Set level ID for Level 1 Intro
+                        SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
                         break;
                     case 2:
                         var level3 = (Level3_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level3);

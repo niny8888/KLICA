@@ -18,7 +18,7 @@ public class Level1IntroScene : IScene
     private Rectangle _startButton;
     private BitmapFont _font;
 
-    private int _levelNumber=1; // Controls which image to load and which level to start
+    private int _levelNumber; // Controls which image to load and which level to start
 
     public Level1IntroScene(Game1 game)
     {
@@ -27,17 +27,33 @@ public class Level1IntroScene : IScene
     public void SetLevelId(int levelId)
     {
         _levelNumber  = levelId;
+        this.Update(gameTime: null); // Ensure the intro image is set based on the level ID
     }
 
     public void Initialize() { }
 
     public void LoadContent(ContentManager content)
     {
-        string imageName = $"food_chain{_levelNumber}";
-        _introImage = content.Load<Texture2D>(imageName); // e.g., "food_chain1", "food_chain2"
+        // Map level 0 to level 1 intro
+        int safeId = _levelNumber == 0 ? 1 : _levelNumber;
+
+        if (safeId == 1 || safeId == 2)
+        {
+            string imageName = $"food_chain{safeId}";
+            _introImage = content.Load<Texture2D>(imageName); // food_chain1 or food_chain2
+        }
+        else
+        {
+            Console.WriteLine($"Invalid intro level ID: {_levelNumber}");
+            _introImage = new Texture2D(_game.GraphicsDevice, 1, 1);
+            _introImage.SetData(new[] { Color.Black });
+        }
+
         _font = content.Load<BitmapFont>("Arial");
         _startButton = new Rectangle(860, 900, 200, 60);
     }
+
+
 
     public void Update(GameTime gameTime)
     {

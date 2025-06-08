@@ -50,6 +50,8 @@ public class Level7_Scene : IScene
     private Rectangle _resumeButton, _settingsButton, _mainMenuButton, _exitButton;
 
     private double _autosaveTimer = 0;
+    private UIAtlas _uiAtlas;
+
 
     //zone
     private List<ToxicZone> _toxicZones = new();
@@ -149,6 +151,10 @@ public class Level7_Scene : IScene
 
         // Back button rectangle
         _backButton = new Rectangle(20, 20, 200, 50);
+
+        Texture2D atlasTexture = content.Load<Texture2D>("UI_basic-01");
+        _uiAtlas = new UIAtlas(atlasTexture);
+
 
         _toxicTexture = content.Load<Texture2D>("toxic_blob");
         _particleTexture = TextureGenerator.CreateCircleTexture(_game.GraphicsDevice, 12, Color.White); // or load a PNG
@@ -290,8 +296,9 @@ public class Level7_Scene : IScene
         spriteBatch.End();
         spriteBatch.Begin();
         //DrawButton(spriteBatch, "Back to Menu", _backButton);
-        DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal);
+        DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal, _uiAtlas);
 
+        spriteBatch.End();
 
     }
 
@@ -317,30 +324,46 @@ public class Level7_Scene : IScene
         spriteBatch.DrawString(_font, text, textPosition, Color.Black);
     }
 
-    private void DrawCheckpointBar(SpriteBatch spriteBatch, int currentScore, int maxScore)
+    private void DrawCheckpointBar(SpriteBatch spriteBatch, int currentScore, int maxScore, UIAtlas uiAtlas)
     {
-        int boxSize = 30;
-        int spacing = 5;
-        int totalWidth = maxScore * boxSize + (maxScore - 1) * spacing;
+        int iconWidth = 50; // final display width
+        int iconHeight = iconWidth / 2; // 2:1 aspect from source image
+        int spacing = 0;
+        int totalWidth = maxScore * iconWidth + (maxScore - 1) * spacing;
 
         Vector2 position = new Vector2(
             (Game1.ScreenWidth - totalWidth) / 2,
-            Game1.ScreenHeight - 100 // 60 px from bottom
+            Game1.ScreenHeight - 100
         );
 
         for (int i = 0; i < maxScore; i++)
         {
-            Rectangle box = new Rectangle(
-                (int)(position.X + i * (boxSize + spacing)),
-                (int)position.Y,
-                boxSize,
-                boxSize
+            Vector2 iconPos = new Vector2(
+                position.X + i * (iconWidth + spacing),
+                position.Y
             );
 
-            Color color = i < currentScore ? Color.SkyBlue : Color.White;
-            spriteBatch.Draw(TextureGenerator.Pixel, box, color);
+            Rectangle source = i < currentScore
+                ? uiAtlas.DNAIconBlue
+                : uiAtlas.DNAIconWhite;
+
+            float scale = iconWidth / (float)source.Width;
+
+            spriteBatch.Draw(
+                uiAtlas.GetTexture(),
+                iconPos,
+                source,
+                Color.White,
+                0f,
+                Vector2.Zero,
+                new Vector2(scale, scale), // uniform scale preserves aspect
+                SpriteEffects.None,
+                0f
+            );
         }
     }
+
+
 
 
 
