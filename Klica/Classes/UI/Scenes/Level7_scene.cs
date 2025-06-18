@@ -298,7 +298,7 @@ public class Level7_Scene : IScene
         //DrawButton(spriteBatch, "Back to Menu", _backButton);
         DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal, _uiAtlas);
 
-        spriteBatch.End();
+        
 
     }
 

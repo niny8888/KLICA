@@ -219,7 +219,7 @@ public class Level1_Scene : IScene
 
         // if (_gameStateWin || _gameStateLost)
         //     DrawGameOverOverlay(spriteBatch);
-        spriteBatch.End();
+        
 
 
     }
