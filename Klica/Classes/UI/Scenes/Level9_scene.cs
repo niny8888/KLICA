@@ -44,6 +44,8 @@ public class Level9_Scene : IScene
     private Effect _perlinNoiseEffect;
     private Vector2 _shaderTime = Vector2.Zero;
     private Vector2 _shaderPerlinTime = Vector2.Zero;
+    private Texture2D _resumeBG;
+
 
     public bool _isPaused = false;
     private Rectangle _resumeButton, _settingsButton, _mainMenuButton, _exitButton;
@@ -114,6 +116,18 @@ public class Level9_Scene : IScene
 
     public void LoadContent(ContentManager content)
     {
+        var spriteManager = SpriteManager.getInstance();
+        // spriteManager.SetDefaultSheet(content.Load<Texture2D>("SpritesPNG1_fixed"));
+        // spriteManager.SetIceSheet(content.Load<Texture2D>("SpritesPNG-ICE"));
+        // spriteManager.SetToxicSheet(content.Load<Texture2D>("SpritesPNG-Toxic"));
+
+        // // Switch to ICE version:
+        // spriteManager.UseIceSheet();
+
+        // Now load body parts:
+        var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
+        SpriteFactory.Initialize(spriteManager, spriteDataLines);
+
         _background = content.Load<Texture2D>("ICE-BG_final");
         _halfCircleTexture = TextureGenerator.CreateCircleRadiusLineTexture(_game.GraphicsDevice, 50);
 
@@ -247,6 +261,7 @@ public class Level9_Scene : IScene
         _gameStateLost = _player._health <= 0;
         if (_gameStateLost)
         {
+            LoseSave();
             SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
         }
 
@@ -288,7 +303,7 @@ public class Level9_Scene : IScene
 
         foreach (var peaceful in _peacefulEnemies)
         {
-            peaceful.DrawSnowyVersion(spriteBatch, _game.GetGameTime());
+            peaceful.Draw(spriteBatch, _game.GetGameTime());
             peaceful.DrawHealthBar(spriteBatch);
         }
         foreach (var enemy in _aggressiveEnemies)
@@ -440,6 +455,13 @@ public class Level9_Scene : IScene
 
         SaveManager.Save(data);
     }
+    public void LoseSave()
+    { 
+        var data = SaveManager.Load() ?? new GameData();
+        data.LastCompletedLevel = 0; // Reset to 0 if player loses
+        data.Traits.Clear(); // Clear traits on loss
+        SaveManager.Save(data);
+    }
 
     // public void LoadFromSave()
     // {
@@ -536,7 +558,13 @@ public class Level9_Scene : IScene
                     if (enemy._damageCooldown <= 0)
                     {
                         Console.WriteLine("Player's mouth hit aggressive enemy!");
-                        enemy.TakeDamage(34);
+
+                        int baseDamage = 34;
+                        int finalDamage = _player.CalculateAttackDamage(baseDamage);
+
+                        enemy.TakeDamage(finalDamage);
+                        _player.OnDealDamage(finalDamage); // LifeSteal trigger
+
                         enemy.ApplyBounce(_player.GetMouthCollider().Position - enemy.GetBaseCollider().Position, 0.5f);
                         enemy._damageCooldown = 1.0; // 1 second cooldown
 
@@ -545,11 +573,13 @@ public class Level9_Scene : IScene
                             enemy.LockState(Enemy.AggressiveEnemyState.Locked, 2.0); // Stun for 2 seconds
                             Console.WriteLine("Enemy stunned by Stun Dash!");
                         }
+
                         if (_player._hasSlowTouch)
                         {
                             enemy.ApplySlow(1.5f);
                         }
                     }
+
                 }
             });
 
@@ -590,7 +620,7 @@ public class Level9_Scene : IScene
         spriteBatch.Begin();
 
         // Grey overlay
-        spriteBatch.Draw(_buttonTexture, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.SkyBlue);
+        spriteBatch.Draw(_resumeBG, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.White);
 
         int boxWidth = 300, boxHeight = 300;
         int boxX = (Game1.ScreenWidth - boxWidth) / 2;
@@ -637,6 +667,7 @@ public class Level9_Scene : IScene
             }
             else if (_exitButton.Contains(mouseState.Position))
             {
+                SaveGameState();
                 _game.Exit(); // close the game
             }
         }

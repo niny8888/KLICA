@@ -8,10 +8,10 @@ namespace Klica
 {
     public static class SpriteFactory
     {
-        private static Texture2D _spriteSheet;
-        public static void Initialize(Texture2D spriteSheet, SpriteManager spriteManager, IEnumerable<string> spriteDataLines)
+        //private static Texture2D _spriteSheet;
+        public static void Initialize(SpriteManager spriteManager, IEnumerable<string> spriteDataLines)
         {
-            _spriteSheet = spriteSheet;
+            // _spriteSheet = spriteSheet;
 
             // Parse and add each sprite from the provided data lines
             foreach (var line in spriteDataLines)

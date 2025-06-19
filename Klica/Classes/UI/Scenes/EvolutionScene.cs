@@ -36,7 +36,7 @@ public class EvolutionScene : IScene
     public void LoadContent(ContentManager content)
     {
         _font = content.Load<BitmapFont>("Arial");
-        _background = content.Load<Texture2D>("menu_BG");
+        _background = content.Load<Texture2D>("EvolutionBG");
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _buttonTexture.SetData(new[] { Color.White });
 
@@ -151,19 +151,26 @@ public class EvolutionScene : IScene
                 _availableTraits.Add((EvolutionTrait.StunDash, "Stun Dash"));
                 break;
             case 4:
-                _availableTraits.Add((EvolutionTrait.SlowTouch, "Skin Adaptation - Slows enemies on contact"));
-                _availableTraits.Add((EvolutionTrait.FeederMode, "Feeder Mode - More food drops from kills"));
+                _availableTraits.Add((EvolutionTrait.SlowTouch, "Skin Adaptation"));
+                _availableTraits.Add((EvolutionTrait.FeederMode, "Feeder Mode"));
                 break;
             case 5:
-                _availableTraits.Add((EvolutionTrait.FrenzyMode, "Frenzy - Speed & damage boost on kill"));
-                _availableTraits.Add((EvolutionTrait.ShellArmor, "Shell Armor - Reduce all damage"));
+                _availableTraits.Add((EvolutionTrait.LifeSteal, "Life Steal"));
+                _availableTraits.Add((EvolutionTrait.SpeedBoost, "Speed Boost"));
                 break;
             case 6:
-                _availableTraits.Add((EvolutionTrait.TraitMemory, "Trait Memory - Random traits you skipped"));
+                _availableTraits.Add((EvolutionTrait.CritHit, "CriticalHits"));
+                _availableTraits.Add((EvolutionTrait.SwiftDash, "Swift Dash"));
                 break;
             case 7: //temp
-                _availableTraits.Add((EvolutionTrait.SlowTouch, "Skin Adaptation - Slows enemies on contact"));
-                _availableTraits.Add((EvolutionTrait.FeederMode, "Feeder Mode - More food drops from kills"));
+                _availableTraits.Add((EvolutionTrait.Extra2Dash, "+2 Dash")); 
+                _availableTraits.Add((EvolutionTrait.MultyHealth, "Health x2"));
+                break;
+            case 8: //temp
+                _availableTraits.Add((EvolutionTrait.TraitMemory, "Trait Memory - Random traits you skipped"));
+                break;
+            case 9: 
+                _availableTraits.Add((EvolutionTrait.TraitMemory, "Trait Memory - Random traits you skipped"));
                 break;
         }
 
@@ -185,7 +192,7 @@ public class EvolutionScene : IScene
     {   
         _game.CurrentPlayer?.AddTrait(trait);
     }
-} 
+}
 
 public enum EvolutionTrait
 {
@@ -199,5 +206,11 @@ public enum EvolutionTrait
     ShellArmor,
     FeederMode,
     TraitMemory,
-    SlowTouch
+    SlowTouch,
+    LifeSteal,
+    SpeedBoost,
+    CritHit,
+    SwiftDash,
+    Extra2Dash,
+    MultyHealth
 } 

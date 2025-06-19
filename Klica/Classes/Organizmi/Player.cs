@@ -75,6 +75,17 @@ namespace Klica.Classes.Objects_sprites
         public bool _hasFrenzyMode = true;
         private bool _isFrenzy = false;
 
+        // New trait variables
+        private bool _hasLifeSteal = false;
+        private bool _hasCritHit = false;
+        private bool _hasSpeedBoost = false;
+        private bool _hasSwiftDash = false;
+
+        private float _lifeStealPercent = 0.10f; // 10% life steal
+        private float _critChance = 0.15f;       // 15% crit chance
+        private float _critMultiplier = 2.0f;    // x2 damage on crit
+
+
         //slow
         private bool _isSlowed = false;
         private float _slowTimer = 0f;
@@ -193,12 +204,9 @@ namespace Klica.Classes.Objects_sprites
                 }
 
 
-
-
-
                 _physics._velocity += _bounceImpulse;
                 _bounceImpulse = Vector2.Zero;
-                
+
                 // Update slow timer
                 // Update slow timer
                 if (_isSlowed)
@@ -212,8 +220,8 @@ namespace Klica.Classes.Objects_sprites
                     }
                 }
 
-                float slowFactor = _speedModifier; 
-                System.Console.WriteLine("Player speed modifier: " + _speedModifier);
+                float slowFactor = _speedModifier;
+                //System.Console.WriteLine("Player speed modifier: " + _speedModifier);
                 _position += _physics._velocity * dt * slowFactor;
 
 
@@ -394,12 +402,15 @@ namespace Klica.Classes.Objects_sprites
 
             if (_hasShellArmor)
             {
-                if(damage == 1){//toxic zone
+                if (damage == 1)
+                {//toxic zone
                     damage = 1;
-                }else{
+                }
+                else
+                {
                     damage = (int)(damage * 0.5f);
                 }
-                
+
             }
             _health -= damage;
             if (_health <= 0)
@@ -489,11 +500,48 @@ namespace Klica.Classes.Objects_sprites
                     break;
 
                 case EvolutionTrait.ExtraDash:
-                    _dashCharges=2;
-                    _maxDashCharges=2;
+                    _dashCharges = 2;
+                    _maxDashCharges = 2;
                     break;
+
+                case EvolutionTrait.Extra2Dash:
+                    if (_maxDashCharges < 4)
+                    {
+                        _dashCharges += 2;
+                        _maxDashCharges += 2;
+                    }
+                    else
+                    {
+                        _dashCharges = 4; // cap at 4
+                        _maxDashCharges = 4;
+                    }
+                    break;
+
+                case EvolutionTrait.MultyHealth:
+                    _health *= 2;
+                    _maxhealth *= 2;
+                    break;
+
+                case EvolutionTrait.SpeedBoost:
+                    _hasSpeedBoost = true;
+                    _speedModifier = 1.5f; // +50% speed
+                    break;
+
+                case EvolutionTrait.SwiftDash:
+                    _hasSwiftDash = true;
+                    _dashCooldown = 0.8f; // faster cooldown
+                    _dashRechargeTime = 1.5f;
+                    break;
+
+                case EvolutionTrait.LifeSteal:
+                    _hasLifeSteal = true;
+                    break;
+
+                case EvolutionTrait.CritHit:
+                    _hasCritHit = true;
+                    break;
+
                 case EvolutionTrait.Regeneration:
-                    // No immediate stat change — regen logic will be in UpdatePlayer
                     break;
 
                 case EvolutionTrait.StunDash:
@@ -514,21 +562,20 @@ namespace Klica.Classes.Objects_sprites
                     break;
 
                 case EvolutionTrait.TraitMemory:
-                    // Trait memory logic likely handled outside player (in evolution system)
                     break;
 
                 case EvolutionTrait.SlowTouch:
                     _hasSlowTouch = true;
                     break;
-
             }
         }
+
 
         public bool HasTrait(EvolutionTrait trait)
         {
             return ActiveTraits.Contains(trait);
         }
-        
+
         public void LoadTraits(List<EvolutionTrait> traits)
         {
             foreach (var trait in traits)
@@ -536,6 +583,35 @@ namespace Klica.Classes.Objects_sprites
                 AddTrait(trait); // your existing trait logic
             }
         }
+        public void OnDealDamage(int baseDamage)
+        {
+            // LifeSteal
+            if (_hasLifeSteal && _health > 0)
+            {
+                int healAmount = (int)(baseDamage * _lifeStealPercent);
+                _health += healAmount;
+                if (_health > _maxhealth) _health = _maxhealth;
+                Console.WriteLine($"LifeSteal: Healed {healAmount} HP!");
+            }
+        }
+
+        public int CalculateAttackDamage(int baseDamage)
+        {
+            if (_hasCritHit)
+            {
+                Random rand = new Random();
+                if (rand.NextDouble() < _critChance)
+                {
+                    int critDamage = (int)(baseDamage * _critMultiplier);
+                    Console.WriteLine($"CRIT HIT! {critDamage} dmg!");
+                    return critDamage;
+                }
+            }
+
+            return baseDamage;
+        }
+
+
 
 
 

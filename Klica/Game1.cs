@@ -59,9 +59,11 @@ public class Game1 : Game
         bg_sound.IsLooped = true;
         bg_sound.Play();
         
+
         SceneManager.Instance.AddScene(SceneManager.SceneType.MainMenu, new MenuScene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Game, new GameScene(this));
-        SceneManager.Instance.AddScene(SceneManager.SceneType.SettingsScene, new SettingsScene(this,SceneManager.SceneType.MainMenu ));
+        SceneManager.Instance.AddScene(SceneManager.SceneType.SettingsScene, new SettingsScene(this, SceneManager.SceneType.MainMenu));
+        
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level1, new Level1_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level2, new Level2_Scene(this));
         SceneManager.Instance.AddScene(SceneManager.SceneType.Level3, new Level3_Scene(this));
@@ -82,6 +84,7 @@ public class Game1 : Game
 
         TextureGenerator.Init(GraphicsDevice);
 
+        
 
         //intro
         animation = new MyLogoAnimation(0.1);
@@ -91,11 +94,13 @@ public class Game1 : Game
             "00006", "00007", "00008", "00009", "00010",
             "00011", "00012", "00013", "00014", "00015",
             "00016", "00017", "00018", "00019", "00020",
-            "00021", "00022", "00023", "00024", "00025", 
+            "00021", "00022", "00023", "00024", "00025",
             "00025", "00025", "00025", "00025", "00025"
         };
         animation.LoadFrames(Content, frameNames);
         currentState = GameState.Intro;
+        
+        
     }
 
     public GameTime GetGameTime()

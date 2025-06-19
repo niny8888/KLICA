@@ -11,7 +11,12 @@ namespace Klica
 {
     public class SpriteManager
     {
-        private static Texture2D _spriteSheet;
+        private static Texture2D _defaultSpriteSheet;
+        private static Texture2D _toxicSpriteSheet;
+        private static Texture2D _iceSpriteSheet;
+
+        private Texture2D _currentSpriteSheet;
+
         private  Dictionary<string, Sprite> _sprites;
         private List<Sprite> _activeSprites;
         private static volatile SpriteManager instance= null;
@@ -20,22 +25,57 @@ namespace Klica
 
         public SpriteManager(Texture2D spriteSheet)
         {
-            _spriteSheet = spriteSheet;
+            _defaultSpriteSheet = spriteSheet;
             _sprites = new Dictionary<string, Sprite>();
             _activeSprites = new List<Sprite>();
             instance= this;
         }
         public static SpriteManager getInstance(){
             if(instance==null){
-                instance=new SpriteManager(_spriteSheet);
+                instance=new SpriteManager(_defaultSpriteSheet);
             }
             return instance;
         }
+        public void SetDefaultSheet(Texture2D sheet)
+        {
+            _defaultSpriteSheet = sheet;
+            _currentSpriteSheet = sheet;
+        }
 
-        public void AddSprite(String name, Vector2 position, Rectangle sourceRectangle,int _rotatedSheet, float scale = 1f,  float rotation = 0f, Vector2? origin = null, Color? tint = null)
+        public void SetToxicSheet(Texture2D sheet)
+        {
+            _toxicSpriteSheet = sheet;
+        }
+
+        public void SetIceSheet(Texture2D sheet)
+        {
+            _iceSpriteSheet = sheet;
+        }
+
+        public void UseDefaultSheet()
+        {
+            ClearSprites();
+            _currentSpriteSheet = _defaultSpriteSheet;
+        }
+
+        public void UseToxicSheet()
+        {
+            ClearSprites();
+            System.Console.WriteLine("Using toxic sprite sheet");
+            _currentSpriteSheet = _toxicSpriteSheet;
+        }
+
+        public void UseIceSheet()
+        {
+            ClearSprites();
+            _currentSpriteSheet = _iceSpriteSheet;
+        }
+
+
+        public void AddSprite(String name, Vector2 position, Rectangle sourceRectangle, int _rotatedSheet, float scale = 1f, float rotation = 0f, Vector2? origin = null, Color? tint = null)
         {
             AdjustedRotation = _rotatedSheet == 1 ? rotation - 1.6f : rotation;
-            var sprite = new Sprite(_spriteSheet, position, sourceRectangle, _rotatedSheet ,scale,AdjustedRotation , origin,  tint);
+            var sprite = new Sprite(_currentSpriteSheet, position, sourceRectangle, _rotatedSheet, scale, AdjustedRotation, origin, tint);
             _sprites[name] = sprite;
             ActivateSprite(name, position);
         }
@@ -44,11 +84,22 @@ namespace Klica
             _sprites[name] = sprite;
             ActivateSprite(name, sprite.Position);
         }
+        public void ClearSprites()
+        {
+            _sprites.Clear();
+            _activeSprites.Clear();
+        }
+
         
         public Sprite GetSprite(string name)
         {
             return _sprites.ContainsKey(name) ? _sprites[name] : null;
         }
+        public Texture2D GetCurrentSheet()
+        {
+            return _currentSpriteSheet;
+        }
+
 
     
         public void DrawSpriteNamed(SpriteBatch spriteBatch, string name)

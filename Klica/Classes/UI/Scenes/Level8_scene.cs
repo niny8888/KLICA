@@ -21,6 +21,8 @@ public class Level8_Scene : IScene
     private HUD _hud;
     private PhysicsEngine _physicsEngine;
     private CollisionManager _collisionManager;
+    private Texture2D _resumeBG;
+
 
     private List<PeacefulEnemy> _peacefulEnemies { get; } = new();
     private List<Enemy> _aggressiveEnemies;
@@ -58,6 +60,7 @@ public class Level8_Scene : IScene
     private Texture2D _particleTexture;
 
     private Camera2D _camera;
+    private SpriteManager spriteManager = SpriteManager.getInstance();
 
     public Level8_Scene(Game1 game)
     {
@@ -114,6 +117,8 @@ public class Level8_Scene : IScene
 
     public void LoadContent(ContentManager content)
     {
+
+
         _background = content.Load<Texture2D>("ToxicBG");
         _halfCircleTexture = TextureGenerator.CreateCircleRadiusLineTexture(_game.GraphicsDevice, 50);
 
@@ -151,18 +156,20 @@ public class Level8_Scene : IScene
 
         _toxicTexture = content.Load<Texture2D>("toxic_blob");
         _particleTexture = TextureGenerator.CreateCircleTexture(_game.GraphicsDevice, 12, Color.White); // or load a PNG
-        
+
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(100, 300), 200f));   // Top-left zone
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1520, 280), 100f));  // Top-right zone
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(560, 540), 120f));   // Center zone
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(600, 850), 140f));   // Bottom-left zone
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1450, 800), 280f));  // Bottom-right zone
 
+        // Switch to ICE version:
     }
 
 
     public void Update(GameTime gameTime)
     {
+        spriteManager.UseToxicSheet();
         _game.CurrentLevel = 8;
         if (_isPaused)
         {
@@ -222,6 +229,7 @@ public class Level8_Scene : IScene
         _gameStateLost = _player._health <= 0;
         if (_gameStateLost)
         {
+            LoseSave();
             SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
         }
 
@@ -392,6 +400,13 @@ public class Level8_Scene : IScene
 
         SaveManager.Save(data);
     }
+    public void LoseSave()
+    { 
+        var data = SaveManager.Load() ?? new GameData();
+        data.LastCompletedLevel = 0; // Reset to 0 if player loses
+        data.Traits.Clear(); // Clear traits on loss
+        SaveManager.Save(data);
+    }
 
     // public void LoadFromSave()
     // {
@@ -488,7 +503,13 @@ public class Level8_Scene : IScene
                     if (enemy._damageCooldown <= 0)
                     {
                         Console.WriteLine("Player's mouth hit aggressive enemy!");
-                        enemy.TakeDamage(34);
+
+                        int baseDamage = 34;
+                        int finalDamage = _player.CalculateAttackDamage(baseDamage);
+
+                        enemy.TakeDamage(finalDamage);
+                        _player.OnDealDamage(finalDamage); // LifeSteal trigger
+
                         enemy.ApplyBounce(_player.GetMouthCollider().Position - enemy.GetBaseCollider().Position, 0.5f);
                         enemy._damageCooldown = 1.0; // 1 second cooldown
 
@@ -497,11 +518,13 @@ public class Level8_Scene : IScene
                             enemy.LockState(Enemy.AggressiveEnemyState.Locked, 2.0); // Stun for 2 seconds
                             Console.WriteLine("Enemy stunned by Stun Dash!");
                         }
+
                         if (_player._hasSlowTouch)
                         {
                             enemy.ApplySlow(1.5f);
                         }
                     }
+
                 }
             });
 
@@ -542,7 +565,7 @@ public class Level8_Scene : IScene
         spriteBatch.Begin();
 
         // Grey overlay
-        spriteBatch.Draw(_buttonTexture, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.SkyBlue);
+        spriteBatch.Draw(_resumeBG, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.White);
 
         int boxWidth = 300, boxHeight = 300;
         int boxX = (Game1.ScreenWidth - boxWidth) / 2;
@@ -589,6 +612,7 @@ public class Level8_Scene : IScene
             }
             else if (_exitButton.Contains(mouseState.Position))
             {
+                SaveGameState();
                 _game.Exit(); // close the game
             }
         }

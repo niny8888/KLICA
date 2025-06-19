@@ -43,6 +43,8 @@ public class Level1_Scene : IScene
 
     private double _autosaveTimer = 0;
     private Camera2D _camera;
+    private Texture2D _resumeBG;
+
 
     public Level1_Scene(Game1 game)
     {
@@ -122,6 +124,8 @@ public class Level1_Scene : IScene
         // _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
 
         // ... other asset loading ...
+        _resumeBG = content.Load<Texture2D>("ResumeBG");
+
     }
 
 
@@ -172,6 +176,7 @@ public class Level1_Scene : IScene
         _gameStateLost = _player._health <= 0;
         if (_gameStateLost)
         {
+            LoseSave();
             SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
         }
         _camera.Follow(_player._position);
@@ -318,6 +323,14 @@ public class Level1_Scene : IScene
 
         SaveManager.Save(data);
     }
+    public void LoseSave()
+    { 
+        var data = SaveManager.Load() ?? new GameData();
+        data.LastCompletedLevel = 0; // Reset to 0 if player loses
+        data.Traits.Clear(); // Clear traits on loss
+        SaveManager.Save(data);
+    }
+        
 
     // public void LoadFromSave()
     // {
@@ -390,7 +403,7 @@ public class Level1_Scene : IScene
         spriteBatch.Begin();
 
         // Grey overlay
-        spriteBatch.Draw(_buttonTexture, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.SkyBlue);
+        spriteBatch.Draw(_resumeBG, new Rectangle(0, 0, Game1.ScreenWidth, Game1.ScreenHeight), Color.White);
 
         int boxWidth = 300, boxHeight = 300;
         int boxX = (Game1.ScreenWidth - boxWidth) / 2;
@@ -437,6 +450,7 @@ public class Level1_Scene : IScene
             }
             else if (_exitButton.Contains(mouseState.Position))
             {
+                SaveGameState();
                 _game.Exit(); // close the game
             }
         }

@@ -57,7 +57,7 @@ public class SceneManager
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        Console.WriteLine("Drawing scene: " + _currentScene);
+        //Console.WriteLine("Drawing scene: " + _currentScene);
 
         _currentScene?.Draw(spriteBatch);
     }

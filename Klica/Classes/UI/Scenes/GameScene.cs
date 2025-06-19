@@ -110,10 +110,12 @@ public class GameScene : IScene
         var spriteSheet = content.Load<Texture2D>("SpritesPNG1_fixed"); //"SpriteInfo"
         _spriteManager = new SpriteManager(spriteSheet);
         _halfCircleTexture = TextureGenerator.CreateCircleRadiusLineTexture(_game.GraphicsDevice, 50); // Radius 50
-
+        _spriteManager.SetDefaultSheet(content.Load<Texture2D>("SpritesPNG1_fixed"));
+        //_spriteManager.SetIceSheet(content.Load<Texture2D>("SpritesPNG-ICE"));
+        //_spriteManager.SetToxicSheet(content.Load<Texture2D>("SpritesPNG-Toxic"));
+        _spriteManager.UseDefaultSheet();
         var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
-        SpriteFactory.Initialize(spriteSheet, _spriteManager, spriteDataLines);
-
+        SpriteFactory.Initialize(_spriteManager, spriteDataLines);
         se_dmg= content.Load<SoundEffect>("SE_eat_food").CreateInstance();
 
         _waterFlowEffect = content.Load<Effect>("WaterFlow");
