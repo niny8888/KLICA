@@ -91,7 +91,6 @@ public class Level8_Scene : IScene
         }
         // Add 1 aggressive enemy
         _aggressiveEnemies = new List<Enemy>();
-        _aggressiveEnemies = new List<Enemy>();
         for (int i = 0; i < _aggressiveEnemyCount; i++)
         {
             var enemy = new Enemy(new Base(1), new Eyes(1), new Mouth(1), aggressionLevel: 100);
@@ -106,7 +105,7 @@ public class Level8_Scene : IScene
 
 
         _camera = new Camera2D(Game1.ScreenWidth, Game1.ScreenHeight, 1920, 1080);
-        RegisterEnemyColliders();
+        RegisterEnemyColliders(); 
         _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
     }
 
@@ -193,11 +192,23 @@ public class Level8_Scene : IScene
         {
             peacefulenemy.Update(gameTime, _peacefulEnemies, _physicsEngine, _player, null);
         }
-        foreach (var enemy in _aggressiveEnemies)
+        for (int i = _aggressiveEnemies.Count - 1; i >= 0; i--)
         {
+            var enemy = _aggressiveEnemies[i];
             enemy.Update(gameTime, _physicsEngine, _player);
             ConstrainToBounds(enemy);
+
+            if (enemy._isDead)
+            {
+                // Remove the enemy's colliders:
+                _collisionManager.RemoveCollider(enemy.GetBaseCollider());
+                _collisionManager.RemoveCollider(enemy.GetMouthCollider());
+
+                // Remove from list:
+                //_aggressiveEnemies.RemoveAt(i);
+            }
         }
+
 
         _collisionManager.Update();
         _physicsEngine.Update(gameTime, _player._player_mouth._position, ref _gameScore, _player, _aggressiveEnemies);

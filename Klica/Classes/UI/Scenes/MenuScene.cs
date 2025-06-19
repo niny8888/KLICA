@@ -177,7 +177,6 @@ public class MenuScene : IScene
                         case 0:
                             // If no levels completed, start with Level 1 Intro
                             var level1Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
-                            level1Intro.SetLevelId(1); // Set level ID for Level 1 Intro
                             SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
                             break;
                         case 1:
@@ -188,9 +187,8 @@ public class MenuScene : IScene
                             break;
 
                         case 2:
-                            var level2Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
-                            level2Intro.SetLevelId(2); // Set level ID for Level 1 Intro
-                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
+                            var level2Intro = (Level2IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level2Intro);
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level2Intro);
                             break;
 
                         case 3:
@@ -232,7 +230,12 @@ public class MenuScene : IScene
                             level8.Initialize();
                             SceneManager.Instance.SetScene(SceneManager.SceneType.Level8);
                             break;
-
+                        case 9:
+                            var level9 = (Level9_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level9);
+                            level9._isPaused = false;
+                            level9.Initialize();
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level9);
+                            break;
                         default:
                             // All levels completed – go to Main Menu or credits
                             SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
@@ -261,7 +264,6 @@ public class MenuScene : IScene
                     var data = SaveManager.Load();
                     data.LastCompletedLevel = 0; // Reset to level 0
                     var level1Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
-                    level1Intro.SetLevelId(1); // Set level ID for Level 1 Intro
                     SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
 
                     // SaveManager.Reset(); // Clear old save

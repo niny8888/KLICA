@@ -1,10 +1,6 @@
 {
   "Traits": [
-    "Dash",
-    "ExtraDash",
-    "StunDash",
-    "FeederMode",
-    "FrenzyMode"
+    "Dash"
   ],
-  "LastCompletedLevel": 8
+  "LastCompletedLevel": 9
 }

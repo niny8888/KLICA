@@ -12,6 +12,11 @@ public class CollisionManager
     {
         Colliders.Add(new Tuple<Collider, Action<Collider>>(collider, onCollision));
     }
+    
+    public void RemoveCollider(Collider collider)
+    {
+        Colliders.RemoveAll(c => c.Item1 == collider);
+    }
 
     public void Update()
     {

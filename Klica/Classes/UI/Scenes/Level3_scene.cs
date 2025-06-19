@@ -170,10 +170,21 @@ public class Level3_Scene : IScene
         {
             peacefulenemy.Update(gameTime, _peacefulEnemies, _physicsEngine, _player, null);
         }
-        foreach (var enemy in _aggressiveEnemies)
+        for (int i = _aggressiveEnemies.Count - 1; i >= 0; i--)
         {
+            var enemy = _aggressiveEnemies[i];
             enemy.Update(gameTime, _physicsEngine, _player);
             ConstrainToBounds(enemy);
+
+            if (enemy._isDead)
+            {
+                // Remove the enemy's colliders:
+                _collisionManager.RemoveCollider(enemy.GetBaseCollider());
+                _collisionManager.RemoveCollider(enemy.GetMouthCollider());
+
+                // Remove from list:
+                //_aggressiveEnemies.RemoveAt(i);
+            }
         }
 
         _collisionManager.Update();

@@ -75,6 +75,11 @@ namespace Klica.Classes.Objects_sprites
         public bool _hasFrenzyMode = true;
         private bool _isFrenzy = false;
 
+        //slow
+        private bool _isSlowed = false;
+        private float _slowTimer = 0f;
+        private float _speedModifier = 1f;
+
 
 
 
@@ -184,7 +189,7 @@ namespace Klica.Classes.Objects_sprites
                 }
                 else
                 {
-                    _physics.Update(movementDirection);
+                    _physics.Update(movementDirection * _speedModifier);
                 }
 
 
@@ -193,7 +198,24 @@ namespace Klica.Classes.Objects_sprites
 
                 _physics._velocity += _bounceImpulse;
                 _bounceImpulse = Vector2.Zero;
-                _position += _physics._velocity * dt;
+                
+                // Update slow timer
+                // Update slow timer
+                if (_isSlowed)
+                {
+                    System.Console.WriteLine("Player is slowed!");
+                    _slowTimer -= dt;
+                    if (_slowTimer <= 0f)
+                    {
+                        _isSlowed = false;
+                        _speedModifier = 1f;
+                    }
+                }
+
+                float slowFactor = _speedModifier; 
+                System.Console.WriteLine("Player speed modifier: " + _speedModifier);
+                _position += _physics._velocity * dt * slowFactor;
+
 
 
                 _dashTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -413,6 +435,16 @@ namespace Klica.Classes.Objects_sprites
 
 
         }
+        public void ApplySlow(float duration)
+        {
+            if (!_isSlowed)
+            {
+                _isSlowed = true;
+                _speedModifier = 0.5f;
+                _slowTimer = duration;
+            }
+        }
+
         public void SetPosition(Vector2 pos)
         {
             _position = pos;

@@ -38,12 +38,16 @@
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bg_0000_bg3.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/controls.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap2-overlay.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap2.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap21.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap3-overlay.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap3.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap4.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/food_chain1.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/food_chain2.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/howtoplay_BG.png</File>
+    <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/ICE-BG_final.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/intro.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/lose.png</File>
     <File>D:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/menu_BG.png</File>
@@ -88,6 +92,10 @@
     <File>00024.png</File>
     <File>00025.png</File>
     <File>settings_BG.png</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

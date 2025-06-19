@@ -415,6 +415,18 @@
 /processorParam:TextureFormat=Color
 /build:controls.png
 
+#begin dangerZoneMap2-overlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:dangerZoneMap2-overlay.png
+
 #begin dangerZoneMap2.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -426,6 +438,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:dangerZoneMap2.png
+
+#begin dangerZoneMap21.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:dangerZoneMap21.png
+
+#begin dangerZoneMap3-overlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:dangerZoneMap3-overlay.png
 
 #begin dangerZoneMap3.png
 /importer:TextureImporter
@@ -486,6 +522,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:howtoplay_BG.png
+
+#begin ICE-BG_final.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ICE-BG_final.png
 
 #begin intro.png
 /importer:TextureImporter

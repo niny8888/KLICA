@@ -35,7 +35,7 @@ namespace Klica.Classes.Organizmi
         public double _damageCooldown = 0;
         private int _aggressionLevel;
 
-        private bool _isDead = false;
+        public bool _isDead = false;
         private bool _hasDroppedFood = false;
         private double _deathTimer = 1.0;
         private float _deathRotation = 0f;
@@ -372,7 +372,6 @@ namespace Klica.Classes.Organizmi
                 _isSlowed = true;
                 _speed *= 0.4f; // slow to 40% of normal speed
                 _slowTimer = duration;
-                Console.WriteLine("Enemy slowed!");
             }
         }
 
