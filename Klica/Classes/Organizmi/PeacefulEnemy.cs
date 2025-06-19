@@ -314,6 +314,7 @@ namespace Klica.Classes.Organizmi
             return false;
         }
 
+
         private Food GetClosestFood(IEnumerable<Food> foods)
         {
             Food closestFood = null;
@@ -367,6 +368,19 @@ namespace Klica.Classes.Organizmi
             spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, barWidth, barHeight), Color.Gray);
             spriteBatch.Draw(TextureGenerator.Pixel, new Rectangle((int)barPosition.X, (int)barPosition.Y, (int)(barWidth * healthPercent), barHeight), Color.LimeGreen);
         }
+        public void DrawSnowyVersion(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            if (!_isDead)
+            {
+                // Simply draw with a snowy white tint — for example, very light blue/white
+                Color snowyTint = new Color(51, 51, 51); // slightly bluish white
+
+                _organism_base.Draw(spriteBatch, snowyTint);
+                _organism_eye.Draw(spriteBatch, gameTime);
+                _organism_mouth.Draw(spriteBatch, snowyTint);
+            }
+        }
+
         public Vector2 Position => _position;
         public int Health => _health;
         public void SetPosition(Vector2 pos)

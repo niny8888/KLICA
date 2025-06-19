@@ -98,6 +98,11 @@ public class EvolutionScene : IScene
                         level9.Initialize();
                         SceneManager.Instance.SetScene(SceneManager.SceneType.Level9);
                         break;
+                    case 9:
+                        var level10 = (Level10_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level10);
+                        level10.Initialize();
+                        SceneManager.Instance.SetScene(SceneManager.SceneType.Level10);
+                        break;
                 }
                 
                 _game.CurrentLevel++;

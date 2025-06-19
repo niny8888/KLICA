@@ -4,6 +4,7 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../dangerZoneMap3.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00001.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00002.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00003.png</File>
@@ -43,6 +44,7 @@
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap21.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap3-overlay.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap3.png</File>
+    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap31.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap4.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/food_chain1.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/food_chain2.png</File>
@@ -51,6 +53,7 @@
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/intro.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/lose.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/menu_BG.png</File>
+    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/menu_buttons_fixed.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/menu_buttons.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/PerlinNoise.fx</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_dmg.mp3</File>
@@ -58,6 +61,8 @@
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SE_menu.wav</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/song-bg.mp3</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpriteInfo.png</File>
+    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpritesPNG-ICE.png</File>
+    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpritesPNG-Toxic.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/SpritesPNG1_fixed.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/toxic_blob.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/ToxicBG.png</File>
@@ -66,6 +71,7 @@
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/win.png</File>
   </SourceFiles>
   <DestFiles>
+    <File>dangerZoneMap3.png</File>
     <File>00001.png</File>
     <File>00002.png</File>
     <File>00003.png</File>
@@ -92,6 +98,10 @@
     <File>00024.png</File>
     <File>00025.png</File>
     <File>settings_BG.png</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

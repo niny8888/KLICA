@@ -29,8 +29,8 @@ public class Level9_Scene : IScene
     private Rectangle _backButton;
 
     private int _foodGoal = 15;
-    private int _peacefulEnemyCount = 1;
-    private int _aggressiveEnemyCount = 7;
+    private int _peacefulEnemyCount = 4;
+    private int _aggressiveEnemyCount = 10;
     private float _trailTimer = 0f;
     private List<HalfCircleTrail> _trails = new();
     private bool _gameStateWin = false;
@@ -128,7 +128,7 @@ public class Level9_Scene : IScene
         _perlinNoiseEffect.Parameters["lineAlpha"].SetValue(0.5f); // Adjust for less intense lines
 
 
-        _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 20);
+        _level = new Level(new Rectangle(0, 0, 1920, 1080), _background, new GameplayRules(3600, 3), 10);
         _physicsEngine = new PhysicsEngine(_level);
 
         _player = new Player(_physicsEngine);
@@ -288,25 +288,24 @@ public class Level9_Scene : IScene
 
         foreach (var peaceful in _peacefulEnemies)
         {
-            peaceful.Draw(spriteBatch, _game.GetGameTime());
-            peaceful.Draw(spriteBatch, _game.GetGameTime());
+            peaceful.DrawSnowyVersion(spriteBatch, _game.GetGameTime());
             peaceful.DrawHealthBar(spriteBatch);
         }
         foreach (var enemy in _aggressiveEnemies)
         {
-            if (!IsInSlowZone(enemy._position))
-            {
-                DrawDebugCircle(spriteBatch, enemy._position, 40f, Color.Red); // red circle
-            }
+            // if (!IsInSlowZone(enemy._position))
+            // {
+            //     DrawDebugCircle(spriteBatch, enemy._position, 40f, Color.Red); // red circle
+            // }
             enemy.Draw(spriteBatch, _game.GetGameTime());
             enemy.DrawHealthBar(spriteBatch);
         }
 
         _player.DrawHealthBar(spriteBatch);
-        if(!IsInSlowZone(_player._position))
-        {
-            DrawDebugCircle(spriteBatch, _player._position, 40f, Color.Red); // red circle
-        }
+        // if(!IsInSlowZone(_player._position))
+        // {
+        //     DrawDebugCircle(spriteBatch, _player._position, 40f, Color.Red); // red circle
+        // }
         _player.DrawPlayer(spriteBatch, _game.GetGameTime());
 
         // Draw danger zone overlay

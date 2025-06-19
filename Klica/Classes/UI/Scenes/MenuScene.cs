@@ -120,7 +120,7 @@ public class MenuScene : IScene
         }
 
         sound_menu_click= content.Load<SoundEffect>("SE_menu").CreateInstance();
-        _buttonTexture = content.Load<Texture2D>("menu_buttons");
+        _buttonTexture = content.Load<Texture2D>("menu_buttons_fixed");
 
         //_buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
@@ -235,6 +235,12 @@ public class MenuScene : IScene
                             level9._isPaused = false;
                             level9.Initialize();
                             SceneManager.Instance.SetScene(SceneManager.SceneType.Level9);
+                            break;
+                        case 10:
+                            var level10 = (Level10_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level10);
+                            level10._isPaused = false;
+                            level10.Initialize();
+                            SceneManager.Instance.SetScene(SceneManager.SceneType.Level10);
                             break;
                         default:
                             // All levels completed – go to Main Menu or credits
