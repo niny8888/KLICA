@@ -35,7 +35,7 @@ public class EvolutionScene : IScene
 
     public void LoadContent(ContentManager content)
     {
-        SpriteFont font = _game.Content.Load<SpriteFont>("Arial");
+        _font = _game.Content.Load<SpriteFont>("Arial");
         _background = content.Load<Texture2D>("EvolutionBG");
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _buttonTexture.SetData(new[] { Color.White });
