@@ -2,6 +2,8 @@
 ![alt text](https://github.com/niny8888/KLICA/blob/main/win.png)
 Klica is a 2D evolutionary adventure game developed using MonoGame in C#. Inspired by the Cell Stage of Spore, the game focuses on survival, growth, and evolution in a microscopic world.
 
+# OFFICIAL PUBLISH - version 1.0
+Game is downloadable on https://niny8888.itch.io/klica
 
 ## 🛠️ Installation & Running
 
