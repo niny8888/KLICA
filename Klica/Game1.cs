@@ -48,7 +48,7 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-       base.Initialize();
+        base.Initialize();
     }
 
     protected override void LoadContent()

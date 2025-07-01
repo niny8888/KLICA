@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -5,7 +6,18 @@ using System.Text.Json.Serialization;
 
 public static class SaveManager
 {
-    private static string SaveFilePath => "savegame.json";
+    // private static string SaveFilePath => "savegame.json";
+
+    private static string SaveFilePath
+    {
+        get
+        {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string saveDir = Path.Combine(appData, "Klica"); // Use your game's name here
+            Directory.CreateDirectory(saveDir); // Ensures the directory exists
+            return Path.Combine(saveDir, "savegame.json");
+        }
+    }
 
     public static void Save(GameData data)
     {
@@ -22,17 +34,23 @@ public static class SaveManager
 
     public static GameData Load()
     {
-        if (!File.Exists(SaveFilePath)) return null;
-
         var options = new JsonSerializerOptions
         {
-            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase), new Vector2Converter() }
+            Converters = { new JsonStringEnumConverter() }
         };
-        options.Converters.Add(new Vector2Converter());
+
+        // If the file doesn't exist, create it with default values
+        if (!File.Exists(SaveFilePath))
+        {
+            var defaultData = new GameData(); // Default: level 1, empty traits
+            Save(defaultData);               // Create the file
+            return defaultData;
+        }
 
         var json = File.ReadAllText(SaveFilePath);
         return JsonSerializer.Deserialize<GameData>(json, options);
     }
+
 
     public static void Reset()
     {
