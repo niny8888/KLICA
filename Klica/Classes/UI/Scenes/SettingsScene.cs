@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
+ 
 using Klica.Classes;
 using Klica;
 using Microsoft.Xna.Framework.Audio;
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 public class SettingsScene : IScene
 {
     private Game1 _game;
-    private BitmapFont _font;
+    private SpriteFont _font;
     private Texture2D _background;
 
     private int _selectedOption = 0;
@@ -45,7 +45,7 @@ public class SettingsScene : IScene
 
     public void LoadContent(ContentManager content)
     {
-        _font = content.Load<BitmapFont>("Arial");
+        _font = content.Load<SpriteFont>("Arial");
         _background = content.Load<Texture2D>("settings_BG");
     }
 

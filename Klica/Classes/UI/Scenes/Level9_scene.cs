@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
+ 
 using Microsoft.Xna.Framework.Audio;
 
 public class Level9_Scene : IScene
@@ -25,7 +25,7 @@ public class Level9_Scene : IScene
     private List<Enemy> _aggressiveEnemies;
 
     private Texture2D _background, _halfCircleTexture, _buttonTexture, _winTexture, _loseTexture;
-    private BitmapFont _font;
+    private SpriteFont _font;
     private Rectangle _backButton;
 
     private int _foodGoal = 15;
@@ -125,7 +125,7 @@ public class Level9_Scene : IScene
         // spriteManager.UseIceSheet();
 
         // Now load body parts:
-        var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
+        var spriteDataLines = System.IO.File.ReadAllLines("Assets/SpriteInfo.txt");
         SpriteFactory.Initialize(spriteManager, spriteDataLines);
 
         _background = content.Load<Texture2D>("ICE-BG_final");
@@ -147,7 +147,7 @@ public class Level9_Scene : IScene
 
         _player = new Player(_physicsEngine);
         // Font & HUD
-        _font = content.Load<BitmapFont>("Arial");
+        _font = content.Load<SpriteFont>("Arial");
         _hud = new HUD(_font);
 
         // Textures

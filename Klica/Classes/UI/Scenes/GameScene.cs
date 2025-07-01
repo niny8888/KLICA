@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
+ 
 using System.IO;
 using System.Text.Json;
 using Microsoft.Xna.Framework.Audio;
@@ -39,7 +39,7 @@ public class GameScene : IScene
     // za gumb
     private Rectangle _backButton;
     private Texture2D _buttonTexture;
-    private BitmapFont _font;
+    private SpriteFont _font;
     private MouseState _previousMouseState;
 
 
@@ -114,7 +114,7 @@ public class GameScene : IScene
         //_spriteManager.SetIceSheet(content.Load<Texture2D>("SpritesPNG-ICE"));
         //_spriteManager.SetToxicSheet(content.Load<Texture2D>("SpritesPNG-Toxic"));
         _spriteManager.UseDefaultSheet();
-        var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
+        var spriteDataLines = System.IO.File.ReadAllLines("Assets/SpriteInfo.txt");
         SpriteFactory.Initialize(_spriteManager, spriteDataLines);
         se_dmg= content.Load<SoundEffect>("SE_eat_food").CreateInstance();
 
@@ -156,7 +156,7 @@ public class GameScene : IScene
         AddColliders();
 
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
-        _font = content.Load<BitmapFont>("Arial");
+        _font = _game.Content.Load<SpriteFont>("Arial");
         _hud = new HUD(_font);
        
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);

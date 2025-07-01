@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
+ 
 using Microsoft.Xna.Framework.Audio;
 
 public class Level4_Scene : IScene
@@ -25,7 +25,7 @@ public class Level4_Scene : IScene
     private List<Enemy> _aggressiveEnemies;
 
     private Texture2D _background, _halfCircleTexture, _buttonTexture, _winTexture, _loseTexture;
-    private BitmapFont _font;
+    private SpriteFont _font;
     private Rectangle _backButton;
     private Texture2D _resumeBG;
 
@@ -113,7 +113,7 @@ public class Level4_Scene : IScene
 
         _player = new Player(_physicsEngine);
         // Font & HUD
-        _font = content.Load<BitmapFont>("Arial");
+        _font = _game.Content.Load<SpriteFont>("Arial");
         _hud = new HUD(_font);
 
         // Textures

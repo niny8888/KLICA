@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
+ 
 using Klica.Classes;
 using Klica;
 using Microsoft.Xna.Framework.Audio;
@@ -21,7 +21,7 @@ public class MenuScene : IScene
 
     private Texture2D _background;
     private Texture2D _background_HTP;
-    private BitmapFont _font;
+    private SpriteFont _font;
     private Rectangle _playButton;
     private Rectangle _howToPlayButton;
     private Rectangle _settingsButton;
@@ -106,7 +106,7 @@ public class MenuScene : IScene
         {
             _background = content.Load<Texture2D>("menu_BG");
             _background_HTP = content.Load<Texture2D>("controls");
-            _font = content.Load<BitmapFont>("Arial");
+            _font = content.Load<SpriteFont>("Arial");
         }
         catch (Exception ex)
         {
@@ -116,7 +116,7 @@ public class MenuScene : IScene
         sound_menu_click= content.Load<SoundEffect>("SE_menu").CreateInstance();
         _buttonTexture = content.Load<Texture2D>("menu_buttons_fixed");
 
-        _font = content.Load<BitmapFont>("Arial");
+        _font = content.Load<SpriteFont>("Arial");
         introImage = content.Load<Texture2D>("intro");
 
         _contentLoaded = true;

@@ -1,18 +1,32 @@
 {
   "version": 2,
-  "dgSpecHash": "5q5ACsSGN0E=",
+  "dgSpecHash": "VlWA3ILiUI0=",
   "success": true,
   "projectFilePath": "D:\\My Documents\\faks\\3.letnik\\1.semester\\TINR\\TINR2024\\Klica\\Klica.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Nina\\.nuget\\packages\\autofac\\5.2.0\\autofac.5.2.0.nupkg.sha512",
+    "C:\\Users\\Nina\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.10\\microsoft.net.illink.tasks.8.0.10.nupkg.sha512",
     "C:\\Users\\Nina\\.nuget\\packages\\monogame.content.builder.task\\3.8.2.1105\\monogame.content.builder.task.3.8.2.1105.nupkg.sha512",
     "C:\\Users\\Nina\\.nuget\\packages\\monogame.extended\\4.0.3\\monogame.extended.4.0.3.nupkg.sha512",
     "C:\\Users\\Nina\\.nuget\\packages\\monogame.extended.content.pipeline\\4.0.0\\monogame.extended.content.pipeline.4.0.0.nupkg.sha512",
-    "C:\\Users\\Nina\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.2.1105\\monogame.framework.desktopgl.3.8.2.1105.nupkg.sha512",
-    "C:\\Users\\Nina\\.nuget\\packages\\monogame.library.sdl\\2.26.5.5\\monogame.library.sdl.2.26.5.5.nupkg.sha512",
-    "C:\\Users\\Nina\\.nuget\\packages\\nvorbis\\0.10.4\\nvorbis.0.10.4.nupkg.sha512",
-    "C:\\Users\\Nina\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
-    "C:\\Users\\Nina\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512"
+    "C:\\Users\\Nina\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.1.263\\monogame.framework.desktopgl.3.8.1.263.nupkg.sha512",
+    "C:\\Users\\Nina\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\Nina\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.10\\microsoft.netcore.app.runtime.win-x64.8.0.10.nupkg.sha512",
+    "C:\\Users\\Nina\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.10\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.10.nupkg.sha512",
+    "C:\\Users\\Nina\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.10\\microsoft.aspnetcore.app.runtime.win-x64.8.0.10.nupkg.sha512",
+    "C:\\Users\\Nina\\.nuget\\packages\\microsoft.netcore.app.crossgen2.win-x64\\8.0.10\\microsoft.netcore.app.crossgen2.win-x64.8.0.10.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Klica depends on MonoGame.Framework.DesktopGL (>= 3.8.0.2702) but MonoGame.Framework.DesktopGL 3.8.0.2702 was not found. An approximate best match of MonoGame.Framework.DesktopGL 3.8.1.263 was resolved.",
+      "libraryId": "MonoGame.Framework.DesktopGL",
+      "targetGraphs": [
+        "net8.0",
+        "net8.0/win-x64"
+      ]
+    }
+  ]
 }

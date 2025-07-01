@@ -5,12 +5,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
+ 
 
 public class EvolutionScene : IScene
 {
     private Game1 _game;
-    private BitmapFont _font;
+    private SpriteFont _font;
     private Texture2D _background;
     private Texture2D _buttonTexture;
     private MouseState _previousMouseState;
@@ -35,7 +35,7 @@ public class EvolutionScene : IScene
 
     public void LoadContent(ContentManager content)
     {
-        _font = content.Load<BitmapFont>("Arial");
+        SpriteFont font = _game.Content.Load<SpriteFont>("Arial");
         _background = content.Load<Texture2D>("EvolutionBG");
         _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _buttonTexture.SetData(new[] { Color.White });

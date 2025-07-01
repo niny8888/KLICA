@@ -31,12 +31,6 @@
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00024.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../MyLogo/00025.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/../../settings_BG.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_0.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_1.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_2.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_3.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial_4.png</File>
-    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.fnt</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/bg_0000_bg3.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/controls.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap2-overlay.png</File>
@@ -47,6 +41,7 @@
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap31.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/dangerZoneMap4.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/EvolutionBG.png</File>
+    <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/Arial.spritefont</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/food_chain1.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/food_chain2.png</File>
     <File>d:/My Documents/faks/3.letnik/1.semester/TINR/TINR2024/Klica/Content/howtoplay_BG.png</File>
@@ -109,12 +104,7 @@
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
+    <File>Arial.spritefont</File>
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

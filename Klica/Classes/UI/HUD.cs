@@ -3,13 +3,12 @@ using Klica.Classes.Objects_sprites;
 using Klica.Classes.Organizmi;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts;
 
 public class HUD
 {
-    private BitmapFont _font;
+    private SpriteFont _font;
 
-    public HUD(BitmapFont font)
+    public HUD(SpriteFont font)
     {
         _font = font;
     }

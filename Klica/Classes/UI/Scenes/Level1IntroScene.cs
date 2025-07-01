@@ -9,14 +9,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
+ 
 
 public class Level1IntroScene : IScene
 {
     private Game1 _game;
     private Texture2D _introImage;
     private Rectangle _startButton;
-    private BitmapFont _font;
+    private SpriteFont _font;
 
     public Level1IntroScene(Game1 game)
     {
@@ -28,7 +28,7 @@ public class Level1IntroScene : IScene
     public void LoadContent(ContentManager content)
     {
         _introImage = content.Load<Texture2D>("food_chain1");
-        _font = content.Load<BitmapFont>("Arial");
+        _font = _game.Content.Load<SpriteFont>("Arial");
         _startButton = new Rectangle(860, 900, 200, 60);
     }
 
