@@ -163,7 +163,8 @@ public class Level8_Scene : IScene
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(600, 850), 140f));   // Bottom-left zone
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1450, 800), 280f));  // Bottom-right zone
 
-        // Switch to ICE version:
+        // Switch to ICE version: NE DELA
+        _resumeBG = content.Load<Texture2D>("ResumeBG");
     }
 
 

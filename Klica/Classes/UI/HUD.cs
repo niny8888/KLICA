@@ -29,7 +29,6 @@ public class HUD
     }
     public void DisplayScore(SpriteBatch spriteBatch, int gameScore) //int highhscore
     {
-        // Set positions for the score display
         Vector2 scorePosition = new Vector2(800, 20); // Top-left corner of the screen
         //Vector2 highScorePosition = new Vector2(20, 50); // Below the current score
 

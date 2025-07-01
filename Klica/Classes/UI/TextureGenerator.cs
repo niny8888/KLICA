@@ -19,7 +19,7 @@ public static class TextureGenerator
 
                 float distance = MathF.Sqrt(dx * dx + dy * dy);
 
-                if (distance >= radius - lineThickness && distance <= radius && dy >= 0) // Half-circle condition (top half only)
+                if (distance >= radius - lineThickness && distance <= radius && dy >= 0) 
                 {
                     colorData[y * diameter + x] = Color.White;
                 }

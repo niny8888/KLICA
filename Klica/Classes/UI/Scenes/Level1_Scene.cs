@@ -97,6 +97,7 @@ public class Level1_Scene : IScene
         _physicsEngine = new PhysicsEngine(_level);
 
         _player = new Player(_physicsEngine);
+
         // Font & HUD
         _font = content.Load<BitmapFont>("Arial");
         _hud = new HUD(_font);
@@ -122,8 +123,6 @@ public class Level1_Scene : IScene
         // }
 
         // _physicsEngine.AddFood(new Food(new Vector2(500, 500), new Vector2(1, 0.5f), 1f));
-
-        // ... other asset loading ...
         _resumeBG = content.Load<Texture2D>("ResumeBG");
 
     }

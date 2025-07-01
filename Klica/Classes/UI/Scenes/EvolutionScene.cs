@@ -140,7 +140,7 @@ public class EvolutionScene : IScene
         switch (level)
         {
             case 1:
-                _availableTraits.Add((EvolutionTrait.Dash, "Dash")); // Quick burst forward
+                _availableTraits.Add((EvolutionTrait.Dash, "Dash")); 
                 break;
             case 2:
                 _availableTraits.Add((EvolutionTrait.ExtraDash, "+1 Dash"));
@@ -167,10 +167,10 @@ public class EvolutionScene : IScene
                 _availableTraits.Add((EvolutionTrait.MultyHealth, "Health x2"));
                 break;
             case 8: //temp
-                _availableTraits.Add((EvolutionTrait.TraitMemory, "Trait Memory - Random traits you skipped"));
+                _availableTraits.Add((EvolutionTrait.TraitMemory, "Random Trait"));
                 break;
             case 9: 
-                _availableTraits.Add((EvolutionTrait.TraitMemory, "Trait Memory - Random traits you skipped"));
+                _availableTraits.Add((EvolutionTrait.TraitMemory, "Random Trai"));
                 break;
         }
 
@@ -179,7 +179,7 @@ public class EvolutionScene : IScene
         for (int i = 0; i < _availableTraits.Count; i++)
         {
             int spacing = Game1.ScreenWidth / (_availableTraits.Count + 1);
-            int x = spacing * (i + 1) - 100; // center 200px-wide buttons
+            int x = spacing * (i + 1) - 100; 
             int y = Game1.ScreenHeight / 2;
 
             _traitButtons[i] = new Rectangle(x, y, 200, 60);

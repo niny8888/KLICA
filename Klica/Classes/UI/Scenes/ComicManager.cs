@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Klica
 {
     public class ComicManager
-    {
+    {//unused
         private Dictionary<string, ComicScene> comics;
         private ComicScene currentComic;
 

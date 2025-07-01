@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Klica
 {
     public class ComicScene : IScene
-    {
+    {//unused
         private List<Texture2D> panels;
         private int currentPanelIndex;
         private SpriteFont font;

@@ -118,14 +118,14 @@ public class Level10_Scene : IScene
     public void LoadContent(ContentManager content)
     {
         var spriteManager = SpriteManager.getInstance();
-        
+
         // Switch to ICE version:
         // spriteManager.UseToxicSheet(); 
 
         // var spriteDataLines = System.IO.File.ReadAllLines("Content/SpriteInfo.txt");
         // SpriteFactory.Initialize(spriteManager, spriteDataLines);
 
-        
+
 
         _background = content.Load<Texture2D>("ICE-BG_final");
         _halfCircleTexture = TextureGenerator.CreateCircleRadiusLineTexture(_game.GraphicsDevice, 50);
@@ -175,10 +175,11 @@ public class Level10_Scene : IScene
 
         //_background = content.Load<Texture2D>("menu_BG"); // use a more whiteish background texture
         _dangerOverlayTexture = content.Load<Texture2D>("dangerZoneMap3-overlay");
-        _speedMaskTexture = content.Load<Texture2D>("dangerZoneMap31"); 
+        _speedMaskTexture = content.Load<Texture2D>("dangerZoneMap31");
 
         _speedMaskPixels = new Color[_speedMaskTexture.Width * _speedMaskTexture.Height];
         _speedMaskTexture.GetData(_speedMaskPixels);
+        _resumeBG = content.Load<Texture2D>("ResumeBG");
 
     }
 

@@ -45,7 +45,7 @@ namespace Klica.Classes.Organizmi
 
         /// DRUNKARD
         private float _drunkAngle;
-        private float _drunkTurnRate = 0.2f; // How sharply direction changes
+        private float _drunkTurnRate = 0.2f; 
         private float _drunkSpeed = 0.3f;
 
 
@@ -214,7 +214,7 @@ namespace Klica.Classes.Organizmi
 
             _physics.Update(_velocity);
             UpdateOrganism(gameTime);
-            // Clamp position to screen bounds
+            
             float halfWidth = _organism_base.Width / 2f;
             float halfHeight = _organism_base.Height / 2f;
 
@@ -223,21 +223,20 @@ namespace Klica.Classes.Organizmi
 
             if (_position.X < halfWidth || _position.X > 1920 - halfWidth)
             {
-                _drunkAngle = MathHelper.Pi - _drunkAngle; // Reflect angle horizontally
+                _drunkAngle = MathHelper.Pi - _drunkAngle; 
                 hitWall = true;
             }
             if (_position.Y < halfHeight || _position.Y > 1080 - halfHeight)
             {
-                _drunkAngle = -_drunkAngle; // Reflect angle vertically
+                _drunkAngle = -_drunkAngle; 
                 hitWall = true;
             }
 
             if (hitWall)
             {
-                _drunkAngle += (float)(_random.NextDouble() - 0.5f) * 0.3f; // Add jitter to avoid perfect bounce loops
+                _drunkAngle += (float)(_random.NextDouble() - 0.5f) * 0.3f; 
             }
 
-            // Clamp the final position
             clampedPos.X = MathHelper.Clamp(clampedPos.X, halfWidth, 1920 - halfWidth);
             clampedPos.Y = MathHelper.Clamp(clampedPos.Y, halfHeight, 1080 - halfHeight);
 
@@ -251,16 +250,10 @@ namespace Klica.Classes.Organizmi
 
         private Vector2 UpdateIdleState(Food[] foods)
         {
-            // Small random angle perturbation
             _drunkAngle += (float)(_random.NextDouble() - 0.5f) * _drunkTurnRate;
-
-            // Get a new direction vector
             Vector2 direction = new Vector2((float)Math.Cos(_drunkAngle), (float)Math.Sin(_drunkAngle));
-
-            // Move forward slightly
             _targetPosition = _position + direction * 50f;
 
-            // Switch to chase if food is near
             if (IsFoodInRange(foods, 30f))
                 _currentState = PeacefulEnemyState.ChasingFood;
 
@@ -372,8 +365,7 @@ namespace Klica.Classes.Organizmi
         {
             if (!_isDead)
             {
-                // Simply draw with a snowy white tint — for example, very light blue/white
-                Color snowyTint = new Color(51, 51, 51); // slightly bluish white
+                Color snowyTint = new Color(51, 51, 51); 
 
                 _organism_base.Draw(spriteBatch, snowyTint);
                 _organism_eye.Draw(spriteBatch, gameTime);
@@ -397,7 +389,7 @@ namespace Klica.Classes.Organizmi
             if (!_isSlowed)
             {
                 _isSlowed = true;
-                _speed *= 0.4f; // slow to 40% of normal speed
+                _speed *= 0.4f; 
                 _slowTimer = duration;
                 Console.WriteLine("Enemy slowed!");
             }

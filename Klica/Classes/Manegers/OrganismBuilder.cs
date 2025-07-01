@@ -26,20 +26,20 @@ namespace Klica{
         }
         public void UpdateOrganism(GameTime gameTime)
         {
-            // Use existing position from physics
             _organism_base.SetPosition(_physics.GetPosition());
             _position = _organism_base.GetPosition();
-
-            // Get velocity for rotation
             Vector2 vel = _physics._velocity;
+
+
             if (vel.LengthSquared() > 0.001f)
             {
                 _organism_base.SetRotation((float)Math.Atan2(vel.Y, vel.X) + 1.6f);
             }
 
+            //oci
             _organism_eye.SetPosition(_organism_base._position_eyes);
             _organism_eye.SetRotation(_organism_base.GetRotation());
-
+            //usta
             _organism_mouth.SetPosition(_organism_base._position_mouth, vel.X, vel.Y);
             _organism_mouth.SetRotation(_organism_base.GetRotation());
 

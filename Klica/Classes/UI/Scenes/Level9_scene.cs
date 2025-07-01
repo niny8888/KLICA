@@ -180,7 +180,7 @@ public class Level9_Scene : IScene
 
         _speedMaskPixels = new Color[_speedMaskTexture.Width * _speedMaskTexture.Height];
         _speedMaskTexture.GetData(_speedMaskPixels);
-
+        _resumeBG = content.Load<Texture2D>("ResumeBG");
     }
 
 

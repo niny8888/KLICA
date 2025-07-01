@@ -58,13 +58,12 @@ namespace Klica.Classes.Environment
                 }
             }
 
-            // Update particles
             for (int i = _particles.Count - 1; i >= 0; i--)
             {
                 var p = _particles[i];
                 p.Update(dt);
                 if (p.Life <= 0)
-                    _particles[i] = GenerateParticle(); // regenerate
+                    _particles[i] = GenerateParticle(); 
             }
         }
 

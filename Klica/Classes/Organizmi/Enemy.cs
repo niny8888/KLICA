@@ -190,7 +190,7 @@ namespace Klica.Classes.Organizmi
             _physics.Update(_velocity);
             UpdateOrganism(gameTime);
             _position = _organism_base.GetPosition();
-            // Clamp and bounce
+            
             float halfWidth = _organism_base.Width / 2f;
             float halfHeight = _organism_base.Height / 2f;
 
@@ -228,7 +228,7 @@ namespace Klica.Classes.Organizmi
             Vector2 direction = new Vector2((float)Math.Cos(_drunkAngle), (float)Math.Sin(_drunkAngle));
             _targetPosition = _position + direction * 50f;
 
-            // Maintain food and player detection logic below
+
             float distanceToPlayer = Vector2.Distance(_position, player._position);
 
             if (distanceToPlayer < _suspicionRange)
@@ -370,7 +370,7 @@ namespace Klica.Classes.Organizmi
             if (!_isSlowed)
             {
                 _isSlowed = true;
-                _speed *= 0.4f; // slow to 40% of normal speed
+                _speed *= 0.4f;
                 _slowTimer = duration;
             }
         }

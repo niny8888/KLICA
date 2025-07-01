@@ -165,6 +165,7 @@ public class Level7_Scene : IScene
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1500, 700), 120f));
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(1200, 400), 90f));
         _toxicZones.Add(new ToxicZone(_toxicTexture, new Vector2(600, 800), 300f));
+        _resumeBG = content.Load<Texture2D>("ResumeBG");
     }
 
 
@@ -310,7 +311,7 @@ public class Level7_Scene : IScene
         spriteBatch.End();
         spriteBatch.Begin();
         //DrawButton(spriteBatch, "Back to Menu", _backButton);
-        DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal, _uiAtlas);
+        DrawCheckpointBar(spriteBatch, _gameScore, _foodGoal);
 
         
 
@@ -338,44 +339,32 @@ public class Level7_Scene : IScene
         spriteBatch.DrawString(_font, text, textPosition, Color.Black);
     }
 
-    private void DrawCheckpointBar(SpriteBatch spriteBatch, int currentScore, int maxScore, UIAtlas uiAtlas)
+    private void DrawCheckpointBar(SpriteBatch spriteBatch, int currentScore, int maxScore)
     {
-        int iconWidth = 50; // final display width
-        int iconHeight = iconWidth / 2; // 2:1 aspect from source image
-        int spacing = 0;
-        int totalWidth = maxScore * iconWidth + (maxScore - 1) * spacing;
+        int boxSize = 30;
+        int spacing = 5;
+        int totalWidth = maxScore * boxSize + (maxScore - 1) * spacing;
 
         Vector2 position = new Vector2(
             (Game1.ScreenWidth - totalWidth) / 2,
-            Game1.ScreenHeight - 100
+            Game1.ScreenHeight - 100 // 60 px from bottom
         );
 
         for (int i = 0; i < maxScore; i++)
         {
-            Vector2 iconPos = new Vector2(
-                position.X + i * (iconWidth + spacing),
-                position.Y
+            Rectangle box = new Rectangle(
+                (int)(position.X + i * (boxSize + spacing)),
+                (int)position.Y,
+                boxSize,
+                boxSize
             );
 
-            Rectangle source = i < currentScore
-                ? uiAtlas.DNAIconBlue
-                : uiAtlas.DNAIconWhite;
-
-            float scale = iconWidth / (float)source.Width;
-
-            spriteBatch.Draw(
-                uiAtlas.GetTexture(),
-                iconPos,
-                source,
-                Color.White,
-                0f,
-                Vector2.Zero,
-                new Vector2(scale, scale), // uniform scale preserves aspect
-                SpriteEffects.None,
-                0f
-            );
+            Color color = i < currentScore ? Color.SkyBlue : Color.White;
+            spriteBatch.Draw(TextureGenerator.Pixel, box, color);
         }
     }
+
+
 
 
 

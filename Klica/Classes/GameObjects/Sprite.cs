@@ -23,8 +23,8 @@ namespace Klica.Classes
             _sourceRectangle = sourceRectangle;
             _scale = scale;
             _rotation = rotation;
-            _origin = origin ?? new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2); // Default to center
-            _tint = tint ?? Color.White; // Default to white if tint is not provided 
+            _origin = origin ?? new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2); 
+            _tint = tint ?? Color.White; 
             _size= new Rectangle(0,0, (int)(_sourceRectangle.Width * scale), (int)(_sourceRectangle.Height*scale));//to je treba porihtat ker pol k dam shit gor ne gre_size= new Rectangle(0,0,_sourceRectangle.Width * scale, _sourceRectangle.Height*scale);
             _rotatedSheet= rotatedSheet;
         } // dodej layer depth

@@ -46,7 +46,7 @@ public class SettingsScene : IScene
     public void LoadContent(ContentManager content)
     {
         _font = content.Load<BitmapFont>("Arial");
-        _background = content.Load<Texture2D>("settings_BG"); // Load background
+        _background = content.Load<Texture2D>("settings_BG");
     }
 
     public void Update(GameTime gameTime)
@@ -55,11 +55,10 @@ public class SettingsScene : IScene
         MouseState mouseState = Mouse.GetState();
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        // Update input cooldown
+  
         if (_inputCooldown > 0)
             _inputCooldown -= deltaTime;
 
-        // Navigate settings with UP/DOWN
         if (_inputCooldown <= 0)
         {
             if (keyboardState.IsKeyDown(Keys.Up))
@@ -73,7 +72,6 @@ public class SettingsScene : IScene
                 _inputCooldown = InputDelay;
             }
 
-            // Adjust settings with LEFT/RIGHT
             switch (_selectedOption)
             {
                 case 0: // Resolution
@@ -131,7 +129,6 @@ public class SettingsScene : IScene
             }
         }
 
-        // Return to menu
         if (_previousMouseState.RightButton == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released)
         {
             SceneManager.Instance.SetScene(_callerScene);

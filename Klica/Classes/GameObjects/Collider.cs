@@ -5,13 +5,13 @@ public class Collider
 {
     public enum ColliderType { Sphere, Rectangle }
     public ColliderType Type { get; }
-    public Vector2 Position { get; set; } // Position for spheres or the center of rectangles
-    public float Radius { get; set;} // For sphere colliders
-    public Rectangle Bounds { get; } // For rectangle colliders
-    public object Owner { get; set;} // Reference to the object this collider belongs to
+    public Vector2 Position { get; set; } 
+    public float Radius { get; set;}
+    public Rectangle Bounds { get; } 
+    public object Owner { get; set;} 
 
-    // Constructor for sphere collider
-    public Collider(Vector2 position, float radius, object owner)
+    
+    public Collider(Vector2 position, float radius, object owner) // Krogla
     {
         Type = ColliderType.Sphere;
         Position = position;
@@ -19,8 +19,8 @@ public class Collider
         Owner = owner;
     }
 
-    // Constructor for rectangle collider
-    public Collider(Rectangle bounds, object owner)
+    
+    public Collider(Rectangle bounds, object owner) //rectangle
     {
         Type = ColliderType.Rectangle;
         Bounds = bounds;
@@ -63,19 +63,17 @@ public class Collider
     {
         if (collider.Type == Collider.ColliderType.Sphere)
         {
-            // Draw a circle using the texture
             var circleBounds = new Rectangle(
                 (int)(collider.Position.X - collider.Radius),
                 (int)(collider.Position.Y - collider.Radius),
                 (int)(collider.Radius * 2),
                 (int)(collider.Radius * 2)
             );
-            spriteBatch.Draw(circleTexture, circleBounds, color * 0.5f); // Semi-transparent for debugging
+            spriteBatch.Draw(circleTexture, circleBounds, color * 0.5f); //za debug
         }
         else if (collider.Type == Collider.ColliderType.Rectangle)
         {
-            // Draw a rectangle for rectangle colliders
-            spriteBatch.Draw(circleTexture, collider.Bounds, color * 0.5f); // Semi-transparent for debugging
+            spriteBatch.Draw(circleTexture, collider.Bounds, color * 0.5f); //za debug
         }
     }
 

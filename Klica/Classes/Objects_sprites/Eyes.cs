@@ -29,7 +29,7 @@ namespace Klica.Classes.Objects_sprites{
             for (int i = 1; i <= 9; i++)
             {
                 string spriteName = $"mezikanje_e{i}";
-                _eyeFrames.Add(_spriteManager.GetSprite(spriteName).Clone()); // Add frames for animation
+                _eyeFrames.Add(_spriteManager.GetSprite(spriteName).Clone());
             }
             _currentEyeAnimation= new AnimatedSprite(_eyeFrames);
             SetSpriteEye(version);

@@ -101,12 +101,12 @@ namespace Klica.Classes.Objects_sprites
             _physics = new Physics(_position);
             _player_base.SetPosition(_position);
             _baseCollider = new Collider(_player_base.GetPosition(), _player_base.Width / 2f, this);
-            _baseCollider.Owner = this; // or pass owner from Player if needed
+            _baseCollider.Owner = this; 
 
             _mouthCollider = new Collider(_player_base._position_mouth, 10f, this);
-            _mouthCollider.Owner = this; // or pass owner from Player if needed
+            _mouthCollider.Owner = this; 
 
-            _mouthProximityCollider = new Collider(_player_base._position_mouth, 25f, this); // Larger radius than mouth
+            _mouthProximityCollider = new Collider(_player_base._position_mouth, 25f, this);
             _health = 100;
             _maxhealth = _health;
             Mass = 5f;
@@ -139,7 +139,7 @@ namespace Klica.Classes.Objects_sprites
                 if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                     movementDirection.X += 1;
 
-                // Normalize movement direction
+                
                 if (movementDirection == Vector2.Zero && _lastMovementDirection != Vector2.Zero)
                 {
                     movementDirection = _lastMovementDirection;
@@ -178,37 +178,29 @@ namespace Klica.Classes.Objects_sprites
                 }
             }
 
-            // Apply movement if started
+            
             if (_hasStarted || movementDirection != Vector2.Zero)
             {
                 _hasStarted = true;
                 if (movementDirection != Vector2.Zero) movementDirection.Normalize();
-
-                // _physics.Update(movementDirection);
-
                 if (_bounceTimer > 0f)
                 {
                     _bounceTimer -= dt;
 
-                    // Reduce the strength gradually over time
                     float decayFactor = _bounceTimer / _bounceDuration;
                     Vector2 bounceForce = _currentBounceDirection * _currentBounceStrength * decayFactor;
 
                     _physics.Update(bounceForce);
                     _physics._velocity *= 0.92f;
-
                 }
                 else
                 {
                     _physics.Update(movementDirection * _speedModifier);
                 }
 
-
                 _physics._velocity += _bounceImpulse;
                 _bounceImpulse = Vector2.Zero;
 
-                // Update slow timer
-                // Update slow timer
                 if (_isSlowed)
                 {
                     System.Console.WriteLine("Player is slowed!");
@@ -221,7 +213,6 @@ namespace Klica.Classes.Objects_sprites
                 }
 
                 float slowFactor = _speedModifier;
-                //System.Console.WriteLine("Player speed modifier: " + _speedModifier);
                 _position += _physics._velocity * dt * slowFactor;
 
 
@@ -256,15 +247,12 @@ namespace Klica.Classes.Objects_sprites
                     }
                 }
 
-                // End dash after 0.2s
                 if (_isDashing && _dashTimer > 0.2f)
                 {
                     _isDashing = false;
                 }
 
-
                 _spacePreviouslyPressed = spacePressed;
-
 
                 Vector2 newPosition = _physics.GetPosition();
 
@@ -277,29 +265,9 @@ namespace Klica.Classes.Objects_sprites
                 _physics._positon = newPosition;
                 _position = newPosition;
                 _player_base.SetPosition(newPosition);
-
-                // Vector2 newPosition = _physics.GetPosition();
-
-                // float halfWidth = _player_base.Width / 2f;
-                // float halfHeight = _player_base.Height / 2f;
-
-                // newPosition.X = MathHelper.Clamp(newPosition.X, bounds.Left + halfWidth, bounds.Right - halfWidth);
-                // newPosition.Y = MathHelper.Clamp(newPosition.Y, bounds.Top + halfHeight, bounds.Bottom - halfHeight);
-
-
-                // // Apply the clamped position to physics and player
-                // _physics._positon = newPosition;
-                // _player_base.SetPosition(newPosition);
-                // _position = newPosition;
-
-                // Apply friction to slow down bounce velocity
+                
                 Velocity *= 0.90f;
                 _physics._velocity *= 0.90f;
-
-
-                // Set position based on physics after user input
-                // _player_base.SetPosition(_physics.GetPosition());
-                // _position = _player_base.GetPosition();
             }
 
 
@@ -323,22 +291,17 @@ namespace Klica.Classes.Objects_sprites
 
             _player_base.SetRotation((float)Math.Atan2(_physics._velocity.Y, _physics._velocity.X) + 1.6f);
 
-            // Update eye position
             _player_eye.SetPosition(_player_base._position_eyes);
             _player_eye.SetRotation(_player_base.GetRotation());
 
-            // Update mouth position
             _player_mouth.Update();
             _player_mouth.SetPosition(_player_base._position_mouth, movementDirection.X, movementDirection.Y);
             _player_mouth.SetRotation(_player_base.GetRotation());
 
-            // Update colliders
             _baseCollider.Position = _position;
             _mouthCollider.Position = _player_base._position_mouth;
             _mouthProximityCollider.Position = _player_base._position_mouth;
 
-
-            // Update last movement direction
             if (movementDirection != Vector2.Zero)
             {
                 _lastMovementDirection = movementDirection;
@@ -354,10 +317,6 @@ namespace Klica.Classes.Objects_sprites
             _player_base.Draw(_spriteBatch, tint);
             _player_eye.Draw(_spriteBatch, _gameTime);
             _player_mouth.Draw(_spriteBatch, tint);
-
-            //  _player_base.Draw(_spriteBatch);
-            //  _player_eye.Draw(_spriteBatch,_gameTime);
-            //  _player_mouth.Draw(_spriteBatch);
         }
 
         // ==============================================
@@ -462,7 +421,6 @@ namespace Klica.Classes.Objects_sprites
             _physics._positon = pos;
             _player_base.SetPosition(pos);
 
-            // Also update colliders to prevent first-frame desync
             _baseCollider.Position = pos;
             _mouthCollider.Position = _player_base._position_mouth;
             _mouthProximityCollider.Position = _player_base._position_mouth;
@@ -474,10 +432,9 @@ namespace Klica.Classes.Objects_sprites
             if (_hasFrenzyMode && !_isFrenzy)
             {
                 _isFrenzy = true;
-                // Start frenzy mode
                 _frenzyTimer = 0f;
-                _frenzyDuration = 5f; // Set duration for frenzy mode
-                _dashStrength = 30f; // Increase dash strength during frenzy
+                _frenzyDuration = 5f; 
+                _dashStrength = 30f; 
             }
         }
 
@@ -580,12 +537,11 @@ namespace Klica.Classes.Objects_sprites
         {
             foreach (var trait in traits)
             {
-                AddTrait(trait); // your existing trait logic
+                AddTrait(trait); 
             }
         }
         public void OnDealDamage(int baseDamage)
         {
-            // LifeSteal
             if (_hasLifeSteal && _health > 0)
             {
                 int healAmount = (int)(baseDamage * _lifeStealPercent);
@@ -607,17 +563,7 @@ namespace Klica.Classes.Objects_sprites
                     return critDamage;
                 }
             }
-
             return baseDamage;
         }
-
-
-
-
-
-
-
     }
-
-    
 }

@@ -49,6 +49,7 @@ public class Level1IntroScene : IScene
         try { spriteBatch.End(); } catch { }
         spriteBatch.Begin();
         spriteBatch.Draw(_introImage, new Rectangle(0, 0, 1920, 1080), Color.White);
+        
         // Button background: White
         spriteBatch.Draw(TextureGenerator.Pixel, _startButton, Color.White);
 

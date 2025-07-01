@@ -102,17 +102,11 @@ public class MenuScene : IScene
 
     public void LoadContent(ContentManager content)
     {
-        
         try
         {
-            //Console.WriteLine("Loading background...");
             _background = content.Load<Texture2D>("menu_BG");
-            _background_HTP = content.Load<Texture2D>("howtoplay_BG");
-            //Console.WriteLine("Background loaded successfully!");
-
-            //Console.WriteLine("Loading font...");
+            _background_HTP = content.Load<Texture2D>("controls");
             _font = content.Load<BitmapFont>("Arial");
-            //Console.WriteLine("Font loaded successfully!");
         }
         catch (Exception ex)
         {
@@ -122,13 +116,9 @@ public class MenuScene : IScene
         sound_menu_click= content.Load<SoundEffect>("SE_menu").CreateInstance();
         _buttonTexture = content.Load<Texture2D>("menu_buttons_fixed");
 
-        //_buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
         _font = content.Load<BitmapFont>("Arial");
         introImage = content.Load<Texture2D>("intro");
 
-       
-        // _buttonTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
-        // _buttonTexture.SetData(new Color[] { Color.White });
         _contentLoaded = true;
     }
 
@@ -138,7 +128,6 @@ public class MenuScene : IScene
         
         if (_currentState == MenuState.MainMenu)
         {
-            // Hover detection and button size adjustment
             _playButton = GetButtonWithHoverEffect(_playButton, mouseState.Position);
             _howToPlayButton = GetButtonWithHoverEffect(_howToPlayButton, mouseState.Position);
             _settingsButton = GetButtonWithHoverEffect(_settingsButton, mouseState.Position);
@@ -243,7 +232,6 @@ public class MenuScene : IScene
                             SceneManager.Instance.SetScene(SceneManager.SceneType.Level10);
                             break;
                         default:
-                            // All levels completed – go to Main Menu or credits
                             SceneManager.Instance.SetScene(SceneManager.SceneType.MainMenu);
                             break;
                     }
@@ -268,16 +256,9 @@ public class MenuScene : IScene
                 {
                     sound_menu_click.Play();
                     var data = SaveManager.Load();
-                    data.LastCompletedLevel = 0; // Reset to level 0
+                    data.LastCompletedLevel = 0;
                     var level1Intro = (Level1IntroScene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1Intro);
                     SceneManager.Instance.SetScene(SceneManager.SceneType.Level1Intro);
-
-                    // SaveManager.Reset(); // Clear old save
-                    // var level1 = (Level1_Scene)SceneManager.Instance.GetScene(SceneManager.SceneType.Level1);
-                    // level1.Initialize();  
-                    // level1._gameScore=0;
-                    // level1.SaveGameState(); // Save after setup so positions are included
-                    // SceneManager.Instance.SetScene(SceneManager.SceneType.Level1);
                 }
             }
         }
@@ -288,19 +269,13 @@ public class MenuScene : IScene
 
         _previousMouseState = mouseState;
     }
-    private Rectangle GetButtonWithHoverEffect(Rectangle buttonRect, Point mousePosition)
-    {
-        // Hover detection
+    private Rectangle GetButtonWithHoverEffect(Rectangle buttonRect, Point mousePosition) 
+    {///unused!!!!!!!!!!!!!!!!!
+
         bool isHovered = buttonRect.Contains(mousePosition);
-
-        // Scale factor for hover effect
-        float scaleFactor = isHovered ? 1.1f : 1.0f; // 1.1 for scaling up, 1.0 for original size
-
-        // Calculate the new width and height based on scale factor
+        float scaleFactor = isHovered ? 1.1f : 1.0f; 
         int newWidth = (int)(buttonRect.Width * scaleFactor);
         int newHeight = (int)(buttonRect.Height * scaleFactor);
-
-        // Ensure the button stays centered
         int newX = buttonRect.X - (newWidth - buttonRect.Width) / 2;
         int newY = buttonRect.Y - (newHeight - buttonRect.Height) / 2;
 
@@ -336,16 +311,12 @@ public class MenuScene : IScene
 
     private void DrawMainMenu(SpriteBatch spriteBatch)
     {
-        // Get the screen dimensions
         var screenWidth = Game1.ScreenWidth;
         var screenHeight = Game1.ScreenHeight;
-
-        // Draw the background scaled to fit the entire screen
         spriteBatch.Draw(_background, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
 
-        // Draw buttons
         DrawButton(spriteBatch, _newGameButton, _srcNewGame);
-        DrawButton(spriteBatch, _playButton, _srcMenu);         // "Menu" = Play
+        DrawButton(spriteBatch, _playButton, _srcMenu);         
         DrawButton(spriteBatch, _howToPlayButton, _srcHowToPlay);
         DrawButton(spriteBatch, _settingsButton, _srcSettings);
         
@@ -358,11 +329,10 @@ public class MenuScene : IScene
         var screenWidth = Game1.ScreenWidth;
         var screenHeight = Game1.ScreenHeight;
 
-        // Draw the background scaled to fit the entire screen
         spriteBatch.Draw(_background_HTP, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
 
         spriteBatch.GraphicsDevice.Clear(Color.CornflowerBlue);
-        spriteBatch.DrawString(_font, "How to Play Placeholder Text", new Vector2(Game1.ScreenWidth/2 -150, 450), Color.SkyBlue);
+        spriteBatch.DrawString(_font, "", new Vector2(Game1.ScreenWidth/2 -150, 450), Color.SkyBlue);
         spriteBatch.DrawString(_font, "Right-click to return", new Vector2(Game1.ScreenWidth/2 -150, 500), Color.SkyBlue);
     }
 
@@ -392,15 +362,13 @@ public class MenuScene : IScene
         spriteBatch.Draw(_buttonTexture, destRect, srcRect, Color.White);
     }
     private Rectangle GetScaledButtonRectangle(Rectangle original)
-    {
-        // Scale factor for hover effect
+    {//unused!!!!!!!!!!!!!!!!!!!!
+
         float scaleFactor = 1.1f;
 
-        // Calculate the new width and height
         int newWidth = (int)(original.Width * scaleFactor);
         int newHeight = (int)(original.Height * scaleFactor);
 
-        // Center the button around its original position
         int newX = original.X - (newWidth - original.Width) / 2;
         int newY = original.Y - (newHeight - original.Height) / 2;
 
